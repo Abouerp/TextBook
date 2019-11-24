@@ -29,9 +29,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
          * 教师可以访问level1下资源
          * 秘书可以访问level2下资源
          */
-        http.authorizeRequests().antMatchers("/").permitAll()
-                .antMatchers("/level1/**").hasRole("teacher")
-                .antMatchers("/level2/**").hasRole("mushu");
+        http
+            .authorizeRequests()
+            .antMatchers("/index").permitAll();
+//                .antMatchers("/level1/**").hasRole("teacher")
+//                .antMatchers("/level2/**").hasRole("mushu");
 
     }
 }
