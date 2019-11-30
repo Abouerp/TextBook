@@ -61,4 +61,8 @@ public class TextBook implements Serializable {
      * 状态 0保存 1提交
      */
     private Integer status;
+    /**
+     * 所属教师
+     */
+    private Integer teacherId;
 }
