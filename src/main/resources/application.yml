@@ -25,6 +25,7 @@ logging:
   level:
     com.it666.textbook: debug
 
+#开启驼峰命名
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
