@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private UserDao userDao;
+    private final UserDao userDao;
 
     public UserService(UserDao userDao){
         this.userDao = userDao;
