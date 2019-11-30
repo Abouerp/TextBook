@@ -46,7 +46,7 @@ public class User implements Serializable {
      */
     private String phoneNumber;
     /**
-     * 用户类型
+     * 用户类型 1教师 2秘书
      */
     private Integer userType;
 }

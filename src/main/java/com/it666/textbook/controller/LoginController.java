@@ -1,9 +1,7 @@
 package com.it666.textbook.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.it666.textbook.entity.LoginUser;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +13,9 @@ import java.util.Map;
 public class LoginController {
 
 
-    @GetMapping("/login")
-    public Map<String,String> login(){
+    @PostMapping("/login")
+    public Map<String,String> login(@RequestBody LoginUser loginUser){
+
         Map<String,String> map = new HashMap<>();
         map.put("success","创建成功");
         map.put("core","200");
