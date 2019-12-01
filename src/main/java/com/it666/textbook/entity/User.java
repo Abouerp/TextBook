@@ -14,13 +14,21 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User extends LoginUser implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * 主键
      */
     private Integer id;
+    /**
+     * 用户名称
+     */
+    private String userName;
+    /**
+     * 登陆密码
+     */
+    private String userPassword;
     /**
      * 工号
      */

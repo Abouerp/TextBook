@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://106.12.84.152:3307/textbook?serverTimezone=UTC
     username: root
-    password: chenjinjie
+    password: root
 
   redis:
     port: 6379

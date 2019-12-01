@@ -1,12 +1,15 @@
 package com.it666.textbook.controller;
 
+import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.entity.LoginUser;
+import com.it666.textbook.entity.User;
 import com.it666.textbook.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,14 +25,16 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginUser user) {
-        LoginUser users = userService.findByUserName(user.getUserName());
-
-
-        Map<String, String> map = new HashMap<>();
-        map.put("success", "创建成功");
-        map.put("core", "200");
-        map.put("Type", "teacher");
-        return map;
+    public ResultBean<Boolean> login(@RequestBody LoginUser user) {
+        User users = userService.findByUserName(user.getUserName());
+//        List<User> all = userService.findAll();
+//        System.out.println(all);
+        if (user.getUserPassword().equals(users.getUserPassword())){
+            return new ResultBean<>(true);
+//            return "success";
+        }else {
+            return new ResultBean<>(false);
+//            return "false";
+        }
     }
 }

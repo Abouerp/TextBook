@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Abouerp
  */
-@Mapper
+
 @Component
 public interface TextBookDao {
 

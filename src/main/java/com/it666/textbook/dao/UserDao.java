@@ -4,12 +4,17 @@ import com.it666.textbook.entity.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author Abouerp
  */
-@Mapper
+
 @Component
 public interface UserDao {
+
+    @Select("select * from user")
+    public List<User> findAll();
 
     @Select("select * from user where user_name = #{userName}")
     public User findUserByUsername(String userName);

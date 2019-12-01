@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 教材表
@@ -44,7 +45,7 @@ public class TextBook implements Serializable {
     /**
      * 出版时间
      */
-    private Data date;
+    private Date date;
     /**
      * 书好ISBN
      */
