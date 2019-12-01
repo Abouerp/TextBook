@@ -1,7 +1,7 @@
 package com.it666.textbook.service;
 
 import com.it666.textbook.dao.UserDao;
-import com.it666.textbook.entity.User;
+import com.it666.textbook.entity.LoginUser;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,8 +16,8 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public User findByUserName(String username){
-        User user = userDao.findUserByUsername(username);
+    public LoginUser findByUserName(String username){
+        LoginUser user = userDao.findUserByUsername(username);
         return user;
     }
 }

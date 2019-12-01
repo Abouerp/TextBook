@@ -1,6 +1,6 @@
 package com.it666.textbook.controller;
 
-import com.it666.textbook.entity.User;
+import com.it666.textbook.entity.LoginUser;
 import com.it666.textbook.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +20,8 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public Map<String,String> login(@RequestBody User user){
-        User users = userService.findByUserName(user.getUserName());
+    public Map<String,String> login(@RequestBody LoginUser user){
+        LoginUser users = userService.findByUserName(user.getUserName());
 
 
         Map<String,String> map = new HashMap<>();
