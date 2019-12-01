@@ -29,5 +29,5 @@ public class Class implements Serializable {
     /**
      * 专业人数
      */
-    private Integer peopleNumber;
+    private Integer number;
 }

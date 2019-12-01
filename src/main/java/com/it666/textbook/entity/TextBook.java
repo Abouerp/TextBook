@@ -24,19 +24,19 @@ public class TextBook implements Serializable {
     /**
      * 课程名称
      */
-    private String className;
+    private String courseName;
     /**
      * 课程学时
      */
-    private Integer classTime;
+    private Integer courseTime;
     /**
      * 教材名称
      */
-    private String textBookName;
+    private String titleName;
     /**
      * 出版单位
      */
-    private String publishingFirm;
+    private String publisher;
     /**
      * 编者
      */
@@ -44,15 +44,15 @@ public class TextBook implements Serializable {
     /**
      * 出版时间
      */
-    private Data data;
+    private Data date;
     /**
      * 书好ISBN
      */
     private String ISBN;
     /**
-     * 开课班级 （年级，专业，人数）
+     * 开课班级id （年级，专业，人数）
      */
-    private Class classMessage;
+    private Integer classId;
     /**
      * 选定教师名称
      */
