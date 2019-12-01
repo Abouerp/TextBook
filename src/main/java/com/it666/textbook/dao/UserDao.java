@@ -2,7 +2,7 @@ package com.it666.textbook.dao;
 
 import com.it666.textbook.entity.User;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author Abouerp
  */
 
-@Component
+@Repository
 public interface UserDao {
 
     @Select("select * from user")
