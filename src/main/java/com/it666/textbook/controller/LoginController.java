@@ -8,10 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Abouerp
  */
@@ -25,16 +21,16 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResultBean<Boolean> login(@RequestBody LoginUser user) {
+    public ResultBean<Object> login(@RequestBody LoginUser user) {
         User users = userService.findByUserName(user.getUserName());
-//        List<User> all = userService.findAll();
-//        System.out.println(all);
-        if (user.getUserPassword().equals(users.getUserPassword())){
-            return new ResultBean<>(true);
-//            return "success";
-        }else {
-            return new ResultBean<>(false);
-//            return "false";
+        if (users != null) {
+            if (user.getUserPassword().equals(users.getUserPassword())) {
+                return new ResultBean<>(users);
+            } else {
+                return new ResultBean<>("密码错误！");
+            }
+        } else {
+            return new ResultBean<>("该用户不存在");
         }
     }
 }
