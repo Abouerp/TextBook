@@ -23,5 +23,6 @@ public interface TextBookDao {
     @Update("update textbook set course_name=#{courseName},course_time=#{courseTime},title_time=#{titleName},publisher=#{publisher},author=#{author},date=#{date},ISBN=#{ISBN},status=#{status},class_id=#{classId},teacher_id=#{teacherId} where id = #{id}")
     public void edit(TextBook textBook);
 
-
+    @Delete("delete from textbook where id=#{id}")
+    public void delete(Integer id);
 }
