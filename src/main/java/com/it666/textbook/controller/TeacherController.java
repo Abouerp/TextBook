@@ -5,6 +5,7 @@ import com.it666.textbook.service.TextBookService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Abouerp
  */
-@RestController("/api/teacher")
+@RestController
+@RequestMapping("/api/teacher")
 @Log4j2
 public class TeacherController {
 
