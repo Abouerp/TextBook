@@ -4,7 +4,6 @@ import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.UserService;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,7 +18,7 @@ public class SecretaryController {
     private final SecretaryService secretaryService;
     private final UserService userService;
 
-    public SecretaryController(SecretaryService secretaryService,UserService userService) {
+    public SecretaryController(SecretaryService secretaryService, UserService userService) {
         this.secretaryService = secretaryService;
         this.userService = userService;
     }

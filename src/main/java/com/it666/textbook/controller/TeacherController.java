@@ -21,13 +21,13 @@ public class TeacherController {
     private final TextBookService textBookService;
     private final UserService userService;
 
-    public TeacherController(TextBookService textBookService,UserService userService){
+    public TeacherController(TextBookService textBookService, UserService userService) {
         this.textBookService = textBookService;
         this.userService = userService;
     }
 
     @PostMapping
-    public TextBook save(@RequestBody TextBook textBook){
+    public TextBook save(@RequestBody TextBook textBook) {
         return textBookService.sava(textBook);
     }
 
