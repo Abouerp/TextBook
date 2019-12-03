@@ -21,4 +21,9 @@ public class SecretaryService {
         userDao.save(user);
         return user;
     }
+
+    public User edit(User user){
+        userDao.edit(user);
+        return user;
+    }
 }

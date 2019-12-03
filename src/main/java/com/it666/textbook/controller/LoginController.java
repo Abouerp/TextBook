@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 /**
  * @author Abouerp
  */
@@ -20,7 +22,7 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResultBean<Object> login(@RequestBody LoginUser user) {
         User users = userService.findByUserName(user.getUserName());
         if (users != null) {

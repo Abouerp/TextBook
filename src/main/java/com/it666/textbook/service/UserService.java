@@ -28,4 +28,8 @@ public class UserService {
          return userDao.findAll();
     }
 
+    public User edit(User user){
+        userDao.edit(user);
+        return user;
+    }
 }

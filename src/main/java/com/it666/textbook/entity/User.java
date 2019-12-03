@@ -54,7 +54,7 @@ public class User implements Serializable {
      */
     private Integer userType;
     /**
-     * 选定教师名称
+     * 教师名称
      */
-    private String teacherName;
+    private String realName;
 }
