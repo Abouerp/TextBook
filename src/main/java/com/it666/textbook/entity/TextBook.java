@@ -54,7 +54,7 @@ public class TextBook implements Serializable {
     /**
      * 书号ISBN
      */
-    private String ISBN;
+    private String isbn;
     /**
      * 教材类型
      */

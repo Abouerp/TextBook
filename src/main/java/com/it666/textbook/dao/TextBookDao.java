@@ -18,7 +18,7 @@ public interface TextBookDao {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into textbook(course_name,course_time,title_name,publisher,author,title_date,version,ISBN,title_type,flag,phone,date,status,teacher_id)" +
-            "values(#{courseName},#{courseTime},#{titleName},#{publisher},#{author},#{titleDate},#{version},#{ISBN},#{titleType},#{flag},#{phone},#{date},#{status},#{teacherId})")
+            "values(#{courseName},#{courseTime},#{titleName},#{publisher},#{author},#{titleDate},#{version},#{isbn},#{titleType},#{flag},#{phone},#{date},#{status},#{teacherId})")
     public void save(TextBook textBook);
 
     @Update("update textbook set course_name=#{courseName},course_time=#{courseTime},title_time=#{titleName},publisher=#{publisher},author=#{author},date=#{date},ISBN=#{ISBN},status=#{status},class_id=#{classId},teacher_id=#{teacherId} where id = #{id}")
