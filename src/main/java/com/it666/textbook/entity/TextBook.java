@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 教材表
@@ -45,23 +46,39 @@ public class TextBook implements Serializable {
     /**
      * 出版时间
      */
-    private Date date;
+    private String titleDate;
     /**
-     * 书好ISBN
+     * 版次
+     */
+    private String version;
+    /**
+     * 书号ISBN
      */
     private String ISBN;
     /**
-     * 开课班级id （年级，专业，人数）
+     * 教材类型
      */
-    private Integer classId;
+    private String titleType;
     /**
-     * 选定教师名称
+     * 是否为近三年优质教材
      */
-    private String teacherName;
+    private String flag;
+    /**
+     * 联系电话
+     */
+    private String phone;
+    /**
+     * 提交/保存时间
+     */
+    private Date date;
     /**
      * 状态 0保存 1提交
      */
     private Integer status;
+    /**
+     * list[包含的班级]
+     */
+    private List<Integer> classList;
     /**
      * 所属教师
      */

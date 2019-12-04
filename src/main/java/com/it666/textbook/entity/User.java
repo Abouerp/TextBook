@@ -32,7 +32,7 @@ public class User implements Serializable {
     /**
      * 工号
      */
-    private Integer jobNumber;
+    private String jobNumber;
     /**
      * 性别
      */

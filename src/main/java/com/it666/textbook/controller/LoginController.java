@@ -21,7 +21,7 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResultBean<Object> login(@RequestBody LoginUser user) {
         User users = userService.findByUserName(user.getUserName());
         if (users != null) {
