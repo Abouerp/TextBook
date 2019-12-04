@@ -20,9 +20,9 @@ public interface ClassDao {
     @Select("select * from class where id=#{id}")
     public Class findById(Integer id);
 
-    @Update("update from class set textbook_id=#{textbookId} where id=#{id}")
+    @Update("update  class set textbook_id=#{textbookId} where id=#{id}")
     public void updateTextbookId(Integer id, Integer textbookId);
 
-    @Update("update from class set grade=#{grade}, subject=#{subject},number=#{number},date=#{date},class_type=#{classType},textbook_id=#{textbookId} where id=#{id}")
+    @Update("update class set grade=#{grade}, subject=#{subject},number=#{number},date=#{date},class_type=#{classType},textbook_id=#{textbookId} where id=#{id}")
     public void update(Class classMessage);
 }
