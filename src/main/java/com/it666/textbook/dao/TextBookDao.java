@@ -2,6 +2,7 @@ package com.it666.textbook.dao;
 
 import com.it666.textbook.entity.TextBook;
 import org.apache.ibatis.annotations.*;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +25,15 @@ public interface TextBookDao {
     @Update("update textbook set course_name=#{courseName},course_time=#{courseTime},title_time=#{titleName},publisher=#{publisher},author=#{author},date=#{date},ISBN=#{ISBN},status=#{status},class_id=#{classId},teacher_id=#{teacherId} where id = #{id}")
     public void edit(TextBook textBook);
 
-    @Delete("delete from textbook where id=#{id}")
+    @Delete("delete from textbook where id = #{id}")
     public void delete(Integer id);
+
+    @Select("select * from textbook where teacher_id = #{id}")
+    public List<TextBook> findByTeacherId(Integer id);
+
+    @Select("select * from textbook where id = #{id}")
+    public TextBook findByTextBookById(Integer id);
+
+    @Delete("delete from textbook where id = #{id}")
+    public void deleteById(Integer id);
 }

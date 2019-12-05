@@ -4,6 +4,9 @@ import com.it666.textbook.dao.ClassDao;
 import com.it666.textbook.entity.Class;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Abouerp
  */
@@ -16,9 +19,14 @@ public class ClassService {
         this.classDao = classDao;
     }
 
-    public Class sava(Class classMessage) {
-        classDao.save(classMessage);
-        return classMessage;
+    public List<Integer> sava(List<Class> classMessage) {
+        List<Integer> list = new ArrayList<>();
+        for (Class c:classMessage){
+            classDao.save(c);
+            list.add(c.getId());
+        }
+//        classDao.save(classMessage);
+        return list;
     }
 
     public Class edit(Class classMessage){
@@ -32,5 +40,13 @@ public class ClassService {
 
     public void updateTeacherId(Integer id, Integer textbookId) {
         classDao.updateTextbookId(id,textbookId);
+    }
+
+    public List<Class> findByTextBookId(Integer id){
+        return classDao.findByTextBookId(id);
+    }
+
+    public Integer deleteByTextBookId(Integer id){
+        return classDao.deleteByTextBookId(id);
     }
 }

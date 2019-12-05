@@ -1,5 +1,6 @@
 package com.it666.textbook.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.entity.Class;
 import com.it666.textbook.entity.TextBook;
@@ -11,7 +12,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教师
@@ -33,6 +36,11 @@ public class TeacherController {
         this.classService = classService;
     }
 
+    /**
+     * 提交教材申请表
+     * @param textBook
+     * @return
+     */
     @PostMapping("/savetextbook")
     public ResultBean<TextBook> save(@RequestBody TextBook textBook) {
         textBook.setDate(new Date());
@@ -45,15 +53,67 @@ public class TeacherController {
         return new ResultBean<>(sava);
     }
 
+    /**
+     * 提交教材所对应的班级
+     * @param classMessage
+     * @return
+     */
+    @CrossOrigin
     @PostMapping("/saveclass")
-    public Class classSave(@RequestBody Class classMessage) {
+    public List<Integer> classSave(@RequestBody List<Class> classMessage) {
         return classService.sava(classMessage);
     }
 
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
     @PutMapping
-    public ResultBean<Object> edit(@RequestBody User user) {
+    public ResultBean<User> edit(@RequestBody User user) {
         User edit = userService.edit(user);
         return new ResultBean(edit);
     }
 
+    /**
+     * 获取该教师所提交的所有申请表，分页
+     * @param page
+     * @param size
+     * @param id       教师的id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page", defaultValue = "1") int page,
+                                              @RequestParam(value = "size", defaultValue = "10") int size,
+                                              @PathVariable Integer id) {
+        return new ResultBean<>(textBookService.findByTeacherId(page,size,id));
+    }
+
+    /**
+     * 获取申请表详细信息
+     * @param id    申请表的id
+     * @return
+     */
+    @GetMapping("/findtextbook/{id}")
+    public ResultBean<Map<String,Object>> findTextBookById(@PathVariable Integer id){
+        TextBook textBook = textBookService.findTextBookById(id);
+        Integer textBookId = textBook.getId();
+        List<Class> classList = classService.findByTextBookId(textBookId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("textbook",textBook);
+        map.put("class",classList);
+        return new ResultBean<>(map);
+    }
+
+    /**
+     * 删除申请表
+     * @param id    申请表的id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResultBean<Boolean> deleteByTextBookId(@PathVariable Integer id){
+        classService.deleteByTextBookId(id);
+        textBookService.deleteByTextBookId(id);
+        return new ResultBean<>(true);
+    }
 }

@@ -24,7 +24,7 @@ public class CORSFilter implements Filter {
         //注意 * 不能满足带有cookie的访问,Origin 必须是全匹配
 //        resp.addHeader("Access-Control-Allow-Origin", "*");
         //解决办法通过获取Origin请求头来动态设置
-
+        
         String origin = request.getHeader("Origin");
         if (StringUtils.hasText(origin)) {
             resp.addHeader("Access-Control-Allow-Origin", origin);
