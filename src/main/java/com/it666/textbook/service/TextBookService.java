@@ -40,4 +40,9 @@ public class TextBookService {
     public void deleteByTextBookId(Integer id){
          textBookDao.deleteById(id);
     }
+
+    public TextBook updateTextBook(TextBook textBook){
+        textBookDao.updateTextbook(textBook);
+        return textBook;
+    }
 }

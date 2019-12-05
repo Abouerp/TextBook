@@ -47,8 +47,10 @@ public class TeacherController {
         TextBook sava = textBookService.sava(textBook);
         Integer textbook_id = sava.getId();
         List<Integer> classList = textBook.getClassList();
-        for (Integer cl: classList){
-            classService.updateTeacherId(cl,textbook_id);
+        if (classList != null){
+            for (Integer cl: classList){
+                classService.updateTeacherId(cl,textbook_id);
+            }
         }
         return new ResultBean<>(sava);
     }
@@ -58,7 +60,7 @@ public class TeacherController {
      * @param classMessage
      * @return
      */
-    @CrossOrigin
+//    @CrossOrigin
     @PostMapping("/saveclass")
     public List<Integer> classSave(@RequestBody List<Class> classMessage) {
         return classService.sava(classMessage);
@@ -103,6 +105,16 @@ public class TeacherController {
         map.put("textbook",textBook);
         map.put("class",classList);
         return new ResultBean<>(map);
+    }
+
+    /**
+     * 更新教材申请表
+     * @param textBook
+     * @return
+     */
+    @PutMapping("/textbook")
+    public ResultBean<TextBook> updateTextBook(@PathVariable TextBook textBook){
+        return new ResultBean<>(textBookService.updateTextBook(textBook));
     }
 
     /**

@@ -6,6 +6,7 @@ import com.it666.textbook.entity.User;
 import com.it666.textbook.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Abouerp
  */
 @RestController
+@RequestMapping("/api")
 public class LoginController {
 
     private final UserService userService;
