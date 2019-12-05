@@ -41,4 +41,7 @@ public interface TextBookDao {
 
     @Update("update textbook set review_date=#{date} where id=#{id}")
     public void updateReviewDate(Date date, Integer id);
+
+    @Select("select * from textbook where teacher_id=#{teacherId} and status=#{status}")
+    public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status);
 }
