@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,4 +38,7 @@ public interface TextBookDao {
 
     @Delete("delete from textbook where id = #{id}")
     public void deleteById(Integer id);
+
+    @Update("update textbook set review_date=#{date} where id=#{id}")
+    public void updateReviewDate(Date date, Integer id);
 }

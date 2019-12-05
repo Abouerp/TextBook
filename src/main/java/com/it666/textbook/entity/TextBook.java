@@ -80,6 +80,10 @@ public class TextBook implements Serializable {
      */
     private List<Integer> classList;
     /**
+     * 审核通过时间
+     */
+    private Date reviewDate;
+    /**
      * 所属教师
      */
     private Integer teacherId;
