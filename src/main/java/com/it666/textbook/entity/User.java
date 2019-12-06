@@ -38,9 +38,9 @@ public class User implements Serializable {
      */
     private String sex;
     /**
-     * 年龄
+     * 学院
      */
-    private Integer age;
+    private String college;
     /**
      * 邮箱
      */

@@ -22,7 +22,7 @@ public class TextBookService {
         this.textBookDao = textBookDao;
     }
 
-    public TextBook sava(TextBook textBook){
+    public TextBook save(TextBook textBook){
         textBookDao.save(textBook);
         return textBook;
     }

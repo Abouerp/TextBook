@@ -37,6 +37,27 @@ public class TeacherController {
     }
 
     /**
+     * 查看用户个人信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResultBean<User> getMessage(@PathVariable Integer id){
+        return new ResultBean<>(userService.findByUserId(id));
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    @PutMapping
+    public ResultBean<User> edit(@RequestBody User user) {
+        User edit = userService.edit(user);
+        return new ResultBean(edit);
+    }
+
+    /**
      * 提交教材申请表
      * @param textBook
      * @return
@@ -44,7 +65,7 @@ public class TeacherController {
     @PostMapping("/savetextbook")
     public ResultBean<TextBook> save(@RequestBody TextBook textBook) {
         textBook.setDate(new Date());
-        TextBook sava = textBookService.sava(textBook);
+        TextBook sava = textBookService.save(textBook);
         Integer textbook_id = sava.getId();
         List<Integer> classList = textBook.getClassList();
         if (classList != null){
@@ -63,19 +84,10 @@ public class TeacherController {
 //    @CrossOrigin
     @PostMapping("/saveclass")
     public List<Integer> classSave(@RequestBody List<Class> classMessage) {
-        return classService.sava(classMessage);
+        return classService.save(classMessage);
     }
 
-    /**
-     * 更新用户信息
-     * @param user
-     * @return
-     */
-    @PutMapping
-    public ResultBean<User> edit(@RequestBody User user) {
-        User edit = userService.edit(user);
-        return new ResultBean(edit);
-    }
+
 
     /**
      * 获取该教师所提交的所有申请表，分页
@@ -84,7 +96,7 @@ public class TeacherController {
      * @param id       教师的id
      * @return
      */
-    @GetMapping("/{id}")
+    @GetMapping("/getall/{id}")
     public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page", defaultValue = "1") int page,
                                               @RequestParam(value = "size", defaultValue = "10") int size,
                                               @PathVariable Integer id) {

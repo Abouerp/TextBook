@@ -19,7 +19,7 @@ public class ClassService {
         this.classDao = classDao;
     }
 
-    public List<Integer> sava(List<Class> classMessage) {
+    public List<Integer> save(List<Class> classMessage) {
         List<Integer> list = new ArrayList<>();
         for (Class c:classMessage){
             classDao.save(c);
