@@ -45,4 +45,8 @@ public class TextBookService {
         textBookDao.updateTextbook(textBook);
         return textBook;
     }
+
+    public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status){
+        return textBookDao.findByTeacherIdAndStatus(teacherId,status);
+    }
 }
