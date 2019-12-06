@@ -21,7 +21,7 @@ public class ClassService {
 
     public List<Integer> save(List<Class> classMessage) {
         List<Integer> list = new ArrayList<>();
-        for (Class c:classMessage){
+        for (Class c : classMessage) {
             classDao.save(c);
             list.add(c.getId());
         }
@@ -29,24 +29,24 @@ public class ClassService {
         return list;
     }
 
-    public Class edit(Class classMessage){
+    public Class edit(Class classMessage) {
         classDao.update(classMessage);
         return classMessage;
     }
 
-    public Class findById(Integer id){
-         return classDao.findById(id);
+    public Class findById(Integer id) {
+        return classDao.findById(id);
     }
 
     public void updateTeacherId(Integer id, Integer textbookId) {
-        classDao.updateTextbookId(id,textbookId);
+        classDao.updateTextbookId(id, textbookId);
     }
 
-    public List<Class> findByTextBookId(Integer id){
+    public List<Class> findByTextBookId(Integer id) {
         return classDao.findByTextBookId(id);
     }
 
-    public Integer deleteByTextBookId(Integer id){
+    public Integer deleteByTextBookId(Integer id) {
         return classDao.deleteByTextBookId(id);
     }
 }

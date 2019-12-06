@@ -24,14 +24,41 @@ class UserServiceTest {
     private UserDao userDao;
 
     @Test
-    void findByUserName() {
+    void findAll() {
         List<User> all = userDao.findAll();
-        for (User user : all) {
-            System.out.println(user);
+        for (User a : all) {
+            System.out.println(a);
         }
     }
 
     @Test
-    void findAll() {
+    void findByUsername() {
+        User all = userDao.findUserByUsername("hahaha");
+        System.out.println(all);
+    }
+
+    @Test
+    void findUserById() {
+        User u = userDao.findUserById(5);
+        System.out.println(u);
+    }
+
+    @Test
+    void save() {
+        User u = new User();
+        u.setUserName("fasdfsdfah");
+        u.setUserPassword("adasfah");
+        u.setUserType(2);
+        int a = userDao.save(u);
+    }
+
+    @Test
+    void edit() {
+
+    }
+
+    @Test
+    void delete() {
+
     }
 }
