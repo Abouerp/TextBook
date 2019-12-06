@@ -58,6 +58,16 @@ public class TeacherController {
     }
 
     /**
+     * 提交教材所对应的班级
+     * @param classMessage
+     * @return    @CrossOrigin
+     */
+    @PostMapping("/saveclass")
+    public List<Integer> classSave(@RequestBody List<Class> classMessage) {
+        return classService.save(classMessage);
+    }
+
+    /**
      * 提交教材申请表
      * @param textBook
      * @return
@@ -75,19 +85,6 @@ public class TeacherController {
         }
         return new ResultBean<>(sava);
     }
-
-    /**
-     * 提交教材所对应的班级
-     * @param classMessage
-     * @return
-     */
-//    @CrossOrigin
-    @PostMapping("/saveclass")
-    public List<Integer> classSave(@RequestBody List<Class> classMessage) {
-        return classService.save(classMessage);
-    }
-
-
 
     /**
      * 获取该教师所提交的所有申请表，分页
