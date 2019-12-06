@@ -26,7 +26,9 @@ class UserServiceTest {
     @Test
     void findByUserName() {
         List<User> all = userDao.findAll();
-        System.out.println(all.get(0));
+        for (User user : all) {
+            System.out.println(user);
+        }
     }
 
     @Test
