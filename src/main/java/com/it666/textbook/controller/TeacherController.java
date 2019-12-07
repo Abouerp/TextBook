@@ -123,7 +123,14 @@ public class TeacherController {
      * @return
      */
     @PutMapping("/textbook")
-    public ResultBean<TextBook> updateTextBook(@PathVariable TextBook textBook){
+    public ResultBean<TextBook> updateTextBook(@RequestBody TextBook textBook){
+        textBook.setDate(new Date());
+        Integer textBookId = textBook.getId();
+        classService.deleteByTextBookId(textBookId);
+        List<Integer> classList = textBook.getClassList();
+        for (Integer id: classList){
+            classService.updateTeacherId(id,textBookId);
+        }
         return new ResultBean<>(textBookService.updateTextBook(textBook));
     }
 
@@ -139,6 +146,12 @@ public class TeacherController {
         return new ResultBean<>(true);
     }
 
+    /**
+     * 根据状态和教师id获取申请表list
+     * @param teacherId
+     * @param status
+     * @return
+     */
     @GetMapping("/{teacherId}/{status}")
     public ResultBean<List<TextBook>> findByTeacherIdAndStatus(@PathVariable Integer teacherId,@PathVariable Integer status) {
         return new ResultBean<>(textBookService.findByTeacherIdAndStatus(teacherId,status));
