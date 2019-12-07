@@ -9,6 +9,7 @@ import com.it666.textbook.service.ClassService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -136,5 +137,10 @@ public class TeacherController {
         classService.deleteByTextBookId(id);
         textBookService.deleteByTextBookId(id);
         return new ResultBean<>(true);
+    }
+
+    @GetMapping("/{teacherId}/{status}")
+    public ResultBean<List<TextBook>> findByTeacherIdAndStatus(@PathVariable Integer teacherId,@PathVariable Integer status) {
+        return new ResultBean<>(textBookService.findByTeacherIdAndStatus(teacherId,status));
     }
 }
