@@ -1,7 +1,7 @@
 package com.it666.textbook.service;
 
-import com.it666.textbook.dao.ClassDao;
-import com.it666.textbook.entity.Class;
+import com.it666.textbook.dao.ClassInformationDao;
+import com.it666.textbook.entity.ClassInformation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ import java.util.List;
 public class ClassService {
 
     @Autowired
-    private ClassDao classDao;
+    private ClassInformationDao classDao;
 
     @Test
     public void save(){
-        Class test = new Class();
+        ClassInformation test = new ClassInformation();
         test.setGrade("20级");
         test.setSubject("移动");
         test.setNumber(50);
@@ -34,7 +34,7 @@ public class ClassService {
 
     @Test
     public void findById(){
-        Class byId = classDao.findById(1);
+        ClassInformation byId = classDao.findById(1);
         System.out.println(byId);
     }
 
@@ -45,7 +45,7 @@ public class ClassService {
 
     @Test
     public void update(){
-        Class test = new Class();
+        ClassInformation test = new ClassInformation();
         test.setId(54);
         test.setGrade("20级");
         test.setSubject("溜溜球");
@@ -58,8 +58,8 @@ public class ClassService {
 
     @Test
     public void findByTextBookId(){
-        List<Class> bytextbookid =  classDao.findByTextBookId(12);
-        for (Class user: bytextbookid) {
+        List<ClassInformation> bytextbookid =  classDao.findByTextBookId(12);
+        for (ClassInformation user: bytextbookid) {
             System.out.println(user);
         }
     }

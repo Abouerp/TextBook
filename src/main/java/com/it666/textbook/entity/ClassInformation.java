@@ -3,10 +3,8 @@ package com.it666.textbook.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.data.relational.core.sql.In;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 开课班级
@@ -16,7 +14,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Class implements Serializable {
+public class ClassInformation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

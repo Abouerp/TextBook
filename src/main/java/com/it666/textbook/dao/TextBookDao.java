@@ -2,7 +2,6 @@ package com.it666.textbook.dao;
 
 import com.it666.textbook.entity.TextBook;
 import org.apache.ibatis.annotations.*;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;

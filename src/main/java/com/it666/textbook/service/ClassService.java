@@ -1,7 +1,7 @@
 package com.it666.textbook.service;
 
-import com.it666.textbook.dao.ClassDao;
-import com.it666.textbook.entity.Class;
+import com.it666.textbook.dao.ClassInformationDao;
+import com.it666.textbook.entity.ClassInformation;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,15 +13,15 @@ import java.util.List;
 @Service
 public class ClassService {
 
-    private final ClassDao classDao;
+    private final ClassInformationDao classDao;
 
-    public ClassService(ClassDao classDao) {
+    public ClassService(ClassInformationDao classDao) {
         this.classDao = classDao;
     }
 
-    public List<Integer> save(List<Class> classMessage) {
+    public List<Integer> save(List<ClassInformation> classMessage) {
         List<Integer> list = new ArrayList<>();
-        for (Class c : classMessage) {
+        for (ClassInformation c : classMessage) {
             classDao.save(c);
             list.add(c.getId());
         }
@@ -29,12 +29,12 @@ public class ClassService {
         return list;
     }
 
-    public Class edit(Class classMessage) {
+    public ClassInformation edit(ClassInformation classMessage) {
         classDao.update(classMessage);
         return classMessage;
     }
 
-    public Class findById(Integer id) {
+    public ClassInformation findById(Integer id) {
         return classDao.findById(id);
     }
 
@@ -42,7 +42,7 @@ public class ClassService {
         classDao.updateTextbookId(id, textbookId);
     }
 
-    public List<Class> findByTextBookId(Integer id) {
+    public List<ClassInformation> findByTextBookId(Integer id) {
         return classDao.findByTextBookId(id);
     }
 

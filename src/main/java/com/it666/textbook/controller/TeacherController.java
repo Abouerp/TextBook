@@ -2,14 +2,14 @@ package com.it666.textbook.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
-import com.it666.textbook.entity.Class;
+import com.it666.textbook.entity.ClassInformation;
 import com.it666.textbook.entity.TextBook;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.ClassService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.relational.core.sql.In;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -64,7 +64,7 @@ public class TeacherController {
      * @return    @CrossOrigin
      */
     @PostMapping("/saveclass")
-    public List<Integer> classSave(@RequestBody List<Class> classMessage) {
+    public List<Integer> classSave(@RequestBody List<ClassInformation> classMessage) {
         return classService.save(classMessage);
     }
 
@@ -110,7 +110,7 @@ public class TeacherController {
     public ResultBean<Map<String,Object>> findTextBookById(@PathVariable Integer id){
         TextBook textBook = textBookService.findTextBookById(id);
         Integer textBookId = textBook.getId();
-        List<Class> classList = classService.findByTextBookId(textBookId);
+        List<ClassInformation> classList = classService.findByTextBookId(textBookId);
         Map<String,Object> map = new HashMap<>();
         map.put("textbook",textBook);
         map.put("class",classList);
