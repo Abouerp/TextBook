@@ -54,11 +54,17 @@ class UserServiceTest {
 
     @Test
     void edit() {
-
+        User u = new User();
+        u.setUserName("345g43ywe");
+        u.setUserPassword("s345t");
+        u.setId(5);
+        u.setUserType(1);
+        u.setJobNumber("12351");
+        userDao.edit(u);
     }
 
     @Test
     void delete() {
-
+        userDao.delete(6);
     }
 }
