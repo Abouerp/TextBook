@@ -72,7 +72,7 @@ public class TextBook implements Serializable {
      */
     private Date date;
     /**
-     * 状态 0保存 1提交
+     * 状态 1待提交 2待审核 3已审核
      */
     private Integer status;
     /**
