@@ -22,7 +22,11 @@ public class TextBookServiceTest {
 
     @Test
     public void save(){
-
+        TextBook tb = new TextBook();
+        tb.setTeacherId(4);
+        tb.setCourseName("红红火火恍恍惚惚");
+        tb.setCourseTime(45);
+        textBookDao.save(tb);
     }
 
     @Test
@@ -35,17 +39,30 @@ public class TextBookServiceTest {
 
     @Test
     public void findTextBookById(){
-
+        TextBook tb = textBookDao.findByTextBookById(13);
+        System.out.println(tb);
     }
 
     @Test
     public void deleteByTextBookId(){
-
+        textBookDao.deleteById(27);
     }
 
     @Test
     public void updateTextBook(){
+        TextBook tb = new TextBook();
+        tb.setTeacherId(5);
+        tb.setCourseName("上海金");
+        tb.setCourseTime(23);
+        textBookDao.updateTextbook(tb);
+    }
 
+    @Test
+    public void findByTeacherIdAndStatus() {
+        List<TextBook> tbList = textBookDao.findByTeacherIdAndStatus(1, 1);
+        for (TextBook tb: tbList) {
+            System.out.println(tb);
+        }
     }
 
 }

@@ -23,7 +23,7 @@ public interface TextBookDao {
             "values(#{courseName},#{courseTime},#{titleName},#{publisher},#{author},#{titleDate},#{version},#{isbn},#{titleType},#{flag},#{phone},#{date},#{status},#{teacherId})")
     public void save(TextBook textBook);
 
-    @Update("update textbook set course_name=#{courseName},course_time=#{courseTime},title_time=#{titleName},publisher=#{publisher},author=#{author},title_date=#{titleDate}," +
+    @Update("update textbook set course_name=#{courseName},course_time=#{courseTime},title_name=#{titleName},publisher=#{publisher},author=#{author},title_date=#{titleDate}," +
             "version=#{version},ISBN=#{isbn},title_type=#{titleType},flag=#{flag},phone=#{phone},date=#{date},status=#{status},teacher_id=#{teacherId} where id = #{id}")
     public void updateTextbook(TextBook textBook);
 
