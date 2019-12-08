@@ -93,9 +93,6 @@ public class SecretaryController {
             int lastRowNum = sheet.getLastRowNum();
             for (int i=1; i<=lastRowNum; i++){
                 HSSFRow row = sheet.getRow(i);
-                if (row==null){
-                    break;
-                }
                 User user = new User();
                 user.setUserName(row.getCell(0).getStringCellValue());
                 user.setUserPassword(row.getCell(1).getStringCellValue());
