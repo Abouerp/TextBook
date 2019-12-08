@@ -9,7 +9,6 @@ import com.it666.textbook.service.ClassService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -31,7 +30,7 @@ public class TeacherController {
     private final UserService userService;
     private final ClassService classService;
 
-    public TeacherController(TextBookService textBookService, UserService userService,ClassService classService) {
+    public TeacherController(TextBookService textBookService, UserService userService, ClassService classService) {
         this.textBookService = textBookService;
         this.userService = userService;
         this.classService = classService;
@@ -39,16 +38,18 @@ public class TeacherController {
 
     /**
      * 查看用户个人信息
+     *
      * @param id
      * @return
      */
     @GetMapping("/{id}")
-    public ResultBean<User> getMessage(@PathVariable Integer id){
+    public ResultBean<User> getMessage(@PathVariable Integer id) {
         return new ResultBean<>(userService.findByUserId(id));
     }
 
     /**
      * 更新用户信息
+     *
      * @param user
      * @return
      */
@@ -60,8 +61,9 @@ public class TeacherController {
 
     /**
      * 提交教材所对应的班级
+     *
      * @param classMessage
-     * @return    @CrossOrigin
+     * @return @CrossOrigin
      */
     @PostMapping("/saveclass")
     public List<Integer> classSave(@RequestBody List<ClassInformation> classMessage) {
@@ -70,6 +72,7 @@ public class TeacherController {
 
     /**
      * 提交教材申请表
+     *
      * @param textBook
      * @return
      */
@@ -79,68 +82,72 @@ public class TeacherController {
         TextBook sava = textBookService.save(textBook);
         Integer textbook_id = sava.getId();
         List<Integer> classList = textBook.getClassList();
-        if (classList != null){
-            for (Integer cl: classList){
-                classService.updateTeacherId(cl,textbook_id);
+        if (classList != null) {
+            for (Integer cl : classList) {
+                classService.updateTeacherId(cl, textbook_id);
             }
         }
         return new ResultBean<>(sava);
     }
 
     /**
-     * 获取该教师所提交的所有申请表，分页
+     * 获取该教师所提交的申请表，分页
+     *
      * @param page
      * @param size
-     * @param id       教师的id
+     * @param id   教师的id
      * @return
      */
     @GetMapping("/getall/{id}")
     public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page", defaultValue = "1") int page,
-                                              @RequestParam(value = "size", defaultValue = "10") int size,
-                                              @PathVariable Integer id) {
-        return new ResultBean<>(textBookService.findByTeacherId(page,size,id));
+                                                          @RequestParam(value = "size", defaultValue = "10") int size,
+                                                          @PathVariable Integer id) {
+        return new ResultBean<>(textBookService.findByTeacherId(page, size, id));
     }
 
     /**
      * 获取申请表详细信息
-     * @param id    申请表的id
+     *
+     * @param id 申请表的id
      * @return
      */
     @GetMapping("/findtextbook/{id}")
-    public ResultBean<Map<String,Object>> findTextBookById(@PathVariable Integer id){
+    public ResultBean<Map<String, Object>> findTextBookById(@PathVariable Integer id) {
         TextBook textBook = textBookService.findTextBookById(id);
         Integer textBookId = textBook.getId();
         List<ClassInformation> classList = classService.findByTextBookId(textBookId);
-        Map<String,Object> map = new HashMap<>();
-        map.put("textbook",textBook);
-        map.put("class",classList);
+        Map<String, Object> map = new HashMap<>();
+        map.put("textbook", textBook);
+        map.put("class", classList);
         return new ResultBean<>(map);
     }
 
     /**
      * 更新教材申请表
+     *
      * @param textBook
      * @return
      */
     @PutMapping("/textbook")
-    public ResultBean<TextBook> updateTextBook(@RequestBody TextBook textBook){
+    public ResultBean<TextBook> updateTextBook(@RequestBody TextBook textBook) {
         textBook.setDate(new Date());
         Integer textBookId = textBook.getId();
         classService.deleteByTextBookId(textBookId);
         List<Integer> classList = textBook.getClassList();
-        for (Integer id: classList){
-            classService.updateTeacherId(id,textBookId);
+        for (Integer id : classList) {
+            classService.updateTeacherId(id, textBookId);
         }
         return new ResultBean<>(textBookService.updateTextBook(textBook));
     }
 
     /**
      * 删除申请表
-     * @param id    申请表的id
+     *
+     * @param id 申请表的id
      * @return
      */
     @DeleteMapping("/{id}")
-    public ResultBean<Boolean> deleteByTextBookId(@PathVariable Integer id){
+    public ResultBean<Boolean> deleteByTextBookId(@PathVariable Integer id) {
         classService.deleteByTextBookId(id);
         textBookService.deleteByTextBookId(id);
         return new ResultBean<>(true);
@@ -148,12 +155,13 @@ public class TeacherController {
 
     /**
      * 根据状态和教师id获取申请表list
+     *
      * @param teacherId
      * @param status
      * @return
      */
     @GetMapping("/{teacherId}/{status}")
-    public ResultBean<List<TextBook>> findByTeacherIdAndStatus(@PathVariable Integer teacherId,@PathVariable Integer status) {
-        return new ResultBean<>(textBookService.findByTeacherIdAndStatus(teacherId,status));
+    public ResultBean<List<TextBook>> findByTeacherIdAndStatus(@PathVariable Integer teacherId, @PathVariable Integer status) {
+        return new ResultBean<>(textBookService.findByTeacherIdAndStatus(teacherId, status));
     }
 }

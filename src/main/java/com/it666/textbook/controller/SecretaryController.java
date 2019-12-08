@@ -5,21 +5,16 @@ import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.UserService;
-
-
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.URI;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 
@@ -46,6 +41,7 @@ public class SecretaryController {
 
     /**
      * 添加教师
+     *
      * @param user
      * @return
      */
@@ -57,6 +53,7 @@ public class SecretaryController {
 
     /**
      * 更新用户信息
+     *
      * @param user
      * @return
      */
@@ -68,22 +65,23 @@ public class SecretaryController {
 
     /**
      * 提交excel文件
+     *
      * @param file
      * @return
      */
     @PostMapping("/file")
     public ResultBean<String> importProcess(@RequestBody MultipartFile file) {
-        if (file == null){
+        if (file == null) {
             return new ResultBean<>("file is null");
         }
-        String path =uploadFolder;
+        String path = uploadFolder;
         System.out.println(path);
         File newfile = new File(path);
-        if (!newfile.exists() ){
+        if (!newfile.exists()) {
             newfile.mkdir();
         }
-        String uuid = UUID.randomUUID().toString().replace("-","");
-        String filename = uuid+"_"+file.getOriginalFilename();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String filename = uuid + "_" + file.getOriginalFilename();
         try {
             //file.transferTo(new File(path,filename));
 
@@ -91,16 +89,16 @@ public class SecretaryController {
             HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
             HSSFSheet sheet = workbook.getSheetAt(0);
             int lastRowNum = sheet.getLastRowNum();
-            for (int i=1; i<=lastRowNum; i++){
+            for (int i = 1; i <= lastRowNum; i++) {
                 HSSFRow row = sheet.getRow(i);
                 User user = new User();
                 user.setUserName(row.getCell(0).getStringCellValue());
                 user.setUserPassword(row.getCell(1).getStringCellValue());
                 user.setJobNumber(row.getCell(2).getStringCellValue());
                 String usertype = row.getCell(3).getStringCellValue();
-                if ("教师".equals(usertype)){
+                if ("教师".equals(usertype)) {
                     user.setUserType(1);
-                }else {
+                } else {
                     user.setUserType(2);
                 }
                 secretaryService.savaTeacher(user);
@@ -112,10 +110,9 @@ public class SecretaryController {
 
     }
 
-    public ResultBean<Boolean> processExcel(@PathVariable String fileName){
-        String path = uploadFolder+"/"+fileName;
+    public ResultBean<Boolean> processExcel(@PathVariable String fileName) {
+        String path = uploadFolder + "/" + fileName;
         File file = new File(path);
-
 
 
         return new ResultBean<>(true);

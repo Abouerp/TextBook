@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ClassInformationDao {
 
-    @Options(useGeneratedKeys = true,keyProperty = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into class(grade,subject,number,date,class_type,textbook_id)values(#{grade},#{subject},#{number},#{date},#{classType},#{textbookId})")
     public void save(ClassInformation classMessage);
 
