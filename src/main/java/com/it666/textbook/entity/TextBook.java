@@ -56,7 +56,7 @@ public class TextBook implements Serializable {
      */
     private String isbn;
     /**
-     * 教材类型
+     * 教材类型(教育部国家级规划教材、省部级规划教材、教育部国家级精品教材、省部级精品教材、无）
      */
     private String titleType;
     /**
