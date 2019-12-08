@@ -12,7 +12,10 @@ spring:
     username: root
     password: root
 
-
+file:
+  staticAccessPath: /upload/**
+#  uploadFolder: /home/upload/
+  uploadFolder: d://upload/
 
   redis:
     port: 6379

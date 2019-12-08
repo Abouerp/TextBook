@@ -1,15 +1,22 @@
 package com.it666.textbook.controller;
 
+
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.UserService;
+
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URI;
+import java.util.UUID;
 
 
 /**
@@ -23,6 +30,10 @@ public class SecretaryController {
 
     private final SecretaryService secretaryService;
     private final UserService userService;
+    @Value("${file.staticAccessPath}")
+    private String staticAccessPath;
+    @Value("${file.uploadFolder}")
+    private String uploadFolder;
 
     public SecretaryController(SecretaryService secretaryService, UserService userService) {
         this.secretaryService = secretaryService;
@@ -42,27 +53,20 @@ public class SecretaryController {
     }
 
     @PostMapping("/file")
-    public ResultBean<String> importProcess(HttpServletRequest request, @RequestBody MultipartFile myfile)  {
-        String path = request.getSession().getServletContext().getRealPath("/upload/");
-//        System.out.println(path2);
-        String path2 = URI.create("classpath:/upload2").toString();
+    public ResultBean<String> importProcess(HttpServletRequest request, @RequestBody MultipartFile myfile) throws IOException {
+        String path =this.getClass().getClassLoader().getResource("").toString();
+                //request.getSession().getServletContext().getRealPath("resources/upload");
+
+        System.out.println(path);
+//        String path2 = URI.create("classpath:/upload2").toString();
         File file = new File(path);
-        File file12 = new File(path2);
         if (!file.exists() ){
             file.mkdir();
-
-            file12.mkdir();
         }
-        String filename = myfile.getOriginalFilename();
-        try {
-            File file1 = new File(path, filename);
-            myfile.transferTo(file1);
+        String uuid = UUID.randomUUID().toString().replace("-","");
+        String filename = uuid+"_"+myfile.getOriginalFilename();
+        myfile.transferTo(new File(path,filename));
 
-
-//            FileUtils.deleteDirectory(file1);
-        }catch (IOException e){
-            return new ResultBean<>("file upload false");
-        }
         return new ResultBean<>("file upload success");
     }
 
