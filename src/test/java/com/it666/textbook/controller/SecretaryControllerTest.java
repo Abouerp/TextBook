@@ -16,7 +16,7 @@ public class SecretaryControllerTest {
 
     @Test
     public void test() throws IOException {
-        OutputStream outputStream = new FileOutputStream("./a.xls");
+        OutputStream outputStream = new FileOutputStream("./b.xls");
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("Sheet1");
         HSSFRow row = sheet.createRow(0);

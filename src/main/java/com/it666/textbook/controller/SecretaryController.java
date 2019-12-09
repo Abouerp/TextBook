@@ -5,6 +5,7 @@ import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -25,6 +26,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api/secretary")
+@Log4j2
 public class SecretaryController {
 
     private final SecretaryService secretaryService;
@@ -92,9 +94,13 @@ public class SecretaryController {
             for (int i = 1; i <= lastRowNum; i++) {
                 HSSFRow row = sheet.getRow(i);
                 User user = new User();
-                user.setUserName(row.getCell(0).getStringCellValue());
-                user.setUserPassword(row.getCell(1).getStringCellValue());
-                user.setJobNumber(row.getCell(2).getStringCellValue());
+                String username = row.getCell(0).getStringCellValue();
+                log.info("row.getcell(0) = {} "+row.getCell(0).getStringCellValue());
+                user.setUserName(username);
+                String password = row.getCell(1).getStringCellValue();
+                user.setUserPassword(password);
+                String jobnumber = row.getCell(2).getStringCellValue();
+                user.setJobNumber(jobnumber);
                 String usertype = row.getCell(3).getStringCellValue();
                 if ("教师".equals(usertype)) {
                     user.setUserType(1);
