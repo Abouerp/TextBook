@@ -137,4 +137,9 @@ public class SecretaryController {
         return new ResultBean<>(path);
     }
 
+    @PutMapping("/textbook/{id}/{status}")
+    public ResultBean<Object> putTextBookStatus(@PathVariable Integer id, @PathVariable Integer status){
+        textBookService.updateTextbookStatus(id,status);
+        return new ResultBean<>("update success");
+    }
 }

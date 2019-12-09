@@ -46,4 +46,7 @@ public interface TextBookDao {
 
     @Select("select * from textbook where status=#{status}")
     public List<TextBook> findByStatus(Integer status);
+
+    @Update("update textbook set status = #{status} where id = #{id}")
+    public Integer updateTextbookStatus(Integer id,Integer status);
 }

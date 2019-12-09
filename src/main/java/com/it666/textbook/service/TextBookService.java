@@ -61,6 +61,10 @@ public class TextBookService {
         return textBookDao.findByStatus(status);
     }
 
+    public Integer updateTextbookStatus(Integer id, Integer status) {
+        return textBookDao.updateTextbookStatus(id,status);
+    }
+
     public String outExcel(List<TextBook> textbookList,String uploadFolder) throws IOException {
         String filename = UUID.randomUUID().toString() + ".xls";
         OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
@@ -141,4 +145,6 @@ public class TextBookService {
 
         return path;
     }
+
+
 }
