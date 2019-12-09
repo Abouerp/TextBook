@@ -43,4 +43,7 @@ public interface TextBookDao {
 
     @Select("select * from textbook where teacher_id=#{teacherId} and status=#{status}")
     public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status);
+
+    @Select("select * from textbook where status=#{status}")
+    public List<TextBook> findByStatus(Integer status);
 }

@@ -2,8 +2,10 @@ package com.it666.textbook.controller;
 
 
 import com.it666.textbook.bean.ResultBean;
+import com.it666.textbook.entity.TextBook;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.SecretaryService;
+import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -13,9 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -31,14 +32,20 @@ public class SecretaryController {
 
     private final SecretaryService secretaryService;
     private final UserService userService;
+    private final TextBookService textBookService;
     @Value("${file.staticAccessPath}")
     private String staticAccessPath;
     @Value("${file.uploadFolder}")
     private String uploadFolder;
+    @Value("${remote.port}")
+    private String port;
+    @Value("${remote.address}")
+    private String address;
 
-    public SecretaryController(SecretaryService secretaryService, UserService userService) {
+    public SecretaryController(SecretaryService secretaryService, UserService userService, TextBookService textBookService) {
         this.secretaryService = secretaryService;
         this.userService = userService;
+        this.textBookService = textBookService;
     }
 
     /**
@@ -66,12 +73,12 @@ public class SecretaryController {
     }
 
     /**
-     * 提交excel文件
+     * excel文件导入教师账户
      *
      * @param file
      * @return
      */
-    @PostMapping("/file")
+    @PostMapping("/excel")
     public ResultBean<String> importProcess(@RequestBody MultipartFile file) {
         if (file == null) {
             return new ResultBean<>("file is null");
@@ -85,7 +92,7 @@ public class SecretaryController {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String filename = uuid + "_" + file.getOriginalFilename();
         try {
-            //file.transferTo(new File(path,filename));
+            /*file.transferTo(new File(path,filename));*/
 
             InputStream inputStream = file.getInputStream();
             HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
@@ -116,11 +123,91 @@ public class SecretaryController {
 
     }
 
-    public ResultBean<Boolean> processExcel(@PathVariable String fileName) {
-        String path = uploadFolder + "/" + fileName;
-        File file = new File(path);
+    /**
+     * 根据申请表的状态导出excel表格
+     * @param status
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/excel/{status}")
+    public ResultBean<String> outExcel(@PathVariable Integer status) throws IOException{
+        List<TextBook> textbookList =  textBookService.findByStatus(status);
+        String filename = UUID.randomUUID().toString()+".xls";
+        OutputStream outputStream = new FileOutputStream(uploadFolder+filename);
 
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Sheet1");
+        HSSFRow row = sheet.createRow(0);
+        row.createCell(0).setCellValue("课程名称");
+        row.createCell(1).setCellValue("课程学时");
+        row.createCell(2).setCellValue("教材名称");
+        row.createCell(3).setCellValue("出版单位");
+        row.createCell(4).setCellValue("编者");
+        row.createCell(5).setCellValue("出版时间");
+        row.createCell(6).setCellValue("版次");
+        row.createCell(7).setCellValue("书号ISBN");
+        row.createCell(8).setCellValue("教材类型");
+        row.createCell(9).setCellValue("联系电话");
+        row.setHeightInPoints(30);
+        sheet.setColumnWidth(0,20*256);
+        sheet.setColumnWidth(2,20*256);
+        sheet.setColumnWidth(3,15*256);
+        sheet.setColumnWidth(4,10*256);
+        sheet.setColumnWidth(5,15*256);
+        sheet.setColumnWidth(7,15*256);
+        sheet.setColumnWidth(8,20*256);
+        sheet.setColumnWidth(9,12*256);
 
-        return new ResultBean<>(true);
+        int j = 1;
+        for (int i=0; i<textbookList.size(); i++){
+            HSSFRow row1 = sheet.createRow(j);
+            String courseName = textbookList.get(i).getCourseName();
+            if (courseName!=null){
+                row1.createCell(0).setCellValue(courseName);
+            }
+            Integer courseTime = textbookList.get(i).getCourseTime();
+            if (courseTime!=null) {
+                row1.createCell(1).setCellValue(courseTime);
+            }
+            String titleName = textbookList.get(i).getTitleName();
+            if (titleName!=null){
+                row1.createCell(2).setCellValue(titleName);
+            }
+            String publisher = textbookList.get(i).getPublisher();
+            if (publisher!=null){
+                row1.createCell(3).setCellValue(publisher);
+            }
+            String author = textbookList.get(i).getAuthor();
+            if (author!=null){
+                row1.createCell(4).setCellValue(author);
+            }
+            String titleDate = textbookList.get(i).getTitleDate();
+            if (titleDate!=null){
+                row1.createCell(5).setCellValue(titleDate);
+            }
+            String version = textbookList.get(i).getVersion();
+            if (version!=null){
+                row1.createCell(6).setCellValue(version);
+            }
+            String isbn = textbookList.get(i).getIsbn();
+            if (isbn!=null){
+                row1.createCell(7).setCellValue(isbn);
+            }
+            String titleType = textbookList.get(i).getTitleType();
+            if (titleType!=null){
+                row1.createCell(8).setCellValue(titleType);
+            }
+            String phone = textbookList.get(i).getPhone();
+            if (phone!=null){
+                row1.createCell(9).setCellValue(phone);
+            }
+            j++;
+        }
+        workbook.setActiveSheet(0);
+        workbook.write(outputStream);
+        outputStream.close();
+
+        String path = "/api/file/"+filename;
+        return new ResultBean<>(path);
     }
 }

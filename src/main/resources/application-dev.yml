@@ -2,6 +2,10 @@ server:
   port: 9090
   address: 0.0.0.0
 
+remote:
+  port: 9090
+  address: 172.16.61.151
+
 spring:
   application:
     name: textBook
@@ -13,7 +17,7 @@ spring:
     password: root
 
 file:
-  staticAccessPath: /upload/**
+  staticAccessPath: /api/file/**
 #  uploadFolder: /home/upload/
   uploadFolder: d://upload/
 

@@ -49,4 +49,8 @@ public class TextBookService {
     public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status){
         return textBookDao.findByTeacherIdAndStatus(teacherId,status);
     }
+
+    public List<TextBook> findByStatus(Integer status){
+        return textBookDao.findByStatus(status);
+    }
 }
