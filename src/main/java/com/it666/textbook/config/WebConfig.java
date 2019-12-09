@@ -18,19 +18,6 @@ import java.io.IOException;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("redirect:/login");
-//    }
-
-//    @Bean(name = "multipartResolver")
-//    public MultipartResolver multipartResolver() throws IOException {
-//        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-//        resolver.setDefaultEncoding("UTF-8");
-//        resolver.setMaxInMemorySize(10240);     //最大内存大小 (10240)
-//        resolver.setMaxUploadSize(50*1024*1024);
-//        return resolver;
-//    }
 
     @Value("${file.staticAccessPath}")
     private String staticAccessPath;
