@@ -86,7 +86,10 @@
             <artifactId>poi</artifactId>
             <version>3.14</version>
         </dependency>
-        <!-- 使用 xlsx 格式需要额外引入此依赖 -->
+        <!-- 使用 xls 格式需要额外引入此依赖
+        文档：https://www.jianshu.com/p/698bebdf2129    方法1
+        https://blog.csdn.net/vbirdbest/article/details/72870714    方法2
+        -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>

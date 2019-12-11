@@ -72,13 +72,17 @@ public class TextBook implements Serializable {
      */
     private Date date;
     /**
-     * 状态 1待提交 2待审核 3已审核
+     * 状态 1待提交 2待审核 3已审核 4审核不通过
      */
     private Integer status;
     /**
      * list[包含的班级]
      */
     private List<Integer> classList;
+    /**
+     * 审核意见
+     */
+    private String reviewOpinion;
     /**
      * 审核通过时间
      */
