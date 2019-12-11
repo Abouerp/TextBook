@@ -23,7 +23,7 @@ public interface UserDao {
     public User findUserById(Integer id);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into user(user_name,user_password,job_number,sex,college,email,phone,user_type)values(#{userName},#{userPassword},#{jobNumber},#{sex},#{college},#{email},#{phone},#{userType})")
+    @Insert("insert into user(user_name,user_password,job_number,sex,college,email,phone,user_type,real_name)values(#{userName},#{userPassword},#{jobNumber},#{sex},#{college},#{email},#{phone},#{userType},#{realName})")
     public int save(User user);
 
     @Update("update user set user_name=#{userName}, user_password=#{userPassword}, job_number=#{jobNumber}, sex=#{sex}, college=#{college}, email=#{email}, phone=#{phone}, user_type=#{userType}, real_name=#{realName} where id=#{id}")

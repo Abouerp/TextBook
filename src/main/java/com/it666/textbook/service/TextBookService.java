@@ -5,15 +5,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.dao.TextBookDao;
+import com.it666.textbook.entity.ClassInformation;
 import com.it666.textbook.entity.TextBook;
+import com.it666.textbook.entity.User;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +26,10 @@ import java.util.UUID;
 public class TextBookService {
 
     private final TextBookDao textBookDao;
+    @Value("${file.staticAccessPath}")
+    private String staticAccessPath;
+    @Value("${file.uploadFolder}")
+    private String uploadFolder;
 
     public TextBookService(TextBookDao textBookDao){
         this.textBookDao = textBookDao;
@@ -53,16 +59,18 @@ public class TextBookService {
         return textBook;
     }
 
-    public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status){
-        return textBookDao.findByTeacherIdAndStatus(teacherId,status);
+    public PageInfo<TextBook> findByTeacherIdAndStatus(int page, int size, Integer teacherId, Integer status){
+        PageHelper.startPage(page,size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndStatus(teacherId,status), size) ;
+        return pageInfo;
     }
 
     public List<TextBook> findByStatus(Integer status){
         return textBookDao.findByStatus(status);
     }
 
-    public Integer updateTextbookStatus(Integer id, Integer status) {
-        return textBookDao.updateTextbookStatus(id,status);
+    public Integer updateTextbookStatus(Integer id, Integer status, String reviewOpinion) {
+        return textBookDao.updateTextbookStatus(id,status,reviewOpinion);
     }
 
     public String outExcel(List<TextBook> textbookList,String uploadFolder) throws IOException {
@@ -141,10 +149,71 @@ public class TextBookService {
         workbook.write(outputStream);
         outputStream.close();
 
-        String path = "/api/file/" + filename;
-
-        return path;
+        return filename;
     }
 
+    public String outSimpleExcel(TextBook textBook,List<ClassInformation> classInformations,User user) throws Exception{
+        FileInputStream fileInputStream = new FileInputStream(uploadFolder + "finallymodel.xls");
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+        POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
+        HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
+        HSSFSheet sheet = workbook.getSheet("Sheet1");
+
+        HSSFRow row = sheet.getRow(2);
+        row.getCell(1).setCellValue(textBook.getCourseName());
+        row.getCell(6).setCellValue(textBook.getCourseTime());
+
+        row = sheet.getRow(3);
+        row.getCell(1).setCellValue(textBook.getTitleName());
+        row.getCell(6).setCellValue(textBook.getPublisher());
+
+        row = sheet.getRow(4);
+        row.getCell(1).setCellValue(textBook.getAuthor());
+        row.getCell(3).setCellValue(textBook.getTitleDate());
+        row.getCell(5).setCellValue(textBook.getVersion());
+        row.getCell(7).setCellValue(textBook.getFlag());
+
+        row = sheet.getRow(6);
+        row.getCell(4).setCellValue(textBook.getTitleType());
+
+        row = sheet.getRow(7);
+        row.getCell(6).setCellValue(textBook.getIsbn());
+
+
+        int i = 9;
+        for (ClassInformation classInformation : classInformations) {
+            row = sheet.getRow(i);
+            row.getCell(0).setCellValue(classInformation.getGrade());
+            row.getCell(1).setCellValue(classInformation.getSubject());
+            row.getCell(3).setCellValue(classInformation.getNumber());
+            row.getCell(4).setCellValue(classInformation.getDate());
+            row.getCell(5).setCellValue(classInformation.getClassType());
+            row.getCell(6).setCellValue(classInformation.getSemester());
+            i++;
+        }
+
+        row = sheet.getRow(14);
+
+
+        System.out.println(user.getRealName());
+        row.getCell(2).setCellValue(user.getRealName());
+        row.getCell(6).setCellValue(textBook.getPhone());
+
+        row = sheet.getRow(16);
+        row.getCell(0).setCellValue("审核意见： " + textBook.getReviewOpinion());
+
+        row = sheet.getRow(17);
+        row.getCell(5).setCellValue("审核时间：" + (textBook.getReviewDate() == null ? "" : textBook.getReviewDate()));
+
+        row = sheet.getRow(18);
+        row.getCell(5).setCellValue("系主任签名：kk");
+        String filename = UUID.randomUUID().toString() + ".xls";
+        OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
+        workbook.write(outputStream);
+        outputStream.close();
+        workbook.close();
+
+        return filename;
+    }
 
 }

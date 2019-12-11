@@ -17,7 +17,7 @@ public class SecretaryService {
         this.userDao = userDao;
     }
 
-    public User savaTeacher(User user){
+    public User saveTeacher(User user){
         userDao.save(user);
         return user;
     }

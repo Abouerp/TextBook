@@ -2,23 +2,23 @@ package com.it666.textbook.controller;
 
 
 import com.it666.textbook.bean.ResultBean;
+import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.entity.TextBook;
 import com.it666.textbook.entity.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -58,10 +58,10 @@ public class SecretaryController {
      * @param user
      * @return
      */
-    @PostMapping("/save")
-    public ResultBean<Object> savaTeacher(@RequestBody User user) {
-        User newuser = secretaryService.savaTeacher(user);
-        return new ResultBean<>(newuser);
+    @PostMapping("/teacher")
+    public ResultBean<User> saveTeacher(@RequestBody User user) {
+        User newUser = secretaryService.saveTeacher(user);
+        return new ResultBean<>(newUser);
     }
 
     /**
@@ -89,9 +89,9 @@ public class SecretaryController {
         }
         String path = uploadFolder;
         System.out.println(path);
-        File newfile = new File(path);
-        if (!newfile.exists()) {
-            newfile.mkdir();
+        File newFile = new File(path);
+        if (!newFile.exists()) {
+            newFile.mkdir();
         }
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String filename = uuid + "_" + file.getOriginalFilename();
@@ -118,7 +118,7 @@ public class SecretaryController {
                 } else {
                     user.setUserType(2);
                 }
-                secretaryService.savaTeacher(user);
+                secretaryService.saveTeacher(user);
             }
             return new ResultBean<>("insert teacher success");
         } catch (IOException e) {
@@ -138,18 +138,24 @@ public class SecretaryController {
     public ResultBean<String> outExcel(@PathVariable Integer status) throws IOException {
         List<TextBook> textbookList = textBookService.findByStatus(status);
         String path = textBookService.outExcel(textbookList, uploadFolder);
-        return new ResultBean<>(path);
+        return new ResultBean<>(ResultCode.SUCCESS,path);
     }
 
     /**
      * 审核申请表
+     * @param id        申请表id
+     * @param status    申请表状态
+     * @param reviewOpinion     审核意见
      * @return
      */
-    @PutMapping("/textbook")
-    public ResultBean<Object> putTextBookStatus(@RequestBody TextBook textBook){
+    @PutMapping("/textbook/{id}/{status}")
+    public ResultBean<Object> putTextBookStatus(@PathVariable Integer id, @PathVariable Integer status,@RequestBody String reviewOpinion) {
+        TextBook textBook = textBookService.findTextBookById(id);
+        textBook.setStatus(status);
+        textBook.setReviewOpinion(reviewOpinion);
         textBook.setReviewDate(new Date());
         textBookService.updateTextBook(textBook);
-        return new ResultBean<>("update success");
+        return new ResultBean<>(ResultCode.SUCCESS,textBook);
     }
 
 

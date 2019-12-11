@@ -24,7 +24,7 @@ public class SecretaryServiceTest {
         u.setUserType(1);
         u.setUserName("冷鱼不冷");
         u.setUserPassword("cf123456");
-        secretaryService.savaTeacher(u);
+        secretaryService.saveTeacher(u);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.it666.textbook.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
+import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.entity.ClassInformation;
 import com.it666.textbook.entity.TextBook;
 import com.it666.textbook.entity.User;
@@ -32,10 +33,7 @@ public class TeacherController {
     private final TextBookService textBookService;
     private final UserService userService;
     private final ClassService classService;
-    @Value("${file.staticAccessPath}")
-    private String staticAccessPath;
-    @Value("${file.uploadFolder}")
-    private String uploadFolder;
+
     @Value("${remote.port}")
     private String port;
     @Value("${remote.address}")
@@ -173,73 +171,25 @@ public class TeacherController {
      * @return
      */
     @GetMapping("/{teacherId}/{status}")
-    public ResultBean<List<TextBook>> findByTeacherIdAndStatus(@PathVariable Integer teacherId, @PathVariable Integer status) {
-        return new ResultBean<>(textBookService.findByTeacherIdAndStatus(teacherId, status));
+    public ResultBean<PageInfo<TextBook>> findByTeacherIdAndStatus(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                   @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                   @PathVariable Integer teacherId, @PathVariable Integer status) {
+        return new ResultBean<>(textBookService.findByTeacherIdAndStatus(page, size, teacherId, status));
     }
 
+    /**
+     * 导出单张申请表
+     *
+     * @param id 申请表的id
+     * @return string  文件名字
+     * @throws IOException
+     */
     @GetMapping("/excel/{id}")
-    public ResultBean<String> simpleExcel(@PathVariable Integer id) throws IOException {
+    public ResultBean<String> simpleExcel(@PathVariable Integer id) throws Exception {
         TextBook textBook = textBookService.findTextBookById(id);
-        FileInputStream fileInputStream = new FileInputStream(uploadFolder+"finallymodel.xls");
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-        POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
-        HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
-        HSSFSheet sheet = workbook.getSheet("Sheet1");
-
-        HSSFRow row = sheet.getRow(2);
-        row.getCell(1).setCellValue(textBook.getCourseName());
-        row.getCell(6).setCellValue(textBook.getCourseTime());
-
-        row = sheet.getRow(3);
-        row.getCell(1).setCellValue(textBook.getTitleName());
-        row.getCell(6).setCellValue(textBook.getPublisher());
-
-        row = sheet.getRow(4);
-        row.getCell(1).setCellValue(textBook.getAuthor());
-        row.getCell(3).setCellValue(textBook.getTitleDate());
-        row.getCell(5).setCellValue(textBook.getVersion());
-        row.getCell(7).setCellValue(textBook.getFlag());
-
-        row = sheet.getRow(6);
-        row.getCell(4).setCellValue(textBook.getTitleType());
-
-        row = sheet.getRow(7);
-        row.getCell(6).setCellValue(textBook.getIsbn());
-
         List<ClassInformation> classInformations = classService.findByTextBookId(textBook.getId());
-
-        int i=9;
-        for (ClassInformation classInformation :classInformations){
-            row = sheet.getRow(i);
-            row.getCell(0).setCellValue(classInformation.getGrade());
-            row.getCell(1).setCellValue(classInformation.getSubject());
-            row.getCell(3).setCellValue(classInformation.getNumber());
-            row.getCell(4).setCellValue(classInformation.getDate());
-            row.getCell(5).setCellValue(classInformation.getClassType());
-            row.getCell(6).setCellValue(classInformation.getSemester());
-            i++;
-        }
-
-        row = sheet.getRow(14);
         User user = userService.findByUserId(textBook.getTeacherId());
-        log.info("user = {}",user);
-        System.out.println(user.getRealName());
-        row.getCell(2).setCellValue(user.getRealName());
-        row.getCell(6).setCellValue(textBook.getPhone());
-
-        row = sheet.getRow(16);
-        row.getCell(0).setCellValue("审核意见： "+textBook.getReviewOpinion());
-
-        row = sheet.getRow(17);
-        row.getCell(5).setCellValue("审核时间："+(textBook.getReviewDate()==null?"":textBook.getReviewDate()));
-
-        row = sheet.getRow(18);
-        row.getCell(5).setCellValue("系主任签名：kk");
-        String filename = UUID.randomUUID().toString() + ".xls";
-        OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
-        workbook.write(outputStream);
-        outputStream.close();
-        workbook.close();
-        return new ResultBean<>(filename);
+        String path = textBookService.outSimpleExcel(textBook, classInformations, user);
+        return new ResultBean<>(ResultCode.SUCCESS,path);
     }
 }

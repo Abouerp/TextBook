@@ -18,12 +18,12 @@ public interface TextBookDao {
     public List<TextBook> findAll(Integer id);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into textbook(course_name,course_time,title_name,publisher,author,title_date,version,ISBN,title_type,flag,phone,date,status,teacher_id)" +
-            "values(#{courseName},#{courseTime},#{titleName},#{publisher},#{author},#{titleDate},#{version},#{isbn},#{titleType},#{flag},#{phone},#{date},#{status},#{teacherId})")
+    @Insert("insert into textbook(course_name,course_time,title_name,publisher,author,title_date,version,ISBN,title_type,flag,phone,date,status,review_opinion,teacher_id)" +
+            "values(#{courseName},#{courseTime},#{titleName},#{publisher},#{author},#{titleDate},#{version},#{isbn},#{titleType},#{flag},#{phone},#{date},#{status},#{reviewOpinion},#{teacherId})")
     public void save(TextBook textBook);
 
     @Update("update textbook set course_name=#{courseName},course_time=#{courseTime},title_name=#{titleName},publisher=#{publisher},author=#{author},title_date=#{titleDate}," +
-            "version=#{version},ISBN=#{isbn},title_type=#{titleType},flag=#{flag},phone=#{phone},date=#{date},status=#{status},teacher_id=#{teacherId} where id = #{id}")
+            "version=#{version},ISBN=#{isbn},title_type=#{titleType},flag=#{flag},phone=#{phone},date=#{date},status=#{status},review_date=#{reviewDate},review_opinion=#{reviewOpinion},teacher_id=#{teacherId} where id = #{id}")
     public void updateTextbook(TextBook textBook);
 
     @Delete("delete from textbook where id = #{id}")
@@ -47,6 +47,8 @@ public interface TextBookDao {
     @Select("select * from textbook where status=#{status}")
     public List<TextBook> findByStatus(Integer status);
 
-    @Update("update textbook set status = #{status} where id = #{id}")
-    public Integer updateTextbookStatus(Integer id,Integer status);
+    @Update("update textbook set status = #{status}, review_opinion=#{reviewOpinion} where id = #{id}")
+    public Integer updateTextbookStatus(Integer id,Integer status,String reviewOpinion);
+
+
 }
