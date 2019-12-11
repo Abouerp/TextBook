@@ -1,13 +1,11 @@
 package com.it666.textbook.service;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.dao.TextBookDao;
-import com.it666.textbook.entity.ClassInformation;
-import com.it666.textbook.entity.TextBook;
-import com.it666.textbook.entity.User;
+import com.it666.textbook.domain.ClassInformation;
+import com.it666.textbook.domain.TextBook;
+import com.it666.textbook.domain.User;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

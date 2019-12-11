@@ -1,4 +1,4 @@
-package com.it666.textbook.entity;
+package com.it666.textbook.domain;
 
 /**
  * @author Abouerp

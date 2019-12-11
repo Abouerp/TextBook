@@ -1,8 +1,8 @@
 package com.it666.textbook.controller;
 
 import com.it666.textbook.bean.ResultBean;
-import com.it666.textbook.entity.LoginUser;
-import com.it666.textbook.entity.User;
+import com.it666.textbook.domain.LoginUser;
+import com.it666.textbook.domain.User;
 import com.it666.textbook.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

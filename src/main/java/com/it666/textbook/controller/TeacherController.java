@@ -3,17 +3,13 @@ package com.it666.textbook.controller;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
-import com.it666.textbook.entity.ClassInformation;
-import com.it666.textbook.entity.TextBook;
-import com.it666.textbook.entity.User;
+import com.it666.textbook.domain.ClassInformation;
+import com.it666.textbook.domain.TextBook;
+import com.it666.textbook.domain.User;
 import com.it666.textbook.service.ClassService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -174,6 +170,7 @@ public class TeacherController {
     public ResultBean<PageInfo<TextBook>> findByTeacherIdAndStatus(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                    @RequestParam(value = "size", defaultValue = "10") int size,
                                                                    @PathVariable Integer teacherId, @PathVariable Integer status) {
+
         return new ResultBean<>(textBookService.findByTeacherIdAndStatus(page, size, teacherId, status));
     }
 

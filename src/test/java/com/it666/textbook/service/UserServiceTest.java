@@ -1,7 +1,7 @@
 package com.it666.textbook.service;
 
 import com.it666.textbook.dao.UserDao;
-import com.it666.textbook.entity.User;
+import com.it666.textbook.domain.User;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

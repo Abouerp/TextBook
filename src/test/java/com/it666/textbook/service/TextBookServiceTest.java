@@ -1,7 +1,7 @@
 package com.it666.textbook.service;
 
 import com.it666.textbook.dao.TextBookDao;
-import com.it666.textbook.entity.TextBook;
+import com.it666.textbook.domain.TextBook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +63,15 @@ public class TextBookServiceTest {
         for (TextBook tb: tbList) {
             System.out.println(tb);
         }
+    }
+
+    @Test
+    public void findByCollege(){
+        List<TextBook> college = textBookDao.findByCollege("计算机学院");
+        for (TextBook c:college){
+            System.out.println(c);
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 package com.it666.textbook.dao;
 
-import com.it666.textbook.entity.TextBook;
+import com.it666.textbook.domain.TextBook;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -50,5 +50,8 @@ public interface TextBookDao {
     @Update("update textbook set status = #{status}, review_opinion=#{reviewOpinion} where id = #{id}")
     public Integer updateTextbookStatus(Integer id,Integer status,String reviewOpinion);
 
-
+    @Select("select b.id,b.course_name,b.course_time,b.title_name,b.publisher,b.author,b.title_date,b.version,b.ISBN," +
+            "b.title_type,b.flag,b.phone,b.date,b.status,b.review_date,b.review_opinion,b.teacher_id" +
+            "from  textbook b inner join user a on a.id = b.teacher_id and a.college=#{college}")
+    public List<TextBook> findByCollege(String college);
 }

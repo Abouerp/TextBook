@@ -3,11 +3,12 @@ package com.it666.textbook.controller;
 
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
-import com.it666.textbook.entity.TextBook;
-import com.it666.textbook.entity.User;
+import com.it666.textbook.domain.TextBook;
+import com.it666.textbook.domain.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -158,5 +159,11 @@ public class SecretaryController {
         return new ResultBean<>(ResultCode.SUCCESS,textBook);
     }
 
+    @GetMapping("/college/{collegeName}")
+    public ResultBean<Boolean> findTextBookByCollege(@PathVariable String collegeName){
 
+
+
+        return new  ResultBean<>(ResultCode.SUCCESS,true);
+    }
 }

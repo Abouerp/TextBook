@@ -1,7 +1,7 @@
 package com.it666.textbook.service;
 
 import com.it666.textbook.dao.ClassInformationDao;
-import com.it666.textbook.entity.ClassInformation;
+import com.it666.textbook.domain.ClassInformation;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

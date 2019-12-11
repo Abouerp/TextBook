@@ -1,6 +1,6 @@
 package com.it666.textbook.dao;
 
-import com.it666.textbook.entity.ClassInformation;
+import com.it666.textbook.domain.ClassInformation;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

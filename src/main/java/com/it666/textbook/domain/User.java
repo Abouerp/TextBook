@@ -1,4 +1,4 @@
-package com.it666.textbook.entity;
+package com.it666.textbook.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
