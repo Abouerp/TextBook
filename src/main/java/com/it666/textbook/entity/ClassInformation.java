@@ -40,6 +40,10 @@ public class ClassInformation implements Serializable {
      */
     private String classType;
     /**
+     * 开课学期
+     */
+    private String semester;
+    /**
      * 外键：一对多 属于哪个申请表
      */
     private Integer textbookId;

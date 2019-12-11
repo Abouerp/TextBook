@@ -180,7 +180,7 @@ public class TeacherController {
     @GetMapping("/excel/{id}")
     public ResultBean<String> simpleExcel(@PathVariable Integer id) throws IOException {
         TextBook textBook = textBookService.findTextBookById(id);
-        FileInputStream fileInputStream = new FileInputStream(uploadFolder+"getmodel.xls");
+        FileInputStream fileInputStream = new FileInputStream(uploadFolder+"finallymodel.xls");
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
         POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
         HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
@@ -208,7 +208,33 @@ public class TeacherController {
 
         List<ClassInformation> classInformations = classService.findByTextBookId(textBook.getId());
 
+        int i=9;
+        for (ClassInformation classInformation :classInformations){
+            row = sheet.getRow(i);
+            row.getCell(0).setCellValue(classInformation.getGrade());
+            row.getCell(1).setCellValue(classInformation.getSubject());
+            row.getCell(3).setCellValue(classInformation.getNumber());
+            row.getCell(4).setCellValue(classInformation.getDate());
+            row.getCell(5).setCellValue(classInformation.getClassType());
+            row.getCell(6).setCellValue(classInformation.getSemester());
+            i++;
+        }
 
+        row = sheet.getRow(14);
+        User user = userService.findByUserId(textBook.getTeacherId());
+        log.info("user = {}",user);
+        System.out.println(user.getRealName());
+        row.getCell(2).setCellValue(user.getRealName());
+        row.getCell(6).setCellValue(textBook.getPhone());
+
+        row = sheet.getRow(16);
+        row.getCell(0).setCellValue("审核意见： "+textBook.getReviewOpinion());
+
+        row = sheet.getRow(17);
+        row.getCell(5).setCellValue("审核时间："+(textBook.getReviewDate()==null?"":textBook.getReviewDate()));
+
+        row = sheet.getRow(18);
+        row.getCell(5).setCellValue("系主任签名：kk");
         String filename = UUID.randomUUID().toString() + ".xls";
         OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
         workbook.write(outputStream);
