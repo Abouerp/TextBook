@@ -9,8 +9,14 @@ import com.it666.textbook.service.ClassService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -26,6 +32,14 @@ public class TeacherController {
     private final TextBookService textBookService;
     private final UserService userService;
     private final ClassService classService;
+    @Value("${file.staticAccessPath}")
+    private String staticAccessPath;
+    @Value("${file.uploadFolder}")
+    private String uploadFolder;
+    @Value("${remote.port}")
+    private String port;
+    @Value("${remote.address}")
+    private String address;
 
     public TeacherController(TextBookService textBookService, UserService userService, ClassService classService) {
         this.textBookService = textBookService;
@@ -140,11 +154,12 @@ public class TeacherController {
     /**
      * 删除申请表
      *
-     * @param id 申请表的id
+     * @param id 申请表的
      * @return
      */
     @DeleteMapping("/{id}")
     public ResultBean<Boolean> deleteByTextBookId(@PathVariable Integer id) {
+
         classService.deleteByTextBookId(id);
         textBookService.deleteByTextBookId(id);
         return new ResultBean<>(true);
@@ -160,5 +175,45 @@ public class TeacherController {
     @GetMapping("/{teacherId}/{status}")
     public ResultBean<List<TextBook>> findByTeacherIdAndStatus(@PathVariable Integer teacherId, @PathVariable Integer status) {
         return new ResultBean<>(textBookService.findByTeacherIdAndStatus(teacherId, status));
+    }
+
+    @GetMapping("/excel/{id}")
+    public ResultBean<String> simpleExcel(@PathVariable Integer id) throws IOException {
+        TextBook textBook = textBookService.findTextBookById(id);
+        FileInputStream fileInputStream = new FileInputStream(uploadFolder+"getmodel.xls");
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+        POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
+        HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
+        HSSFSheet sheet = workbook.getSheet("Sheet1");
+
+        HSSFRow row = sheet.getRow(2);
+        row.getCell(1).setCellValue(textBook.getCourseName());
+        row.getCell(6).setCellValue(textBook.getCourseTime());
+
+        row = sheet.getRow(3);
+        row.getCell(1).setCellValue(textBook.getTitleName());
+        row.getCell(6).setCellValue(textBook.getPublisher());
+
+        row = sheet.getRow(4);
+        row.getCell(1).setCellValue(textBook.getAuthor());
+        row.getCell(3).setCellValue(textBook.getTitleDate());
+        row.getCell(5).setCellValue(textBook.getVersion());
+        row.getCell(7).setCellValue(textBook.getFlag());
+
+        row = sheet.getRow(6);
+        row.getCell(4).setCellValue(textBook.getTitleType());
+
+        row = sheet.getRow(7);
+        row.getCell(6).setCellValue(textBook.getIsbn());
+
+        List<ClassInformation> classInformations = classService.findByTextBookId(textBook.getId());
+
+
+        String filename = UUID.randomUUID().toString() + ".xls";
+        OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
+        workbook.write(outputStream);
+        outputStream.close();
+        workbook.close();
+        return new ResultBean<>(filename);
     }
 }
