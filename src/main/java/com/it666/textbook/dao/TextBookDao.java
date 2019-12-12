@@ -26,9 +26,6 @@ public interface TextBookDao {
             "version=#{version},ISBN=#{isbn},title_type=#{titleType},flag=#{flag},phone=#{phone},date=#{date},status=#{status},review_date=#{reviewDate},review_opinion=#{reviewOpinion},teacher_id=#{teacherId} where id = #{id}")
     public void updateTextbook(TextBook textBook);
 
-    @Delete("delete from textbook where id = #{id}")
-    public void delete(Integer id);
-
     @Select("select * from textbook where teacher_id = #{id}")
     public List<TextBook> findByTeacherId(Integer id);
 
@@ -41,7 +38,7 @@ public interface TextBookDao {
     @Update("update textbook set review_date=#{date} where id=#{id}")
     public void updateReviewDate(Date date, Integer id);
 
-    @Select("select * from textbook where teacher_id=#{teacherId} and status=#{status}")
+    @Select("select * from textbook where teacher_id=#{teacherId} and status=#{status} order by date")
     public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status);
 
     @Select("select * from textbook where status=#{status}")

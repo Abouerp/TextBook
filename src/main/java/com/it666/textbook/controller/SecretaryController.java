@@ -209,4 +209,19 @@ public class SecretaryController {
         }
         return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByCollege(page,size,collegeName));
     }
+
+    /**
+     * 查看某个教师的所有申请表
+     * @param page
+     * @param size
+     * @param id
+     * @return
+     */
+    @GetMapping("/teacher/{id}")
+    public ResultBean<PageInfo<TextBook>> findTextBookByTeacherId (@RequestParam(value = "page",defaultValue = "1")int page,
+                                                        @RequestParam(value = "size",defaultValue = "10")int size,
+                                                        @PathVariable Integer id){
+        PageInfo<TextBook> pageInfo = textBookService.findByTeacherId(page, size, id);
+        return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
+    }
 }
