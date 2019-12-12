@@ -67,7 +67,8 @@ public class TextBookServiceTest {
 
     @Test
     public void findByCollege(){
-        List<TextBook> college = textBookDao.findByCollege("计算机学院");
+        String name = "外国语学院";
+        List<TextBook> college = textBookDao.findByCollege(name);
         for (TextBook c:college){
             System.out.println(c);
         }

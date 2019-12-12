@@ -214,4 +214,10 @@ public class TextBookService {
         return filename;
     }
 
+    public PageInfo<TextBook> findByCollege(int page,int size, String college) {
+        PageHelper.startPage(page,size);
+        PageInfo<TextBook>  pageInfo = new PageInfo<>(textBookDao.findByCollege(college),size);
+        return pageInfo;
+    }
+
 }
