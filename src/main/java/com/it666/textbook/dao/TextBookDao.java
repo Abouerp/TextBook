@@ -43,7 +43,10 @@ public interface TextBookDao {
     public List<TextBook> findByTeacherIdAndOkStatus(Integer teacherId, Integer status);
 
     @Select("select * from textbook where status=#{status} order by date desc")
-    public List<TextBook> findByStatus(Integer status);
+    public List<TextBook> findByStatusUnReview(Integer status);
+
+    @Select("select * from textbook where status >= #{status} order by date desc")
+    public List<TextBook> findByStatusReview(Integer status);
 
     @Update("update textbook set status = #{status}, review_opinion=#{reviewOpinion} where id = #{id}")
     public Integer updateTextbookStatus(Integer id,Integer status,String reviewOpinion);

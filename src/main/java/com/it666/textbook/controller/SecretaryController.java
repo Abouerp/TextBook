@@ -131,15 +131,15 @@ public class SecretaryController {
     }
 
     /**
-     * 根据申请表的状态导出excel表格
+     * 导出已审核的申请表到excel表格
      *
      * @param status
      * @return  返回文件名 是一个id  然后根据这个id去下载
      * @throws IOException
      */
     @GetMapping("/excel/{status}")
-    public ResultBean<String> outExcel(@PathVariable Integer status) throws IOException {
-        List<TextBook> textbookList = textBookService.findByStatus(status);
+    public ResultBean<String> outExcelOfReview(@PathVariable Integer status) throws IOException {
+        List<TextBook> textbookList = textBookService.outExcelOfReview(status);
         String path = textBookService.outExcel(textbookList, uploadFolder);
         return new ResultBean<>(ResultCode.SUCCESS,path);
     }
@@ -227,11 +227,32 @@ public class SecretaryController {
     }
 
 
+    /**
+     * 获取所有的申请表
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/textbook")
     public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page",defaultValue = "1")int page,
                                                           @RequestParam(value = "size",defaultValue = "10")int size) {
         PageInfo<TextBook> pageInfo = textBookService.findAllTextBook(page,size);
         return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
     }
+
+    /**
+     * 获取所有未审核的申请表
+     * @param page
+     * @param size
+     * @param status     2：获得所有未审核的      3获得所有已审核的
+     * @return
+     */
+    @GetMapping("/textbook/{status}")
+    public ResultBean<PageInfo<TextBook>> findByStatus(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                          @RequestParam(value = "size", defaultValue = "10") int size,
+                                                          @PathVariable Integer status){
+        return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByStatusUnReview(page,size,status));
+    }
+
 
 }

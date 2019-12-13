@@ -1,6 +1,7 @@
 package com.it666.textbook.service;
 
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.dao.TextBookDao;
@@ -73,12 +74,31 @@ public class TextBookService {
     }
 
     /**
-     * 秘书根据申请表状态导出到excel表
+     * 秘书导出已审核的申请表到excel表
      * @param status
      * @return
      */
-    public List<TextBook> findByStatus(Integer status){
-        return textBookDao.findByStatus(status);
+    public List<TextBook> outExcelOfReview(Integer status){
+        return textBookDao.findByStatusReview(status);
+    }
+
+
+    /**
+     * 获取未审核 和 已审核 的申请表
+     * @param status    得到的值应该为2
+     * @return
+     */
+    public PageInfo<TextBook> findByStatusUnReview(int page, int size, Integer status){
+        PageHelper.startPage(page,size);
+        PageInfo<TextBook> pageInfo;
+        if (status == 2) {
+            pageInfo = new PageInfo<>(textBookDao.findByStatusUnReview(status), size);
+        }else if (status >= 3){
+            pageInfo = new PageInfo<>(textBookDao.findByStatusReview(status),size);
+        }else {
+            return null;
+        }
+        return pageInfo;
     }
 
     public Integer updateTextbookStatus(Integer id, Integer status, String reviewOpinion) {
@@ -254,4 +274,6 @@ public class TextBookService {
         PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findAll(),size);
         return pageInfo;
     }
+
+
 }

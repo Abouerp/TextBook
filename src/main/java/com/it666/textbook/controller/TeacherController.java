@@ -11,6 +11,7 @@ import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -29,16 +30,18 @@ public class TeacherController {
     private final TextBookService textBookService;
     private final UserService userService;
     private final ClassService classService;
+    private final RedisTemplate<Object,Object> redisTemplate;
 
     @Value("${remote.port}")
     private String port;
     @Value("${remote.address}")
     private String address;
 
-    public TeacherController(TextBookService textBookService, UserService userService, ClassService classService) {
+    public TeacherController(TextBookService textBookService, UserService userService, ClassService classService,RedisTemplate<Object,Object> redisTemplate) {
         this.textBookService = textBookService;
         this.userService = userService;
         this.classService = classService;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -49,7 +52,13 @@ public class TeacherController {
      */
     @GetMapping("/{id}")
     public ResultBean<User> getMessage(@PathVariable Integer id) {
-        return new ResultBean<>(userService.findByUserId(id));
+        User user = (User) redisTemplate.opsForValue().get("user" + id);
+        if (null == user) {
+            User userId = userService.findByUserId(id);
+            redisTemplate.opsForValue().set("user"+id, userId);
+            return new ResultBean<>(userId);
+        }
+        return new ResultBean<>(user);
     }
 
     /**
@@ -61,6 +70,7 @@ public class TeacherController {
     @PutMapping
     public ResultBean<User> edit(@RequestBody User user) {
         User edit = userService.edit(user);
+        redisTemplate.opsForValue().set("user" + user.getId(),edit);
         return new ResultBean(edit);
     }
 
