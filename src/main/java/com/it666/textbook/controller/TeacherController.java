@@ -12,6 +12,8 @@ import com.it666.textbook.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -52,11 +54,21 @@ public class TeacherController {
      */
     @GetMapping("/{id}")
     public ResultBean<User> getMessage(@PathVariable Integer id) {
+        RedisSerializer redisSerializer = new StringRedisSerializer();
+        redisTemplate.setKeySerializer(redisSerializer);
+
+        /**
+         * 缓存穿透，双重检测锁
+         */
         User user = (User) redisTemplate.opsForValue().get("user" + id);
         if (null == user) {
-            User userId = userService.findByUserId(id);
-            redisTemplate.opsForValue().set("user"+id, userId);
-            return new ResultBean<>(userId);
+            synchronized (this){
+                user = (User) redisTemplate.opsForValue().get("user" + id);
+                if (null == user) {
+                    User userId = userService.findByUserId(id);
+                    redisTemplate.opsForValue().set("user"+id, userId);
+                }
+            }
         }
         return new ResultBean<>(user);
     }
