@@ -1,6 +1,7 @@
 package com.it666.textbook.controller;
 
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
@@ -9,7 +10,7 @@ import com.it666.textbook.domain.User;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -133,7 +134,7 @@ public class SecretaryController {
      * 根据申请表的状态导出excel表格
      *
      * @param status
-     * @return
+     * @return  返回文件名 是一个id  然后根据这个id去下载
      * @throws IOException
      */
     @GetMapping("/excel/{status}")
@@ -214,7 +215,7 @@ public class SecretaryController {
      * 查看某个教师的所有申请表
      * @param page
      * @param size
-     * @param id
+     * @param id     教师的id
      * @return
      */
     @GetMapping("/teacher/{id}")
@@ -224,4 +225,13 @@ public class SecretaryController {
         PageInfo<TextBook> pageInfo = textBookService.findByTeacherId(page, size, id);
         return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
     }
+
+
+    @GetMapping("/textbook")
+    public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page",defaultValue = "1")int page,
+                                                          @RequestParam(value = "size",defaultValue = "10")int size) {
+        PageInfo<TextBook> pageInfo = textBookService.findAllTextBook(page,size);
+        return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
+    }
+
 }

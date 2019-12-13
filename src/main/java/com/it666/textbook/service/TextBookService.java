@@ -1,5 +1,6 @@
 package com.it666.textbook.service;
 
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.dao.TextBookDao;
@@ -13,7 +14,9 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+
 import java.io.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -63,6 +66,17 @@ public class TextBookService {
         return pageInfo;
     }
 
+    public PageInfo<TextBook> findByTeacherIdAndOkStatus(int page, int size, Integer teacherId, Integer status) {
+        PageHelper.startPage(page,size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndOkStatus(teacherId,status),size);
+        return pageInfo;
+    }
+
+    /**
+     * 秘书根据申请表状态导出到excel表
+     * @param status
+     * @return
+     */
     public List<TextBook> findByStatus(Integer status){
         return textBookDao.findByStatus(status);
     }
@@ -71,6 +85,13 @@ public class TextBookService {
         return textBookDao.updateTextbookStatus(id,status,reviewOpinion);
     }
 
+    /**
+     * 导出申请表，多张
+     * @param textbookList
+     * @param uploadFolder
+     * @return
+     * @throws IOException
+     */
     public String outExcel(List<TextBook> textbookList,String uploadFolder) throws IOException {
         String filename = UUID.randomUUID().toString() + ".xls";
         OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
@@ -150,6 +171,14 @@ public class TextBookService {
         return filename;
     }
 
+    /**
+     * 教师导出单张申请表
+     * @param textBook
+     * @param classInformations
+     * @param user
+     * @return
+     * @throws Exception
+     */
     public String outSimpleExcel(TextBook textBook,List<ClassInformation> classInformations,User user) throws Exception{
         FileInputStream fileInputStream = new FileInputStream(uploadFolder + "finallymodel.xls");
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -220,4 +249,9 @@ public class TextBookService {
         return pageInfo;
     }
 
+    public PageInfo<TextBook> findAllTextBook(int page, int size) {
+        PageHelper.startPage(page,size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findAll(),size);
+        return pageInfo;
+    }
 }

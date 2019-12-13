@@ -2,6 +2,7 @@ package com.it666.textbook.service;
 
 import com.it666.textbook.dao.TextBookDao;
 import com.it666.textbook.domain.TextBook;
+import com.it666.textbook.entity.StatisticsRep;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,4 +76,9 @@ public class TextBookServiceTest {
 
     }
 
+    @Test
+    public void findStatisticsByTeacherId(){
+        StatisticsRep statisticsByTeacherId = textBookDao.findStatisticsByTeacherId(1);
+        System.out.println(statisticsByTeacherId);
+    }
 }

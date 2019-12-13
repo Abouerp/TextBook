@@ -84,15 +84,15 @@ public class TeacherController {
     @PostMapping("/savetextbook")
     public ResultBean<TextBook> save(@RequestBody TextBook textBook) {
         textBook.setDate(new Date());
-        TextBook sava = textBookService.save(textBook);
-        Integer textbook_id = sava.getId();
+        TextBook save = textBookService.save(textBook);
+        Integer textbook_id = save.getId();
         List<Integer> classList = textBook.getClassList();
         if (classList != null) {
             for (Integer cl : classList) {
                 classService.updateTeacherId(cl, textbook_id);
             }
         }
-        return new ResultBean<>(sava);
+        return new ResultBean<>(save);
     }
 
     /**
@@ -170,8 +170,10 @@ public class TeacherController {
     public ResultBean<PageInfo<TextBook>> findByTeacherIdAndStatus(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                    @RequestParam(value = "size", defaultValue = "10") int size,
                                                                    @PathVariable Integer teacherId, @PathVariable Integer status) {
-
-        return new ResultBean<>(textBookService.findByTeacherIdAndStatus(page, size, teacherId, status));
+        if (status >= 3) {
+            return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByTeacherIdAndOkStatus(page,size,teacherId,status));
+        }
+        return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByTeacherIdAndStatus(page, size, teacherId, status));
     }
 
     /**

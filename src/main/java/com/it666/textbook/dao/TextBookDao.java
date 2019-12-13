@@ -1,10 +1,11 @@
 package com.it666.textbook.dao;
 
 import com.it666.textbook.domain.TextBook;
+import com.it666.textbook.entity.StatisticsRep;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ import java.util.List;
 @Repository
 public interface TextBookDao {
 
-    @Select("select * from textbook where teacher_id= #{id}")
-    public List<TextBook> findAll(Integer id);
+    @Select("select * from textbook order by date")
+    public List<TextBook> findAll();
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into textbook(course_name,course_time,title_name,publisher,author,title_date,version,ISBN,title_type,flag,phone,date,status,review_opinion,teacher_id)" +
@@ -26,7 +27,7 @@ public interface TextBookDao {
             "version=#{version},ISBN=#{isbn},title_type=#{titleType},flag=#{flag},phone=#{phone},date=#{date},status=#{status},review_date=#{reviewDate},review_opinion=#{reviewOpinion},teacher_id=#{teacherId} where id = #{id}")
     public void updateTextbook(TextBook textBook);
 
-    @Select("select * from textbook where teacher_id = #{id}")
+    @Select("select * from textbook where teacher_id = #{id} order by date desc")
     public List<TextBook> findByTeacherId(Integer id);
 
     @Select("select * from textbook where id = #{id}")
@@ -35,13 +36,13 @@ public interface TextBookDao {
     @Delete("delete from textbook where id = #{id}")
     public void deleteById(Integer id);
 
-    @Update("update textbook set review_date=#{date} where id=#{id}")
-    public void updateReviewDate(Date date, Integer id);
-
-    @Select("select * from textbook where teacher_id=#{teacherId} and status=#{status} order by date")
+    @Select("select * from textbook where teacher_id=#{teacherId} and status=#{status} order by date desc")
     public List<TextBook> findByTeacherIdAndStatus(Integer teacherId, Integer status);
 
-    @Select("select * from textbook where status=#{status}")
+    @Select("select * from textbook where teacher_id=#{teacherId} and status >= #{status} order by review_date")
+    public List<TextBook> findByTeacherIdAndOkStatus(Integer teacherId, Integer status);
+
+    @Select("select * from textbook where status=#{status} order by date desc")
     public List<TextBook> findByStatus(Integer status);
 
     @Update("update textbook set status = #{status}, review_opinion=#{reviewOpinion} where id = #{id}")
@@ -49,4 +50,7 @@ public interface TextBookDao {
 
     @Select(" select b.id,b.course_name,b.course_time,b.title_name,b.publisher,b.author,b.title_date,b.version,b.ISBN,b.title_type,b.flag,b.phone,b.date,b.status,b.review_date,b.review_opinion,b.teacher_id from user a, textbook b where a.id = b.teacher_id AND a.college = #{college}")
     public List<TextBook> findByCollege( String college);
+
+    @Select("select sum(`status`=1) as unSubmit ,sum(`status`=2) as unReview,  sum(`status`=3)+SUM(`status`=4) as review,count(`status`) as count from textbook where teacher_id=#{teacherId}")
+    public StatisticsRep findStatisticsByTeacherId(Integer teacherId);
 }
