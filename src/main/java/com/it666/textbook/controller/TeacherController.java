@@ -6,6 +6,7 @@ import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.ClassInformation;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsRep;
 import com.it666.textbook.service.ClassService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
@@ -212,5 +213,10 @@ public class TeacherController {
         User user = userService.findByUserId(textBook.getTeacherId());
         String path = textBookService.outSimpleExcel(textBook, classInformations, user);
         return new ResultBean<>(ResultCode.SUCCESS,path);
+    }
+
+    @GetMapping("/statistics/{teacherId}")
+    public ResultBean<StatisticsRep> totalNum(@PathVariable Integer teacherId){
+        return new ResultBean<>(ResultCode.SUCCESS,textBookService.findStatisticsByTeacherId(teacherId));
     }
 }

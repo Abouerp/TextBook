@@ -8,6 +8,7 @@ import com.it666.textbook.dao.TextBookDao;
 import com.it666.textbook.domain.ClassInformation;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsRep;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -275,5 +276,12 @@ public class TextBookService {
         return pageInfo;
     }
 
-
+    /**
+     * 返回统计个数
+     * @param teacherId
+     * @return
+     */
+    public StatisticsRep findStatisticsByTeacherId(Integer teacherId){
+        return textBookDao.findStatisticsByTeacherId(teacherId);
+    }
 }
