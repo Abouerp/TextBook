@@ -7,6 +7,7 @@ import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsCollegeRsp;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
@@ -243,6 +244,15 @@ public class SecretaryController {
             collegeName = common(collegeId);
         }
         return new ResultBean<>(ResultCode.SUCCESS,secretaryService.findUserByStartTaskAndCollege(page,size,startTask,collegeName));
+    }
+
+    /**
+     * 获取各个学院的教师人数
+     * @return
+     */
+    @GetMapping("/college")
+    public ResultBean<List<StatisticsCollegeRsp>> findStatisticsCollege(){
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findStatisticsCollege());
     }
 
     /**

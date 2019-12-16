@@ -1,6 +1,7 @@
 package com.it666.textbook.dao;
 
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsCollegeRsp;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -34,9 +35,9 @@ public interface UserDao {
 
     /**
      * 根据 学院 或者 是否启动任务 可以为空 来获取教师列表   动态sql
-     * @param startTask
-     * @param userType
-     * @param college
+     * @param startTask      任务状态
+     * @param userType       用户类型
+     * @param college        学院名称
      * @return
      */
     @Select(  "<script>                                                           "
@@ -57,4 +58,7 @@ public interface UserDao {
 
     @Select("select * from user where user_type=#{userType}")
     public List<User> findUserByType(Integer userType);
+
+    @Select("select college as collegeName,count(college) as totalNumber from user where user_type=1 group by college")
+    public List<StatisticsCollegeRsp> findStatisticsCollege();
 }

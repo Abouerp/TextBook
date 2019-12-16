@@ -3,6 +3,7 @@ package com.it666.textbook.service;
 import com.it666.textbook.dao.UserDao;
 import com.it666.textbook.domain.User;
 
+import com.it666.textbook.entity.StatisticsCollegeRsp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,13 @@ public class UserServiceTest {
         for (User user:list) {
             System.out.println(user);
         }
+    }
 
+    @Test
+    public void findStatisticsCollege(){
+        List<StatisticsCollegeRsp> list = userDao.findStatisticsCollege();
+        for (StatisticsCollegeRsp statisticsCollegeRsp : list){
+            System.out.println(statisticsCollegeRsp);
+        }
     }
 }

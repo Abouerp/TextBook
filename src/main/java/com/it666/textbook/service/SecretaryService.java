@@ -4,7 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.dao.UserDao;
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsCollegeRsp;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Abouerp
@@ -41,5 +44,9 @@ public class SecretaryService {
         PageHelper.startPage(page,size);
         PageInfo<User> pageInfo = new PageInfo<>(userDao.findUserByStartTaskAndCollege(startTask,1,college),size);
         return pageInfo;
+    }
+
+    public List<StatisticsCollegeRsp> findStatisticsCollege(){
+        return userDao.findStatisticsCollege();
     }
 }
