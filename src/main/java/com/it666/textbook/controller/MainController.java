@@ -5,7 +5,6 @@ import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.MainBook;
 import com.it666.textbook.service.MainBookService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -61,7 +60,6 @@ public class MainController {
                 collegeName = "体育部";
                 break;
         }
-
         return new ResultBean<>(ResultCode.SUCCESS,mainBookService.findByCollege(page,size,collegeName) );
     }
 }

@@ -16,13 +16,13 @@ import java.util.List;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-class UserServiceTest {
+public class UserServiceTest {
 
     @Autowired
     private UserDao userDao;
 
     @Test
-    void findAll() {
+    public void findAll() {
         List<User> all = userDao.findAll();
         for (User a : all) {
             System.out.println(a);
@@ -30,19 +30,19 @@ class UserServiceTest {
     }
 
     @Test
-    void findByUsername() {
+    public void findByUsername() {
         User all = userDao.findUserByUsername("hahaha");
         System.out.println(all);
     }
 
     @Test
-    void findUserById() {
+    public void findUserById() {
         User u = userDao.findUserById(5);
         System.out.println(u);
     }
 
     @Test
-    void save() {
+    public void save() {
         User u = new User();
         u.setUserName("fasdfsdfah");
         u.setUserPassword("adasfah");
@@ -51,7 +51,7 @@ class UserServiceTest {
     }
 
     @Test
-    void edit() {
+    public void edit() {
         User u = new User();
         u.setUserName("345g43ywe");
         u.setUserPassword("s345t");
@@ -62,7 +62,16 @@ class UserServiceTest {
     }
 
     @Test
-    void delete() {
+    public void delete() {
         userDao.delete(6);
+    }
+
+    @Test
+    public void findUserByStartTaskAndCollege(){
+        List<User> list = userDao.findUserByStartTaskAndCollege(1, 1, "计算机学院");
+        for (User user:list) {
+            System.out.println(user);
+        }
+
     }
 }
