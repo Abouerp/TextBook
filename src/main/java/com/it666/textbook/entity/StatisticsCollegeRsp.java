@@ -7,6 +7,8 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
+ * 统计各个学院教师的人数
+ *
  * @author Abouerp
  */
 @Data

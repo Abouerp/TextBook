@@ -2,6 +2,7 @@ package com.it666.textbook.dao;
 
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.entity.StatisticsRep;
+import com.it666.textbook.entity.TextBookHistoryRsp;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -42,6 +43,9 @@ public interface TextBookDao {
     @Select("select * from textbook where teacher_id=#{teacherId} and status >= #{status} order by review_date")
     public List<TextBook> findByTeacherIdAndOkStatus(Integer teacherId, Integer status);
 
+    /**
+     * 下面这个待删除
+     */
     @Select("select * from textbook where status=#{status} order by date desc")
     public List<TextBook> findByStatusUnReview(Integer status);
 
@@ -56,4 +60,10 @@ public interface TextBookDao {
 
     @Select("select sum(`status`=1) as unSubmit ,sum(`status`=2) as unReview,  sum(`status`=3)+SUM(`status`=4) as review,count(`status`) as count from textbook where teacher_id=#{teacherId}")
     public StatisticsRep findStatisticsByTeacherId(Integer teacherId);
+
+    @Select("SELECT title_name as titleName,course_name as courseName, date,review_date as reviewDate,status, real_name as teacherName" +
+            "FROM textbook b,user a" +
+            "WHERE" +
+            "b.teacher_id=a.id and status=#{status}")
+    public List<TextBookHistoryRsp> findTextBookHistory(Integer status);
 }
