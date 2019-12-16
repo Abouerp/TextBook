@@ -6,6 +6,7 @@ import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsCollegeRsp;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
@@ -171,42 +172,7 @@ public class SecretaryController {
     public ResultBean<PageInfo<TextBook>> findTextBookByCollege(@RequestParam(value = "page",defaultValue = "1")int page,
                                                                 @RequestParam(value = "size",defaultValue = "10")int size,
                                                                 @PathVariable Integer collegeId){
-        String collegeName = null;
-        switch (collegeId){
-            case 1:
-                collegeName = "电子信息学院";
-                break;
-            case 2:
-                collegeName = "机电工程学院";
-                break;
-            case 3:
-                collegeName = "计算机学院";
-                break;
-            case 4:
-                collegeName = "材料与食品学院";
-                break;
-            case 5:
-                collegeName = "人文社会科学学院";
-                break;
-            case 6:
-                collegeName = "管理学院";
-                break;
-            case 7:
-                collegeName = "经贸学院";
-                break;
-            case 8:
-                collegeName = "外国语学院";
-                break;
-            case 9:
-                collegeName = "艺术设计学院";
-                break;
-            case 10:
-                collegeName = "马克思主义学院";
-                break;
-            default:
-                collegeName = "体育部";
-                break;
-        }
+        String collegeName = common(collegeId);
         return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByCollege(page,size,collegeName));
     }
 
@@ -253,5 +219,85 @@ public class SecretaryController {
         return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByStatusUnReview(page,size,status));
     }
 
+    /**
+     * 动态根据 学院 和 启动任务 来获取教师
+     * @param page
+     * @param size
+     * @param startTask
+     * @param collegeId
+     * @return
+     */
+    @GetMapping("/teacher")
+    public ResultBean<PageInfo<User>> findUserByStartTaskAndCollege(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                    @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                    @RequestParam(value = "startTask", defaultValue = "-1") Integer startTask,
+                                                                    @RequestParam(value = "collegeId",defaultValue = "0") Integer collegeId){
+        String collegeName = null;
+        if (startTask == -1) {
+            startTask = null;
+        }
+        /**
+         * 0 表示没有选择学院
+         */
+        if (collegeId != 0) {
+            collegeName = common(collegeId);
+        }
+        return new ResultBean<>(ResultCode.SUCCESS,secretaryService.findUserByStartTaskAndCollege(page,size,startTask,collegeName));
+    }
 
+    /**
+     * 获取各个学院的教师人数
+     * @return
+     */
+    @GetMapping("/college")
+    public ResultBean<List<StatisticsCollegeRsp>> findStatisticsCollege(){
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findStatisticsCollege());
+    }
+
+    /**
+     * 获取学院名字公共抽离
+     * @param collegeId
+     * @return
+     */
+    public String common(Integer collegeId){
+        String collegeName = null;
+        switch (collegeId){
+            case 1:
+                collegeName = "电子信息学院";
+                break;
+            case 2:
+                collegeName = "机电工程学院";
+                break;
+            case 3:
+                collegeName = "计算机学院";
+                break;
+            case 4:
+                collegeName = "材料与食品学院";
+                break;
+            case 5:
+                collegeName = "人文社会科学学院";
+                break;
+            case 6:
+                collegeName = "管理学院";
+                break;
+            case 7:
+                collegeName = "经贸学院";
+                break;
+            case 8:
+                collegeName = "外国语学院";
+                break;
+            case 9:
+                collegeName = "艺术设计学院";
+                break;
+            case 10:
+                collegeName = "马克思主义学院";
+                break;
+            case 11:
+                collegeName = "体育部";
+                break;
+            default:
+                break;
+        }
+        return collegeName;
+    }
 }
