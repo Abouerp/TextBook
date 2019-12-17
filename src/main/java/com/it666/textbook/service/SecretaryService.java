@@ -76,7 +76,7 @@ public class SecretaryService {
         }
     }
 
-    public void updateUserStartTaskByCollege(String college, Integer startTask){
-
+    public Integer updateUserStartTaskByCollege(String college, Integer startTask){
+        return userDao.updateUserStartTaskByCollege(college,startTask);
     }
 }

@@ -301,6 +301,18 @@ public class SecretaryController {
     }
 
     /**
+     * 指定某个学院所有老师都启动填写申请表任务
+     * @param collegeId
+     * @param startTask
+     * @return
+     */
+    @PutMapping("/teacher/{startTask}/{collegeId}")
+    public ResultBean<Integer> updateUserStartTaskByCollege(@PathVariable Integer collegeId,@PathVariable Integer startTask){
+        String collegeName = common(collegeId);
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.updateUserStartTaskByCollege(collegeName,startTask) );
+    }
+
+    /**
      * 获取学院名字公共抽离
      *
      * @param collegeId
