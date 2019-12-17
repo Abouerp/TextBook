@@ -31,11 +31,11 @@ public class MainBook implements Serializable {
     /**
      * 图片地址
      */
-    private String image;
+    private String imageUrl;
     /**
      * 图书名字
      */
-    private String bookName;
+    private String titleName;
     /**
      * 作者
      */
@@ -47,5 +47,5 @@ public class MainBook implements Serializable {
     /**
      * 出版时间
      */
-    private String date;
+    private String titleDate;
 }

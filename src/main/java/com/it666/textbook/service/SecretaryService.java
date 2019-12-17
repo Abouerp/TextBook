@@ -2,9 +2,11 @@ package com.it666.textbook.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.it666.textbook.dao.TextBookDao;
 import com.it666.textbook.dao.UserDao;
 import com.it666.textbook.domain.User;
 import com.it666.textbook.entity.StatisticsCollegeRsp;
+import com.it666.textbook.entity.TextBookHistoryRsp;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,11 @@ import java.util.List;
 public class SecretaryService {
 
     private final UserDao userDao;
+    private final TextBookDao textBookDao;
 
-    public SecretaryService(UserDao userDao) {
+    public SecretaryService(UserDao userDao, TextBookDao textBookDao) {
         this.userDao = userDao;
+        this.textBookDao = textBookDao;
     }
 
     public User saveTeacher(User user) {
@@ -47,7 +51,20 @@ public class SecretaryService {
         return pageInfo;
     }
 
+    /**
+     * 获取统计信息， xxx学院， 多少教师
+     * @return
+     */
     public List<StatisticsCollegeRsp> findStatisticsCollege() {
         return userDao.findStatisticsCollege();
+    }
+
+    public PageInfo<TextBookHistoryRsp> findTextBookHistory(int page, int size, Integer status,String college) {
+        PageHelper.startPage(page,size);
+        if (status == null){
+
+        }
+        PageInfo<TextBookHistoryRsp> pageInfo = new PageInfo<>(textBookDao.findTextBookHistory(status,college), size);
+        return pageInfo;
     }
 }

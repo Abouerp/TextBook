@@ -60,9 +60,28 @@ public interface TextBookDao {
     @Select("select sum(`status`=1) as unSubmit ,sum(`status`=2) as unReview,  sum(`status`=3)+SUM(`status`=4) as review,count(`status`) as count from textbook where teacher_id=#{teacherId}")
     public StatisticsRep findStatisticsByTeacherId(Integer teacherId);
 
-    @Select("SELECT title_name as titleName,course_name as courseName, date,review_date as reviewDate,status, real_name as teacherName" +
-            "FROM textbook b,user a" +
-            "WHERE" +
-            "b.teacher_id=a.id and status=#{status}")
-    public List<TextBookHistoryRsp> findTextBookHistory(Integer status);
+    @Select("<script>"
+            + "   select title_name as titleName,course_name as courseName, date,review_date as reviewDate,status, real_name as teacherName"
+            + "   from textbook b,user a"
+            + "   <where>"
+            + "       b.teacher_id=a.id "
+            + "       <if test=' status != null '>   "
+            +"            <choose>       "
+            + "              <when test='status == 2 '>                    "
+            + "                 and status=#{status}                     "
+            + "              </when> "
+            +"               <when test='status == -1 '>"
+            +"                  and status>=2    "
+            +"               </when>                    "
+            + "              <otherwise test='status >= 3'>       "
+            + "                 and status>=#{status}                    "
+            + "              </otherwise>                                 "
+            + "           </choose>   "
+            +"         </if>"
+            +"       <if test=' college != null '>"
+            +"          and college=#{college} "
+            +"       </if>"
+            +"   </where>"
+            +"</script>")
+    public List<TextBookHistoryRsp> findTextBookHistory(Integer status,String college);
 }

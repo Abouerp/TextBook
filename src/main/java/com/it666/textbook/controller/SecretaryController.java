@@ -7,6 +7,7 @@ import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
 import com.it666.textbook.entity.StatisticsCollegeRsp;
+import com.it666.textbook.entity.TextBookHistoryRsp;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
@@ -258,6 +259,30 @@ public class SecretaryController {
     @GetMapping("/college")
     public ResultBean<List<StatisticsCollegeRsp>> findStatisticsCollege() {
         return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findStatisticsCollege());
+    }
+
+    /**
+     * 获得历史申请表
+     *
+     * @param page      第几页
+     * @param size      一页的个数
+     * @param status    申请表状态
+     * @param collegeId 学院id
+     * @return
+     */
+    @GetMapping("/textbook/history")
+    public ResultBean<PageInfo<TextBookHistoryRsp>> findTextBookHistory(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                        @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                        @RequestParam(value = "status", defaultValue = "-1") Integer status,
+                                                                        @RequestParam(value = "collegeId", defaultValue = "0") Integer collegeId) {
+        String collegeName = null;
+        /**
+         * 0 表示没有选择学院
+         */
+        if (collegeId != 0) {
+            collegeName = common(collegeId);
+        }
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findTextBookHistory(page, size, status, collegeName));
     }
 
     /**

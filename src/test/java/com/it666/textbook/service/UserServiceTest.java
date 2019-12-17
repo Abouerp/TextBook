@@ -82,4 +82,6 @@ public class UserServiceTest {
             System.out.println(statisticsCollegeRsp);
         }
     }
+
+
 }
