@@ -1,7 +1,6 @@
 package com.it666.textbook.service;
 
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.dao.TextBookDao;
@@ -16,9 +15,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 import java.io.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -34,86 +31,89 @@ public class TextBookService {
     @Value("${file.uploadFolder}")
     private String uploadFolder;
 
-    public TextBookService(TextBookDao textBookDao){
+    public TextBookService(TextBookDao textBookDao) {
         this.textBookDao = textBookDao;
     }
 
-    public TextBook save(TextBook textBook){
+    public TextBook save(TextBook textBook) {
         textBookDao.save(textBook);
         return textBook;
     }
 
     public PageInfo<TextBook> findByTeacherId(int page, int size, Integer id) {
-        PageHelper.startPage(page,size);
-        PageInfo<TextBook> pageInfo =new PageInfo<>(textBookDao.findByTeacherId(id),size);
+        PageHelper.startPage(page, size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherId(id), size);
         return pageInfo;
     }
 
-    public TextBook findTextBookById(Integer id){
+    public TextBook findTextBookById(Integer id) {
         return textBookDao.findByTextBookById(id);
     }
 
-    public void deleteByTextBookId(Integer id){
-         textBookDao.deleteById(id);
+    public void deleteByTextBookId(Integer id) {
+        textBookDao.deleteById(id);
     }
 
-    public TextBook updateTextBook(TextBook textBook){
+    public TextBook updateTextBook(TextBook textBook) {
         textBookDao.updateTextbook(textBook);
         return textBook;
     }
 
-    public PageInfo<TextBook> findByTeacherIdAndStatus(int page, int size, Integer teacherId, Integer status){
-        PageHelper.startPage(page,size);
-        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndStatus(teacherId,status), size) ;
+    public PageInfo<TextBook> findByTeacherIdAndStatus(int page, int size, Integer teacherId, Integer status) {
+        PageHelper.startPage(page, size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndStatus(teacherId, status), size);
         return pageInfo;
     }
 
     public PageInfo<TextBook> findByTeacherIdAndOkStatus(int page, int size, Integer teacherId, Integer status) {
-        PageHelper.startPage(page,size);
-        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndOkStatus(teacherId,status),size);
+        PageHelper.startPage(page, size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndOkStatus(teacherId, status), size);
         return pageInfo;
     }
 
     /**
      * 秘书导出已审核的申请表到excel表
+     *
      * @param status
      * @return
      */
-    public List<TextBook> outExcelOfReview(Integer status){
+    public List<TextBook> outExcelOfReview(Integer status) {
         return textBookDao.findByStatusReview(status);
     }
 
 
     /**
      * 获取未审核 和 已审核 的申请表
-     * @param status    得到的值应该为2
+     *
+     * @param status 得到的值应该为2
      * @return
      */
-    public PageInfo<TextBook> findByStatusUnReview(int page, int size, Integer status){
-        PageHelper.startPage(page,size);
+    public PageInfo<TextBook> findByStatusUnReview(int page, int size, Integer status) {
+        PageHelper.startPage(page, size);
         PageInfo<TextBook> pageInfo;
         if (status == 2) {
             pageInfo = new PageInfo<>(textBookDao.findByStatusUnReview(status), size);
-        }else if (status >= 3){
-            pageInfo = new PageInfo<>(textBookDao.findByStatusReview(status),size);
-        }else {
+        } else if (status >= 3) {
+            pageInfo = new PageInfo<>(textBookDao.findByStatusReview(status), size);
+        } else {
             return null;
         }
         return pageInfo;
     }
 
     public Integer updateTextbookStatus(Integer id, Integer status, String reviewOpinion) {
-        return textBookDao.updateTextbookStatus(id,status,reviewOpinion);
+        return textBookDao.updateTextbookStatus(id, status, reviewOpinion);
     }
 
     /**
      * 导出申请表，多张
+     *
      * @param textbookList
      * @param uploadFolder
      * @return
      * @throws IOException
      */
-    public String outExcel(List<TextBook> textbookList,String uploadFolder) throws IOException {
+    public String outExcel(List<TextBook> textbookList, String uploadFolder) throws IOException {
         String filename = UUID.randomUUID().toString() + ".xls";
         OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
 
@@ -194,13 +194,14 @@ public class TextBookService {
 
     /**
      * 教师导出单张申请表
+     *
      * @param textBook
      * @param classInformations
      * @param user
      * @return
      * @throws Exception
      */
-    public String outSimpleExcel(TextBook textBook,List<ClassInformation> classInformations,User user) throws Exception{
+    public String outSimpleExcel(TextBook textBook, List<ClassInformation> classInformations, User user) throws Exception {
         FileInputStream fileInputStream = new FileInputStream(uploadFolder + "finallymodel.xls");
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
         POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
@@ -264,24 +265,25 @@ public class TextBookService {
         return filename;
     }
 
-    public PageInfo<TextBook> findByCollege(int page,int size, String college) {
-        PageHelper.startPage(page,size);
-        PageInfo<TextBook>  pageInfo = new PageInfo<>(textBookDao.findByCollege(college),size);
+    public PageInfo<TextBook> findByCollege(int page, int size, String college) {
+        PageHelper.startPage(page, size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByCollege(college), size);
         return pageInfo;
     }
 
     public PageInfo<TextBook> findAllTextBook(int page, int size) {
-        PageHelper.startPage(page,size);
-        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findAll(),size);
+        PageHelper.startPage(page, size);
+        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findAll(), size);
         return pageInfo;
     }
 
     /**
      * 返回统计个数
+     *
      * @param teacherId
      * @return
      */
-    public StatisticsRep findStatisticsByTeacherId(Integer teacherId){
+    public StatisticsRep findStatisticsByTeacherId(Integer teacherId) {
         return textBookDao.findStatisticsByTeacherId(teacherId);
     }
 }

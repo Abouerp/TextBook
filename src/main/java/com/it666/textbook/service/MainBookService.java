@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.it666.textbook.dao.MainPageDao;
 import com.it666.textbook.domain.MainBook;
 import org.springframework.stereotype.Service;
-import sun.applet.Main;
 
 /**
  * @author Abouerp
@@ -20,12 +19,12 @@ public class MainBookService {
     }
 
     public PageInfo<MainBook> findByCollege(int page, int size, String college) {
-        PageHelper.startPage(page,size);
-        PageInfo<MainBook> pageInfo = new PageInfo<>(mainPageDao.findByCollege(college),size);
+        PageHelper.startPage(page, size);
+        PageInfo<MainBook> pageInfo = new PageInfo<>(mainPageDao.findByCollege(college), size);
         return pageInfo;
     }
 
-    public MainBook findByBookId(Integer id){
+    public MainBook findByBookId(Integer id) {
         return mainPageDao.findByBookId(id);
     }
 }

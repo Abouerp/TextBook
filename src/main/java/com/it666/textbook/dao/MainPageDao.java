@@ -14,6 +14,7 @@ public interface MainPageDao {
 
     /**
      * 根据学院来查看
+     *
      * @param college
      * @return
      */

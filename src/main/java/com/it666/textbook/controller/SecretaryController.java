@@ -10,7 +10,6 @@ import com.it666.textbook.entity.StatisticsCollegeRsp;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -134,104 +133,110 @@ public class SecretaryController {
      * 导出已审核的申请表到excel表格
      *
      * @param status
-     * @return  返回文件名 是一个id  然后根据这个id去下载
+     * @return 返回文件名 是一个id  然后根据这个id去下载
      * @throws IOException
      */
     @GetMapping("/excel/{status}")
     public ResultBean<String> outExcelOfReview(@PathVariable Integer status) throws IOException {
         List<TextBook> textbookList = textBookService.outExcelOfReview(status);
         String path = textBookService.outExcel(textbookList, uploadFolder);
-        return new ResultBean<>(ResultCode.SUCCESS,path);
+        return new ResultBean<>(ResultCode.SUCCESS, path);
     }
 
     /**
      * 审核申请表
-     * @param id        申请表id
-     * @param status    申请表状态
-     * @param reviewOpinion     审核意见
+     *
+     * @param id            申请表id
+     * @param status        申请表状态
+     * @param reviewOpinion 审核意见
      * @return
      */
     @PutMapping("/textbook/{id}/{status}")
-    public ResultBean<Object> putTextBookStatus(@PathVariable Integer id, @PathVariable Integer status,@RequestBody String reviewOpinion) {
+    public ResultBean<Object> putTextBookStatus(@PathVariable Integer id, @PathVariable Integer status, @RequestBody String reviewOpinion) {
         TextBook textBook = textBookService.findTextBookById(id);
         textBook.setStatus(status);
         textBook.setReviewOpinion(reviewOpinion);
         textBook.setReviewDate(new Date());
         textBookService.updateTextBook(textBook);
-        return new ResultBean<>(ResultCode.SUCCESS,textBook);
+        return new ResultBean<>(ResultCode.SUCCESS, textBook);
     }
 
     /**
      * 根据学院筛选申请表
+     *
      * @param page
      * @param size
      * @param collegeId
      * @return
      */
     @GetMapping("/college/{collegeId}")
-    public ResultBean<PageInfo<TextBook>> findTextBookByCollege(@RequestParam(value = "page",defaultValue = "1")int page,
-                                                                @RequestParam(value = "size",defaultValue = "10")int size,
-                                                                @PathVariable Integer collegeId){
+    public ResultBean<PageInfo<TextBook>> findTextBookByCollege(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                @PathVariable Integer collegeId) {
         String collegeName = common(collegeId);
-        return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByCollege(page,size,collegeName));
+        return new ResultBean<>(ResultCode.SUCCESS, textBookService.findByCollege(page, size, collegeName));
     }
 
     /**
      * 查看某个教师的所有申请表
+     *
      * @param page
      * @param size
-     * @param id     教师的id
+     * @param id   教师的id
      * @return
      */
     @GetMapping("/teacher/{id}")
-    public ResultBean<PageInfo<TextBook>> findTextBookByTeacherId (@RequestParam(value = "page",defaultValue = "1")int page,
-                                                        @RequestParam(value = "size",defaultValue = "10")int size,
-                                                        @PathVariable Integer id){
+    public ResultBean<PageInfo<TextBook>> findTextBookByTeacherId(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                  @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                  @PathVariable Integer id) {
         PageInfo<TextBook> pageInfo = textBookService.findByTeacherId(page, size, id);
-        return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
+        return new ResultBean<>(ResultCode.SUCCESS, pageInfo);
     }
 
 
     /**
      * 获取所有的申请表
+     *
      * @param page
      * @param size
      * @return
      */
     @GetMapping("/textbook")
-    public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page",defaultValue = "1")int page,
-                                                          @RequestParam(value = "size",defaultValue = "10")int size) {
-        PageInfo<TextBook> pageInfo = textBookService.findAllTextBook(page,size);
-        return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
+    public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                          @RequestParam(value = "size", defaultValue = "10") int size) {
+        PageInfo<TextBook> pageInfo = textBookService.findAllTextBook(page, size);
+        return new ResultBean<>(ResultCode.SUCCESS, pageInfo);
     }
 
     /**
      * 获取所有未审核的申请表
+     *
      * @param page
      * @param size
-     * @param status     2：获得所有未审核的      3获得所有已审核的
+     * @param status 2：获得所有未审核的      3获得所有已审核的
      * @return
      */
     @GetMapping("/textbook/{status}")
     public ResultBean<PageInfo<TextBook>> findByStatus(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                          @RequestParam(value = "size", defaultValue = "10") int size,
-                                                          @PathVariable Integer status){
-        return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByStatusUnReview(page,size,status));
+                                                       @RequestParam(value = "size", defaultValue = "10") int size,
+                                                       @PathVariable Integer status) {
+        return new ResultBean<>(ResultCode.SUCCESS, textBookService.findByStatusUnReview(page, size, status));
     }
 
     /**
      * 动态根据 学院 和 启动任务 来获取教师
+     *
      * @param page
      * @param size
-     * @param startTask
-     * @param collegeId
+     * @param startTask 0或者1    0不启动   1启动
+     * @param collegeId 学院id     1-11
      * @return
      */
     @GetMapping("/teacher")
     public ResultBean<PageInfo<User>> findUserByStartTaskAndCollege(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                     @RequestParam(value = "size", defaultValue = "10") int size,
                                                                     @RequestParam(value = "startTask", defaultValue = "-1") Integer startTask,
-                                                                    @RequestParam(value = "collegeId",defaultValue = "0") Integer collegeId){
+                                                                    @RequestParam(value = "collegeId", defaultValue = "0") Integer collegeId) {
         String collegeName = null;
         if (startTask == -1) {
             startTask = null;
@@ -242,26 +247,28 @@ public class SecretaryController {
         if (collegeId != 0) {
             collegeName = common(collegeId);
         }
-        return new ResultBean<>(ResultCode.SUCCESS,secretaryService.findUserByStartTaskAndCollege(page,size,startTask,collegeName));
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findUserByStartTaskAndCollege(page, size, startTask, collegeName));
     }
 
     /**
      * 获取各个学院的教师人数
+     *
      * @return
      */
     @GetMapping("/college")
-    public ResultBean<List<StatisticsCollegeRsp>> findStatisticsCollege(){
+    public ResultBean<List<StatisticsCollegeRsp>> findStatisticsCollege() {
         return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findStatisticsCollege());
     }
 
     /**
      * 获取学院名字公共抽离
+     *
      * @param collegeId
      * @return
      */
-    public String common(Integer collegeId){
+    public String common(Integer collegeId) {
         String collegeName = null;
-        switch (collegeId){
+        switch (collegeId) {
             case 1:
                 collegeName = "电子信息学院";
                 break;

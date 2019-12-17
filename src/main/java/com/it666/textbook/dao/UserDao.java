@@ -35,12 +35,13 @@ public interface UserDao {
 
     /**
      * 根据 学院 或者 是否启动任务 可以为空 来获取教师列表   动态sql
-     * @param startTask      任务状态
-     * @param userType       用户类型
-     * @param college        学院名称
+     *
+     * @param startTask 任务状态
+     * @param userType  用户类型
+     * @param college   学院名称
      * @return
      */
-    @Select(  "<script>                                                           "
+    @Select("<script>                                                           "
             + " select * from user                                                "
             + " <where>                                                           "
             + "     <if test='startTask != null '>                                "
@@ -53,7 +54,7 @@ public interface UserDao {
             + "         and  college=#{college}                                   "
             + "     </if>                                                         "
             + " </where>                                                          "
-            +"</script>")
+            + "</script>")
     public List<User> findUserByStartTaskAndCollege(Integer startTask, Integer userType, String college);
 
     @Select("select * from user where user_type=#{userType}")

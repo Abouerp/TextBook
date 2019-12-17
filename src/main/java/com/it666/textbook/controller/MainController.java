@@ -22,17 +22,18 @@ public class MainController {
 
     /**
      * 主页  根据学院获取书    分页
+     *
      * @param page
      * @param size
-     * @param collegeId    学院id 根据官网的学院来定义数字
+     * @param collegeId 学院id 根据官网的学院来定义数字
      * @return
      */
     @GetMapping("/{collegeId}")
-    public ResultBean<PageInfo<MainBook>> findByCollege(@RequestParam(value = "page",defaultValue = "1") int page,
-                                                        @RequestParam(value = "size",defaultValue = "10") int size,
+    public ResultBean<PageInfo<MainBook>> findByCollege(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                        @RequestParam(value = "size", defaultValue = "10") int size,
                                                         @PathVariable Integer collegeId) {
         String collegeName = "";
-        switch (collegeId){
+        switch (collegeId) {
             case 1:
                 collegeName = "电子信息学院";
                 break;
@@ -67,16 +68,17 @@ public class MainController {
                 collegeName = "体育部";
                 break;
         }
-        return new ResultBean<>(ResultCode.SUCCESS,mainBookService.findByCollege(page,size,collegeName) );
+        return new ResultBean<>(ResultCode.SUCCESS, mainBookService.findByCollege(page, size, collegeName));
     }
 
     /**
      * 获取书籍详细信息
-     * @param id           书本的id
+     *
+     * @param id 书本的id
      * @return
      */
     @GetMapping("/book/{id}")
-    public ResultBean<MainBook> findByBookId(@PathVariable Integer id){
-        return new ResultBean<>(ResultCode.SUCCESS, mainBookService.findByBookId(id) );
+    public ResultBean<MainBook> findByBookId(@PathVariable Integer id) {
+        return new ResultBean<>(ResultCode.SUCCESS, mainBookService.findByBookId(id));
     }
 }

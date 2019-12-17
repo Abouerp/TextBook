@@ -6,7 +6,6 @@ import com.it666.textbook.entity.TextBookHistoryRsp;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-
 import java.util.List;
 
 /**
@@ -53,10 +52,10 @@ public interface TextBookDao {
     public List<TextBook> findByStatusReview(Integer status);
 
     @Update("update textbook set status = #{status}, review_opinion=#{reviewOpinion} where id = #{id}")
-    public Integer updateTextbookStatus(Integer id,Integer status,String reviewOpinion);
+    public Integer updateTextbookStatus(Integer id, Integer status, String reviewOpinion);
 
     @Select(" select b.id,b.course_name,b.course_time,b.title_name,b.publisher,b.author,b.title_date,b.version,b.ISBN,b.title_type,b.flag,b.phone,b.date,b.status,b.review_date,b.review_opinion,b.teacher_id from user a, textbook b where a.id = b.teacher_id AND a.college = #{college}")
-    public List<TextBook> findByCollege( String college);
+    public List<TextBook> findByCollege(String college);
 
     @Select("select sum(`status`=1) as unSubmit ,sum(`status`=2) as unReview,  sum(`status`=3)+SUM(`status`=4) as review,count(`status`) as count from textbook where teacher_id=#{teacherId}")
     public StatisticsRep findStatisticsByTeacherId(Integer teacherId);
