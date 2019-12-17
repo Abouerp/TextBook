@@ -19,4 +19,7 @@ public interface MainPageDao {
      */
     @Select("select * from book where college = #{college}")
     public List<MainBook> findByCollege(String college);
+
+    @Select("select * from book where id = #{id}")
+    public MainBook findByBookId(Integer id);
 }
