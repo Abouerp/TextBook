@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -131,16 +132,18 @@ public class SecretaryController {
     }
 
     /**
-     * 导出已审核的申请表到excel表格
-     *
-     * @param status
-     * @return 返回文件名 是一个id  然后根据这个id去下载
+     * 导出申请表到excel表格   根据传来的listId
+     * @param textBookListId
+     * @return
      * @throws IOException
      */
-    @GetMapping("/excel/{status}")
-    public ResultBean<String> outExcelOfReview(@PathVariable Integer status) throws IOException {
-        List<TextBook> textbookList = textBookService.outExcelOfReview(status);
-        String path = textBookService.outExcel(textbookList, uploadFolder);
+    @PostMapping("/excel/out")
+    public ResultBean<String> outExcelOfReview(@RequestBody List<Integer> textBookListId) throws IOException {
+        List<TextBook> list = new ArrayList<>();
+        for (Integer id : textBookListId) {
+            list.add(textBookService.findTextBookById(id));
+        }
+        String path = textBookService.outExcel(list, uploadFolder);
         return new ResultBean<>(ResultCode.SUCCESS, path);
     }
 
@@ -283,6 +286,18 @@ public class SecretaryController {
             collegeName = common(collegeId);
         }
         return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findTextBookHistory(page, size, status, collegeName));
+    }
+
+    /**
+     * 指定教师启动填写申请表任务
+     * @param teacherListId
+     * @param startTask
+     * @return
+     */
+    @PutMapping("/teacher/{startTask}")
+    public ResultBean<String> updateUserStartTask(@RequestBody List<Integer> teacherListId,@PathVariable Integer startTask) {
+        secretaryService.updateUserStartTask(teacherListId,startTask);
+        return new ResultBean<>(ResultCode.SUCCESS, "open task success");
     }
 
     /**

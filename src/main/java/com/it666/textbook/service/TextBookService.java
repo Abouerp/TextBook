@@ -71,15 +71,6 @@ public class TextBookService {
         return pageInfo;
     }
 
-    /**
-     * 秘书导出已审核的申请表到excel表
-     *
-     * @param status
-     * @return
-     */
-    public List<TextBook> outExcelOfReview(Integer status) {
-        return textBookDao.findByStatusReview(status);
-    }
 
 
     /**
@@ -93,17 +84,12 @@ public class TextBookService {
         PageInfo<TextBook> pageInfo;
         if (status == 2) {
             pageInfo = new PageInfo<>(textBookDao.findByStatusUnReview(status), size);
-        } else if (status >= 3) {
-            pageInfo = new PageInfo<>(textBookDao.findByStatusReview(status), size);
         } else {
             return null;
         }
         return pageInfo;
     }
 
-    public Integer updateTextbookStatus(Integer id, Integer status, String reviewOpinion) {
-        return textBookDao.updateTextbookStatus(id, status, reviewOpinion);
-    }
 
     /**
      * 导出申请表，多张
@@ -255,7 +241,7 @@ public class TextBookService {
         row.getCell(5).setCellValue("审核时间：" + (textBook.getReviewDate() == null ? "" : textBook.getReviewDate()));
 
         row = sheet.getRow(18);
-        row.getCell(5).setCellValue("系主任签名：kk");
+        row.getCell(5).setCellValue("系主任签名：");
         String filename = UUID.randomUUID().toString() + ".xls";
         OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
         workbook.write(outputStream);

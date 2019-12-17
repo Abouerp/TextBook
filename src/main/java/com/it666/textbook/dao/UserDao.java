@@ -62,4 +62,22 @@ public interface UserDao {
 
     @Select("select college as collegeName,count(college) as totalNumber from user where user_type=1 group by college")
     public List<StatisticsCollegeRsp> findStatisticsCollege();
+
+    /**
+     * 指定教师启动填写申请表任务
+     * @param teacherId
+     * @param startTask
+     * @return
+     */
+    @Update("update user set start_task=#{startTask} where id = #{teacherId}")
+    public Integer updateUserStartTask(Integer teacherId, Integer startTask);
+
+    /**
+     * 指定某个学院内所有教师启动填写申请表任务
+     * @param college
+     * @param startTask
+     * @return
+     */
+    @Update("update user set start_task=#{startTask} where college=#{college}")
+    public Integer updateUserStartTaskByCollege(String college, Integer startTask);
 }

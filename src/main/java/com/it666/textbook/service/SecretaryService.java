@@ -61,10 +61,22 @@ public class SecretaryService {
 
     public PageInfo<TextBookHistoryRsp> findTextBookHistory(int page, int size, Integer status,String college) {
         PageHelper.startPage(page,size);
-        if (status == null){
-
-        }
         PageInfo<TextBookHistoryRsp> pageInfo = new PageInfo<>(textBookDao.findTextBookHistory(status,college), size);
         return pageInfo;
+    }
+
+    /**
+     * 更新教师启动任务状态
+     * @param teacherListId
+     * @param startTask
+     */
+    public void updateUserStartTask(List<Integer> teacherListId, Integer startTask) {
+        for (Integer id:teacherListId) {
+            userDao.updateUserStartTask(id, startTask);
+        }
+    }
+
+    public void updateUserStartTaskByCollege(String college, Integer startTask){
+
     }
 }

@@ -48,4 +48,8 @@ public class MainBook implements Serializable {
      * 出版时间
      */
     private String titleDate;
+    /**
+     * 书号ISBN
+     */
+    private String isbn;
 }

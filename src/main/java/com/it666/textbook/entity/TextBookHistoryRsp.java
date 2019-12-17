@@ -19,6 +19,10 @@ public class TextBookHistoryRsp implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
+     * 申请表的id
+     */
+    private Integer id;
+    /**
      * 申请人名字
      */
     private String teacherName;
