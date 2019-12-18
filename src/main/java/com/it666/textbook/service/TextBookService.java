@@ -8,6 +8,7 @@ import com.it666.textbook.domain.ClassInformation;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
 import com.it666.textbook.entity.StatisticsRep;
+import com.it666.textbook.entity.TextBookHistoryRsp;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -79,9 +80,9 @@ public class TextBookService {
      * @param status 得到的值应该为2
      * @return
      */
-    public PageInfo<TextBook> findByStatusUnReview(int page, int size, Integer status) {
+    public PageInfo<TextBookHistoryRsp> findByStatusUnReview(int page, int size, Integer status) {
         PageHelper.startPage(page, size);
-        PageInfo<TextBook> pageInfo;
+        PageInfo<TextBookHistoryRsp> pageInfo;
         if (status == 2) {
             pageInfo = new PageInfo<>(textBookDao.findByStatusUnReview(status), size);
         } else {
@@ -270,6 +271,16 @@ public class TextBookService {
      * @return
      */
     public StatisticsRep findStatisticsByTeacherId(Integer teacherId) {
-        return textBookDao.findStatisticsByTeacherId(teacherId);
+        StatisticsRep rep = textBookDao.findStatisticsByTeacherId(teacherId);
+        if (rep.getUnSubmit() == null){
+            rep.setUnSubmit(0);
+        }
+        if (rep.getReview() == null) {
+            rep.setReview(0);
+        }
+        if (rep.getUnReview() == null) {
+            rep.setUnReview(0);
+        }
+        return rep;
     }
 }

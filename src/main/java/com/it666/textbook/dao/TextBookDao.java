@@ -43,10 +43,11 @@ public interface TextBookDao {
     public List<TextBook> findByTeacherIdAndOkStatus(Integer teacherId, Integer status);
 
 
-    @Select("select * from textbook where status=#{status} order by date desc")
-    public List<TextBook> findByStatusUnReview(Integer status);
+    @Select("select b.id as id, title_name as titleName,course_name as courseName, b.title_type as titleType, date,review_date as reviewDate,status, real_name as teacherName from textbook b,user a where b.teacher_id = a.id and status = #{status}" +
+            " order by date desc")
+    public List<TextBookHistoryRsp> findByStatusUnReview(Integer status);
 
-    @Select(" select b.id,b.course_name,b.course_time,b.title_name,b.publisher,b.author,b.title_date,b.version,b.ISBN,b.title_type,b.flag,b.phone,b.date,b.status,b.review_date,b.review_opinion,b.teacher_id from user a, textbook b where a.id = b.teacher_id AND a.college = #{college}")
+    @Select(" select b.id,b.course_name,b.course_time,b.title_name,b.publisher,b.author,b.title_date,b.version,b.ISBN,b.title_type,b.flag,b.phone,b.date,b.status,b.review_date,b.review_opinion,b.teacher_id from user a, textbook b where a.id = b.teacher_id and a.college = #{college}")
     public List<TextBook> findByCollege(String college);
 
     @Select("select sum(`status`=1) as unSubmit ,sum(`status`=2) as unReview, sum(`status`=3) + sum(`status`=4) as review,count(`status`) as count from textbook where teacher_id=#{teacherId}")
@@ -54,7 +55,7 @@ public interface TextBookDao {
 
 
     @Select("<script>"
-            + "   select b.id as id, title_name as titleName,course_name as courseName, date,review_date as reviewDate,status, real_name as teacherName"
+            + "   select b.id as id, title_name as titleName,course_name as courseName,b.title_type as titleType, date,review_date as reviewDate,status, real_name as teacherName"
             + "   from textbook b,user a                        "
             + "   <where>                                       "
             + "       b.teacher_id=a.id                         "
@@ -67,7 +68,7 @@ public interface TextBookDao {
             +"                  and status>=2                   "
             +"               </when>                            "
             + "              <otherwise test='status >= 3'>     "
-            + "                 and status>=#{status}           "
+            + "                 and status=#{status}           "
             + "              </otherwise>                       "
             + "           </choose>                             "
             +"         </if>                                    "

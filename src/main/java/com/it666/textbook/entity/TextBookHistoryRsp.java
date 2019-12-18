@@ -31,6 +31,10 @@ public class TextBookHistoryRsp implements Serializable {
      */
     private String titleName;
     /**
+     * 教材类型(教育部国家级规划教材、省部级规划教材、教育部国家级精品教材、省部级精品教材、无）
+     */
+    private String titleType;
+    /**
      * 课程名称
      */
     private String courseName;

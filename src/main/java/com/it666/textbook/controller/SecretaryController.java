@@ -217,11 +217,11 @@ public class SecretaryController {
      *
      * @param page
      * @param size
-     * @param status 2：获得所有未审核的      3获得所有已审核的
+     * @param status 2：获得所有未审核的
      * @return
      */
     @GetMapping("/textbook/{status}")
-    public ResultBean<PageInfo<TextBook>> findByStatus(@RequestParam(value = "page", defaultValue = "1") int page,
+    public ResultBean<PageInfo<TextBookHistoryRsp>> findByStatus(@RequestParam(value = "page", defaultValue = "1") int page,
                                                        @RequestParam(value = "size", defaultValue = "10") int size,
                                                        @PathVariable Integer status) {
         return new ResultBean<>(ResultCode.SUCCESS, textBookService.findByStatusUnReview(page, size, status));
