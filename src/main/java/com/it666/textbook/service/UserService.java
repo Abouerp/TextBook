@@ -55,4 +55,7 @@ public class UserService {
         return pageInfo;
     }
 
+    public Integer deleteUserById(Integer id){
+        return userDao.delete(id);
+    }
 }

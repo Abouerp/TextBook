@@ -69,6 +69,16 @@ public class SecretaryController {
     }
 
     /**
+     * 删除教师
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/teacher/{id}")
+    public ResultBean<Integer> deleteTeacher(@PathVariable Integer id){
+        return new ResultBean<>(ResultCode.SUCCESS, userService.deleteUserById(id) );
+    }
+
+    /**
      * 更新用户信息
      *
      * @param user

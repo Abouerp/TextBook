@@ -31,7 +31,7 @@ public interface UserDao {
     public void edit(User user);
 
     @Delete("delete from user where id=#{id}")
-    public void delete(Integer id);
+    public Integer delete(Integer id);
 
     /**
      * 根据 学院 或者 是否启动任务 可以为空 来获取教师列表   动态sql
