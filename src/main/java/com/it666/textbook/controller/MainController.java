@@ -4,8 +4,11 @@ import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.MainBook;
+import com.it666.textbook.entity.StatisticsPublisherRsp;
 import com.it666.textbook.service.MainBookService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Abouerp
@@ -80,5 +83,17 @@ public class MainController {
     @GetMapping("/book/{id}")
     public ResultBean<MainBook> findByBookId(@PathVariable Integer id) {
         return new ResultBean<>(ResultCode.SUCCESS, mainBookService.findByBookId(id));
+    }
+
+    /**
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/publisher")
+    public ResultBean<List<StatisticsPublisherRsp>> findStatisticsPublisherRsp(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                               @RequestParam(value = "size", defaultValue = "10") int size) {
+        return new ResultBean(ResultCode.SUCCESS, mainBookService.findStatisticsPublisherRsp(page,size));
     }
 }

@@ -24,10 +24,10 @@ public interface UserDao {
     public User findUserById(Integer id);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into user(user_name,user_password,job_number,sex,college,email,phone,user_type,real_name，start_task)values(#{userName},#{userPassword},#{jobNumber},#{sex},#{college},#{email},#{phone},#{userType},#{realName},#{startTask})")
+    @Insert("insert into user(user_name,user_password,job_number,sex,college,email,phone,user_type,real_name, start_task)values(#{userName},#{userPassword},#{jobNumber},#{sex},#{college},#{email},#{phone},#{userType},#{realName},#{startTask})")
     public int save(User user);
 
-    @Update("update user set user_name=#{userName}, user_password=#{userPassword}, job_number=#{jobNumber}, sex=#{sex}, college=#{college}, email=#{email}, phone=#{phone}, user_type=#{userType}, real_name=#{realName} start_task=#{startTask} where id=#{id}")
+    @Update("update user set user_name=#{userName}, user_password=#{userPassword}, job_number=#{jobNumber}, sex=#{sex}, college=#{college}, email=#{email}, phone=#{phone}, user_type=#{userType}, real_name=#{realName}, start_task=#{startTask} where id=#{id}")
     public void edit(User user);
 
     @Delete("delete from user where id=#{id}")

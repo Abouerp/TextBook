@@ -1,6 +1,7 @@
 package com.it666.textbook.dao;
 
 import com.it666.textbook.domain.TextBook;
+import com.it666.textbook.entity.StatisticsPublisherRsp;
 import com.it666.textbook.entity.StatisticsRep;
 import com.it666.textbook.entity.TextBookHistoryRsp;
 import org.apache.ibatis.annotations.*;
@@ -78,4 +79,11 @@ public interface TextBookDao {
             +"   </where>                                       "
             +"</script>")
     public List<TextBookHistoryRsp> findTextBookHistory(Integer status,String college);
+
+    /**
+     * 统计使用出版社书籍的数量
+     * @return
+     */
+    @Select("select publisher ,count(publisher) as number from textbook group by publisher order by number")
+    public List<StatisticsPublisherRsp> findStatisticsPublisherRsp();
 }
