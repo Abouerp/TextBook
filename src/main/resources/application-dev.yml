@@ -18,8 +18,8 @@ spring:
 
 file:
   staticAccessPath: /api/file/**
-#  uploadFolder: /home/upload/
-  uploadFolder: d://upload/
+  uploadFolder: /home/chenjinjie/App/upload/
+#  uploadFolder: d://upload/
 
   redis:
     port: 6379
