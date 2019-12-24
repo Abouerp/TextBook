@@ -1,16 +1,16 @@
 package com.it666.textbook.controller;
 
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.it666.textbook.bean.ResultBean;
 import com.it666.textbook.bean.ResultCode;
 import com.it666.textbook.domain.TextBook;
 import com.it666.textbook.domain.User;
+import com.it666.textbook.entity.StatisticsCollegeRsp;
+import com.it666.textbook.entity.TextBookHistoryRsp;
 import com.it666.textbook.service.SecretaryService;
 import com.it666.textbook.service.TextBookService;
 import com.it666.textbook.service.UserService;
-
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +66,16 @@ public class SecretaryController {
     public ResultBean<User> saveTeacher(@RequestBody User user) {
         User newUser = secretaryService.saveTeacher(user);
         return new ResultBean<>(newUser);
+    }
+
+    /**
+     * 删除教师
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/teacher/{id}")
+    public ResultBean<Integer> deleteTeacher(@PathVariable Integer id){
+        return new ResultBean<>(ResultCode.SUCCESS, userService.deleteUserById(id) );
     }
 
     /**
@@ -131,49 +142,195 @@ public class SecretaryController {
     }
 
     /**
-     * 根据申请表的状态导出excel表格
-     *
-     * @param status
-     * @return  返回文件名 是一个id  然后根据这个id去下载
+     * 导出申请表到excel表格   根据传来的listId
+     * @param textBookListId
+     * @return
      * @throws IOException
      */
-    @GetMapping("/excel/{status}")
-    public ResultBean<String> outExcel(@PathVariable Integer status) throws IOException {
-        List<TextBook> textbookList = textBookService.findByStatus(status);
-        String path = textBookService.outExcel(textbookList, uploadFolder);
-        return new ResultBean<>(ResultCode.SUCCESS,path);
+    @PostMapping("/excel/out")
+    public ResultBean<String> outExcelOfReview(@RequestBody List<Integer> textBookListId) throws IOException {
+        List<TextBook> list = new ArrayList<>();
+        for (Integer id : textBookListId) {
+            list.add(textBookService.findTextBookById(id));
+        }
+        String path = textBookService.outExcel(list, uploadFolder);
+        return new ResultBean<>(ResultCode.SUCCESS, path);
     }
 
     /**
      * 审核申请表
-     * @param id        申请表id
-     * @param status    申请表状态
-     * @param reviewOpinion     审核意见
+     *
+     * @param id            申请表id
+     * @param status        申请表状态
+     * @param reviewOpinion 审核意见
      * @return
      */
     @PutMapping("/textbook/{id}/{status}")
-    public ResultBean<Object> putTextBookStatus(@PathVariable Integer id, @PathVariable Integer status,@RequestBody String reviewOpinion) {
+    public ResultBean<Object> putTextBookStatus(@PathVariable Integer id, @PathVariable Integer status, @RequestBody String reviewOpinion) {
         TextBook textBook = textBookService.findTextBookById(id);
         textBook.setStatus(status);
         textBook.setReviewOpinion(reviewOpinion);
         textBook.setReviewDate(new Date());
         textBookService.updateTextBook(textBook);
-        return new ResultBean<>(ResultCode.SUCCESS,textBook);
+        return new ResultBean<>(ResultCode.SUCCESS, textBook);
     }
 
     /**
      * 根据学院筛选申请表
+     *
      * @param page
      * @param size
      * @param collegeId
      * @return
      */
     @GetMapping("/college/{collegeId}")
-    public ResultBean<PageInfo<TextBook>> findTextBookByCollege(@RequestParam(value = "page",defaultValue = "1")int page,
-                                                                @RequestParam(value = "size",defaultValue = "10")int size,
-                                                                @PathVariable Integer collegeId){
+    public ResultBean<PageInfo<TextBook>> findTextBookByCollege(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                @PathVariable Integer collegeId) {
+        String collegeName = common(collegeId);
+        return new ResultBean<>(ResultCode.SUCCESS, textBookService.findByCollege(page, size, collegeName));
+    }
+
+    /**
+     * 查看某个教师的所有申请表
+     *
+     * @param page
+     * @param size
+     * @param id   教师的id
+     * @return
+     */
+    @GetMapping("/teacher/{id}")
+    public ResultBean<PageInfo<TextBook>> findTextBookByTeacherId(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                  @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                  @PathVariable Integer id) {
+        PageInfo<TextBook> pageInfo = textBookService.findByTeacherId(page, size, id);
+        return new ResultBean<>(ResultCode.SUCCESS, pageInfo);
+    }
+
+
+    /**
+     * 获取所有的申请表
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/textbook")
+    public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                          @RequestParam(value = "size", defaultValue = "10") int size) {
+        PageInfo<TextBook> pageInfo = textBookService.findAllTextBook(page, size);
+        return new ResultBean<>(ResultCode.SUCCESS, pageInfo);
+    }
+
+    /**
+     * 获取所有未审核的申请表
+     *
+     * @param page
+     * @param size
+     * @param status 2：获得所有未审核的
+     * @return
+     */
+    @GetMapping("/textbook/{status}")
+    public ResultBean<PageInfo<TextBookHistoryRsp>> findByStatus(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                       @RequestParam(value = "size", defaultValue = "10") int size,
+                                                       @PathVariable Integer status) {
+        return new ResultBean<>(ResultCode.SUCCESS, textBookService.findByStatusUnReview(page, size, status));
+    }
+
+    /**
+     * 动态根据 学院 和 启动任务 来获取教师
+     *
+     * @param page
+     * @param size
+     * @param startTask 0或者1    0不启动   1启动
+     * @param collegeId 学院id     1-11
+     * @return
+     */
+    @GetMapping("/teacher")
+    public ResultBean<PageInfo<User>> findUserByStartTaskAndCollege(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                    @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                    @RequestParam(value = "startTask", defaultValue = "-1") Integer startTask,
+                                                                    @RequestParam(value = "collegeId", defaultValue = "0") Integer collegeId) {
         String collegeName = null;
-        switch (collegeId){
+        if (startTask == -1) {
+            startTask = null;
+        }
+        /**
+         * 0 表示没有选择学院
+         */
+        if (collegeId != 0) {
+            collegeName = common(collegeId);
+        }
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findUserByStartTaskAndCollege(page, size, startTask, collegeName));
+    }
+
+    /**
+     * 获取各个学院的教师人数
+     *
+     * @return
+     */
+    @GetMapping("/college")
+    public ResultBean<List<StatisticsCollegeRsp>> findStatisticsCollege() {
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findStatisticsCollege());
+    }
+
+    /**
+     * 获得历史申请表
+     *
+     * @param page      第几页
+     * @param size      一页的个数
+     * @param status    申请表状态
+     * @param collegeId 学院id
+     * @return
+     */
+    @GetMapping("/textbook/history")
+    public ResultBean<PageInfo<TextBookHistoryRsp>> findTextBookHistory(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                        @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                        @RequestParam(value = "status", defaultValue = "-1") Integer status,
+                                                                        @RequestParam(value = "collegeId", defaultValue = "0") Integer collegeId) {
+        String collegeName = null;
+        /**
+         * 0 表示没有选择学院
+         */
+        if (collegeId != 0) {
+            collegeName = common(collegeId);
+        }
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.findTextBookHistory(page, size, status, collegeName));
+    }
+
+    /**
+     * 指定教师启动填写申请表任务
+     * @param teacherListId
+     * @param startTask
+     * @return
+     */
+    @PutMapping("/teacher/{startTask}")
+    public ResultBean<String> updateUserStartTask(@RequestBody List<Integer> teacherListId,@PathVariable Integer startTask) {
+        secretaryService.updateUserStartTask(teacherListId,startTask);
+        return new ResultBean<>(ResultCode.SUCCESS, "open task success");
+    }
+
+    /**
+     * 指定某个学院所有老师都启动填写申请表任务
+     * @param collegeId
+     * @param startTask
+     * @return
+     */
+    @PutMapping("/teacher/{startTask}/{collegeId}")
+    public ResultBean<Integer> updateUserStartTaskByCollege(@PathVariable Integer collegeId,@PathVariable Integer startTask){
+        String collegeName = common(collegeId);
+        return new ResultBean<>(ResultCode.SUCCESS, secretaryService.updateUserStartTaskByCollege(collegeName,startTask) );
+    }
+
+    /**
+     * 获取学院名字公共抽离
+     *
+     * @param collegeId
+     * @return
+     */
+    public String common(Integer collegeId) {
+        String collegeName = null;
+        switch (collegeId) {
             case 1:
                 collegeName = "电子信息学院";
                 break;
@@ -204,34 +361,12 @@ public class SecretaryController {
             case 10:
                 collegeName = "马克思主义学院";
                 break;
-            default:
+            case 11:
                 collegeName = "体育部";
                 break;
+            default:
+                break;
         }
-        return new ResultBean<>(ResultCode.SUCCESS,textBookService.findByCollege(page,size,collegeName));
+        return collegeName;
     }
-
-    /**
-     * 查看某个教师的所有申请表
-     * @param page
-     * @param size
-     * @param id     教师的id
-     * @return
-     */
-    @GetMapping("/teacher/{id}")
-    public ResultBean<PageInfo<TextBook>> findTextBookByTeacherId (@RequestParam(value = "page",defaultValue = "1")int page,
-                                                        @RequestParam(value = "size",defaultValue = "10")int size,
-                                                        @PathVariable Integer id){
-        PageInfo<TextBook> pageInfo = textBookService.findByTeacherId(page, size, id);
-        return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
-    }
-
-
-    @GetMapping("/textbook")
-    public ResultBean<PageInfo<TextBook>> findAllTextBook(@RequestParam(value = "page",defaultValue = "1")int page,
-                                                          @RequestParam(value = "size",defaultValue = "10")int size) {
-        PageInfo<TextBook> pageInfo = textBookService.findAllTextBook(page,size);
-        return new ResultBean<>(ResultCode.SUCCESS,pageInfo);
-    }
-
 }

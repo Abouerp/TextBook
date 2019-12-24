@@ -57,4 +57,8 @@ public class User implements Serializable {
      * 教师名称
      */
     private String realName;
+    /**
+     * 是否启动任务  0不启动，1启动
+     */
+    private Integer startTask;
 }
