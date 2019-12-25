@@ -1,6 +1,6 @@
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-//package com.it666.textbook.config;
+package com.it666.textbook.config;
 //
 //
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,7 +12,7 @@
 // * @author Abouerp
 // */
 //@EnableWebSecurity
-//public class SpringSecurityConfig  {//extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfig  {//extends WebSecurityConfigurerAdapter {
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
 //        //定制请求的授权规则
@@ -33,4 +33,4 @@
 //                 .and()
 //                 .withUser("admin").password("admin").roles("teacher");
 //    }
-//}
+}

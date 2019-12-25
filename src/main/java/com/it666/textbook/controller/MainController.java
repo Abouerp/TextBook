@@ -8,7 +8,9 @@ import com.it666.textbook.entity.StatisticsPublisherRsp;
 import com.it666.textbook.service.MainBookService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Abouerp
@@ -102,6 +104,9 @@ public class MainController {
                 break;
             }
         }
-        return new ResultBean(ResultCode.SUCCESS, list);
+        Map<String,Object> map = new HashMap<>();
+        map.put("publisher",list);
+        map.put("total",statisticsPublisherRsp.getTotal());
+        return new ResultBean(ResultCode.SUCCESS, map);
     }
 }

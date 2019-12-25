@@ -16,6 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +41,7 @@ public class SecretaryController {
     private final SecretaryService secretaryService;
     private final UserService userService;
     private final TextBookService textBookService;
+    private final RedisTemplate<Object, Object> redisTemplate;
     @Value("${file.staticAccessPath}")
     private String staticAccessPath;
     @Value("${file.uploadFolder}")
@@ -49,10 +51,11 @@ public class SecretaryController {
     @Value("${remote.address}")
     private String address;
 
-    public SecretaryController(SecretaryService secretaryService, UserService userService, TextBookService textBookService) {
+    public SecretaryController(SecretaryService secretaryService, UserService userService, TextBookService textBookService,RedisTemplate<Object, Object> redisTemplate) {
         this.secretaryService = secretaryService;
         this.userService = userService;
         this.textBookService = textBookService;
+        this.redisTemplate =redisTemplate;
     }
 
     /**
@@ -178,6 +181,7 @@ public class SecretaryController {
         textBook.setReviewOpinion(reviewOpinion);
         textBook.setReviewDate(new Date());
         textBookService.updateTextBook(textBook);
+
         return new ResultBean<>(ResultCode.SUCCESS, textBook);
     }
 

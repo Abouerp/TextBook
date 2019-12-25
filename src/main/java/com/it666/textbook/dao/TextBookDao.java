@@ -84,6 +84,6 @@ public interface TextBookDao {
      * 统计使用出版社书籍的数量
      * @return
      */
-    @Select("select publisher ,count(publisher) as number from textbook group by publisher order by number")
+    @Select("select publisher ,count(publisher) as number from textbook  group by publisher order by number ")
     public List<StatisticsPublisherRsp> findStatisticsPublisherRsp();
 }

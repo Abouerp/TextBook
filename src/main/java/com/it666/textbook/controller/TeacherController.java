@@ -66,16 +66,17 @@ public class TeacherController {
         /**
          * 缓存穿透，双重检测锁
          */
-        User user = (User) redisTemplate.opsForValue().get("user" + id);
-        if (null == user) {
-            synchronized (this) {
-                user = (User) redisTemplate.opsForValue().get("user" + id);
-                if (null == user) {
-                    User userId = userService.findByUserId(id);
-                    redisTemplate.opsForValue().set("user" + id, userId);
-                }
-            }
-        }
+//        User user = (User) redisTemplate.opsForValue().get("user" + id);
+//        if (null == user) {
+//            synchronized (this) {
+//                user = (User) redisTemplate.opsForValue().get("user" + id);
+//                if (null == user) {
+//                    User userId = userService.findByUserId(id);
+//                    redisTemplate.opsForValue().set("user" + id, userId);
+//                }
+//            }
+//        }
+        User user = userService.findByUserId(id);
         return new ResultBean<>(user);
     }
 
@@ -88,7 +89,7 @@ public class TeacherController {
     @PutMapping
     public ResultBean<User> edit(@RequestBody User user) {
         User edit = userService.edit(user);
-        redisTemplate.opsForValue().set("user" + user.getId(), edit);
+//        redisTemplate.opsForValue().set("user" + user.getId(), edit);
         return new ResultBean(edit);
     }
 
@@ -135,7 +136,7 @@ public class TeacherController {
                 classService.updateTeacherId(cl, textbook_id);
             }
         }
-        return new ResultBean<>(save);
+        return new ResultBean<>(ResultCode.SUCCESS,save);
     }
 
     /**
@@ -161,13 +162,29 @@ public class TeacherController {
      */
     @GetMapping("/findtextbook/{id}")
     public ResultBean<Map<String, Object>> findTextBookById(@PathVariable Integer id) {
+        /**
+         * 查看缓存是否有要查询的申请表
+         */
+//        RedisSerializer redisSerializer = new StringRedisSerializer();
+//        redisTemplate.setKeySerializer(redisSerializer);
+//        TextBook textBookredis = (TextBook) redisTemplate.opsForValue().get("textbook"+id);
+//        if (textBookredis != null) {
+//            List<ClassInformation> classList = classService.findByTextBookId(id);
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("textbook", textBookredis);
+//            map.put("class", classList);
+//            return new ResultBean<>(ResultCode.SUCCESS,map);
+//        }
+
+
         TextBook textBook = textBookService.findTextBookById(id);
+//        redisTemplate.opsForValue().set("textbook"+id, textBook);
         Integer textBookId = textBook.getId();
         List<ClassInformation> classList = classService.findByTextBookId(textBookId);
         Map<String, Object> map = new HashMap<>();
         map.put("textbook", textBook);
         map.put("class", classList);
-        return new ResultBean<>(map);
+        return new ResultBean<>(ResultCode.SUCCESS,map);
     }
 
     /**
@@ -178,6 +195,11 @@ public class TeacherController {
      */
     @PutMapping("/textbook")
     public ResultBean<TextBook> updateTextBook(@RequestBody TextBook textBook) {
+        //把redis中的key序列化为一个字符串，可读性比较好
+//        RedisSerializer redisSerializer = new StringRedisSerializer();
+//        redisTemplate.setKeySerializer(redisSerializer);
+//        redisTemplate.delete("textbook"+textBook.getId());
+
         textBook.setDate(new Date());
         Integer textBookId = textBook.getId();
         classService.deleteByTextBookId(textBookId);
@@ -245,4 +267,6 @@ public class TeacherController {
     public ResultBean<StatisticsRep> totalNum(@PathVariable Integer teacherId) {
         return new ResultBean<>(ResultCode.SUCCESS, textBookService.findStatisticsByTeacherId(teacherId));
     }
+
+
 }
