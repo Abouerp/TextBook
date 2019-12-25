@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -78,6 +81,7 @@ public class TextBook implements Serializable {
     /**
      * list[包含的班级]
      */
+    @NotEmpty(message = "缺少班级")
     private List<Integer> classList;
     /**
      * 审核意见

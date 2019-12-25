@@ -16,16 +16,15 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -63,7 +62,14 @@ public class SecretaryController {
      * @return
      */
     @PostMapping("/teacher")
-    public ResultBean<User> saveTeacher(@RequestBody User user) {
+    public ResultBean<Object> saveTeacher(@Valid @RequestBody User user, BindingResult bindingResult) {
+        Map<ResultCode, String> map = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(e->{
+                map.put(ResultCode.CHECK_FAIL,e.getDefaultMessage() );
+            });
+            return new ResultBean<>(ResultCode.CHECK_FAIL,map);
+        }
         User newUser = secretaryService.saveTeacher(user);
         return new ResultBean<>(newUser);
     }
@@ -102,13 +108,13 @@ public class SecretaryController {
             return new ResultBean<>("file is null");
         }
         String path = uploadFolder;
-        System.out.println(path);
+//        System.out.println(path);
         File newFile = new File(path);
         if (!newFile.exists()) {
             newFile.mkdir();
         }
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        String filename = uuid + "_" + file.getOriginalFilename();
+//        String filename = uuid + "_" + file.getOriginalFilename();
         try {
             /*file.transferTo(new File(path,filename));*/
 

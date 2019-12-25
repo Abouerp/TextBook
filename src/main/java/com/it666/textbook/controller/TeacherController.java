@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -97,8 +99,15 @@ public class TeacherController {
      * @return @CrossOrigin
      */
     @PostMapping("/saveclass")
-    public List<Integer> classSave(@RequestBody List<ClassInformation> classMessage) {
-        return classService.save(classMessage);
+    public ResultBean<Object> classSave(@Valid @RequestBody List<ClassInformation> classMessage, BindingResult bindingResult) {
+        Map<ResultCode, String> map = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(e->{
+                map.put(ResultCode.CHECK_FAIL,e.getDefaultMessage() );
+            });
+            return new ResultBean<>(ResultCode.CHECK_FAIL,map);
+        }
+        return new ResultBean<>(ResultCode.SUCCESS, classService.save(classMessage) );
     }
 
     /**
@@ -108,7 +117,15 @@ public class TeacherController {
      * @return
      */
     @PostMapping("/savetextbook")
-    public ResultBean<TextBook> save(@RequestBody TextBook textBook) {
+    public ResultBean<Object> save(@Valid @RequestBody TextBook textBook , BindingResult bindingResult) {
+        Map<ResultCode, String> map = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(e->{
+                map.put(ResultCode.CHECK_FAIL,e.getDefaultMessage() );
+            });
+            return new ResultBean<>(ResultCode.CHECK_FAIL,map);
+        }
+
         textBook.setDate(new Date());
         TextBook save = textBookService.save(textBook);
         Integer textbook_id = save.getId();

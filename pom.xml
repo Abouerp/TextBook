@@ -81,7 +81,15 @@
             <scope>test</scope>
             <version>4.12</version>
         </dependency>
-
+        <!--数据校验-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
         <!--分页-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>

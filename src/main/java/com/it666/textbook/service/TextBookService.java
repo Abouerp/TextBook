@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -239,7 +240,8 @@ public class TextBookService {
         row.getCell(0).setCellValue("审核意见： " + textBook.getReviewOpinion());
 
         row = sheet.getRow(17);
-        row.getCell(5).setCellValue("审核时间：" + (textBook.getReviewDate() == null ? "" : textBook.getReviewDate()));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        row.getCell(5).setCellValue("审核时间：" + (textBook.getReviewDate() == null ? "" : format.format(textBook.getReviewDate()) ));
 
         row = sheet.getRow(18);
         row.getCell(5).setCellValue("系主任签名：");

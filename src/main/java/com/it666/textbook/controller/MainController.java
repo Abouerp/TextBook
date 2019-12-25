@@ -86,7 +86,7 @@ public class MainController {
     }
 
     /**
-     *
+     * 出版社统计情况
      * @param page
      * @param size
      * @return
@@ -94,6 +94,14 @@ public class MainController {
     @GetMapping("/publisher")
     public ResultBean<List<StatisticsPublisherRsp>> findStatisticsPublisherRsp(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                                @RequestParam(value = "size", defaultValue = "10") int size) {
-        return new ResultBean(ResultCode.SUCCESS, mainBookService.findStatisticsPublisherRsp(page,size));
+        PageInfo<StatisticsPublisherRsp> statisticsPublisherRsp = mainBookService.findStatisticsPublisherRsp(page, size);
+        List<StatisticsPublisherRsp> list = statisticsPublisherRsp.getList();
+        for (int i=0; i<list.size(); i++){
+            if (list.get(i).getNumber()==0){
+                list.remove(i);
+                break;
+            }
+        }
+        return new ResultBean(ResultCode.SUCCESS, list);
     }
 }

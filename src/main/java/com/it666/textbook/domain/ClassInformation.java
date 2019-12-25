@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 
 /**
@@ -46,5 +47,6 @@ public class ClassInformation implements Serializable {
     /**
      * 外键：一对多 属于哪个申请表
      */
+    @Null(message = "添加的班级所属教材表的id必须为空")
     private Integer textbookId;
 }
