@@ -6,14 +6,15 @@ import com.it666.textbook.domain.LoginUser;
 import com.it666.textbook.domain.User;
 import com.it666.textbook.service.UserService;
 import com.it666.textbook.utils.JwtUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.HashMap;
@@ -59,37 +60,49 @@ public class LoginController {
     }
 
 
-    @GetMapping("/file/{hashName}")
-    public ResultBean<Boolean> getFile(HttpServletResponse response,@PathVariable("hashName") String hashName)  {
-
-        File file = new File(uploadFolder+"/111.mp4");
-        FileInputStream ips = null;
-        OutputStream out = null;
-        try {
-            response.setCharacterEncoding("UTF-8");
-//            response.setHeader("content-Type", "application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment;fileName=111.mp4" );
-            ips = new FileInputStream(file);
-            response.setContentType("multipart/form-data");
-
-            out = response.getOutputStream();
-            //读取文件流
-            int len = 0;
-            byte[] buffer = new byte[1024];
-            while ((len = ips.read(buffer)) > 0){
-                out.write(buffer,0,len);
-            }
-            out.flush();
-        }catch (Exception e) {
-            System.out.println(21.07);
-        }finally {
-            try {
-                out.close();
-                ips.close();
-            }catch (IOException  e){
-
-            }
-        }
-        return new ResultBean(ResultCode.SUCCESS,true);
-    }
+//    @CrossOrigin
+//    @GetMapping("/file/{hashName}")
+//    public ResultBean<Boolean> getFile(HttpServletResponse response, @PathVariable("hashName") String hashName) throws IOException {
+////        Resource file = (Resource) new FileSystemResource(uploadFolder+"/1.jpg");
+//////        Resource file = (Resource) new File(uploadFolder+"/111.mp4");
+////        InputStream inputStream = file.getInputStream();
+////        String str = "";
+////        int len;
+////        byte[] bytes = new byte[1024];
+////        while ((len=inputStream.read(bytes)) > 0) {
+////            str += inputStream.read(bytes);
+////        }
+////        byte[] bytes1 = str.getBytes();
+////        Resource resource =  new ByteArrayResource(bytes1);
+//
+////        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "images/jpeg").body(resource);
+//        FileInputStream ips = null;
+//        OutputStream out = null;
+//        File file = new File(uploadFolder+"/1.jpg");
+////        File file = new File(uploadFolder+"/111.mp4");
+//        try {
+//            response.setCharacterEncoding("UTF-8");
+//            response.setHeader("Content-Disposition", "attachment;fileName=111.mp4" );
+//            ips = new FileInputStream(file);
+//            response.setContentType("multipart/form-data");
+//            out = response.getOutputStream();
+//            //读取文件流
+//            int len = 0;
+//            byte[] buffer = new byte[1024];
+//            while ((len = ips.read(buffer)) > 0){
+//                out.write(buffer,0,len);
+//            }
+//            out.flush();
+//        }catch (Exception e) {
+//            System.out.println(21.07);
+//        }finally {
+//            try {
+//                out.close();
+//                ips.close();
+//            }catch (IOException  e){
+//
+//            }
+//        }
+//        return new ResultBean(ResultCode.SUCCESS,true);
+//    }
 }
