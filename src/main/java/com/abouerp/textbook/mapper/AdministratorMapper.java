@@ -3,6 +3,7 @@ package com.abouerp.textbook.mapper;
 import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.Authority;
 import com.abouerp.textbook.domain.Role;
+import com.abouerp.textbook.dto.AdministratorDTO;
 import com.abouerp.textbook.security.UserPrincipal;
 
 import org.mapstruct.Mapper;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 public interface AdministratorMapper {
 
     AdministratorMapper INSTANCE = Mappers.getMapper(AdministratorMapper.class);
+
+    AdministratorDTO toDTO(Administrator administrator);
 
     default UserPrincipal toUserPrincipal(Administrator administrator) {
         List<SimpleGrantedAuthority>authorities = administrator.getRoles()

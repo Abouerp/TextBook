@@ -3,6 +3,8 @@ package com.abouerp.textbook.controller;
 import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.dao.AdministratorRepository;
 import com.abouerp.textbook.domain.Administrator;
+import com.abouerp.textbook.dto.AdministratorDTO;
+import com.abouerp.textbook.mapper.AdministratorMapper;
 import com.abouerp.textbook.security.UserPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -32,9 +34,9 @@ public class AdministratorController {
         if (object instanceof UserPrincipal) {
             UserPrincipal userPrincipal = (UserPrincipal) object;
             Administrator administrator = administratorRepository.getOne(userPrincipal.getId());
-//            map.put("user", AdministratorMapper.INSTANCE.toDTO(administrator));
+            map.put("user", AdministratorMapper.INSTANCE.toDTO(administrator));
         } else {
-//            map.put("user", new AdministratorDTO());
+            map.put("user", new AdministratorDTO());
         }
         map.put("_csrf", csrfToken);
         return ResultBean.ok(map);
