@@ -28,7 +28,7 @@ public class init implements CommandLineRunner {
                     .setAccountNonLocked(false)
                     .setCredentialsNonExpired(false)
                     .setEnabled(false)
-                    .setCollege("test")
+                    .setCollege("计算机学院")
                     .setEmail("1057240821@qq.com")
                     .setJobNumber("001")
                     .setPassword("{noop}admin")
