@@ -5,6 +5,8 @@ import com.abouerp.textbook.dao.AdministratorRepository;
 import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.Role;
 import com.abouerp.textbook.dto.AdministratorDTO;
+import com.abouerp.textbook.exception.PasswordNotMatchException;
+import com.abouerp.textbook.exception.UserNotFoundException;
 import com.abouerp.textbook.mapper.AdministratorMapper;
 import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
@@ -54,6 +56,21 @@ public class AdministratorController {
         }
         map.put("_csrf", csrfToken);
         return ResultBean.ok(map);
+    }
+
+    @PatchMapping("/me/password")
+    public ResultBean<AdministratorDTO> updatePassword(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            String srcPassword,
+            String password
+    ) {
+        Administrator administrator = administratorService.findById(userPrincipal.getId())
+                .orElseThrow(UserNotFoundException::new);
+        if (!passwordEncoder.matches(srcPassword, administrator.getPassword())) {
+            throw new PasswordNotMatchException();
+        }
+        administrator.setPassword(passwordEncoder.encode(password));
+        return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administratorService.save(administrator)));
     }
 
     @PostMapping
