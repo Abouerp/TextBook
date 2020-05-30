@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  web:
+    image: abouerp.top/TextBook:master
+    networks:
+      - portal
+    ports:
+      - 80:8080
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./deploy/resources/application.yml:/app/resources/application.yml:ro
+    restart: always
+
+networks:
+  portal:
+    external: true
+
