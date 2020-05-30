@@ -97,6 +97,14 @@
             <version>4.2.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.google.cloud.tools.jib/com.google.cloud.tools.jib.gradle.plugin -->
+        <dependency>
+            <groupId>com.google.cloud.tools.jib</groupId>
+            <artifactId>com.google.cloud.tools.jib.gradle.plugin</artifactId>
+            <version>1.8.0</version>
+            <type>pom</type>
+        </dependency>
+
 
         <!--excel处理-->
         <!-- 基本依赖，仅操作 xls 格式只需引入此依赖 -->
