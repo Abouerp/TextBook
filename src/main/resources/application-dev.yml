@@ -7,7 +7,7 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/textbook?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
     username: root
     password: chenjinjie
   jpa:
