@@ -22,7 +22,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /root/TextBook
-            mvn clean
-            mvn compile jib:dockerBuild
-            
+            chmod +x ./deploy/deploy.sh
+            ./deploy/deploy.sh
+
+
 
