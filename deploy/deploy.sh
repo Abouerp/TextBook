@@ -3,7 +3,7 @@
 git fetch && \
 git reset --hard origin/master
 
-chmod +x ./mvn && \
-mvn clean compile jibDockerBuild -X
+chmod +x ./mvnw && \
+./mvnw clean jibDockerBuild
 
 echo "deploy success"
