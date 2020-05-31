@@ -81,4 +81,10 @@ public class AdministratorController {
         administrator.setRoles(roles);
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administratorService.save(administrator)));
     }
+
+    @DeleteMapping("/{id}")
+    public ResultBean delete(@PathVariable Integer id) {
+        administratorService.delete(id);
+        return ResultBean.ok();
+    }
 }
