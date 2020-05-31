@@ -153,7 +153,8 @@
                         <image>textbook/abouerp:latest</image>
                     </to>
                     <!--容器相关的属性-->
-<!--                    <container>-->
+                    <container>
+                        <useCurrentTimestamp>true</useCurrentTimestamp>
 <!--                        &lt;!&ndash;jvm内存参数&ndash;&gt;-->
 <!--                        <jvmFlags>-->
 <!--                            <jvmFlag>-Xms4g</jvmFlag>-->
@@ -163,7 +164,7 @@
 <!--                        <ports>-->
 <!--                            <port>80</port>-->
 <!--                        </ports>-->
-<!--                    </container>-->
+                    </container>
                 </configuration>
             </plugin>
             <!--引入插件自动生成类-->

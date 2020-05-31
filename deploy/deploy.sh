@@ -3,8 +3,8 @@
 git fetch && \
 git reset --hard origin/master
 
-chmod +x ./mvn && \
-./mvn compile jib:dockerBuild
+chmod +x ./mvnw && \
+./mvnw compile jib:dockerBuild
 
 
 echo "deploy success"
