@@ -4,7 +4,7 @@ git fetch && \
 git reset --hard origin/master
 
 chmod +x ./mvnw && \
-./mvnw compile jib:dockerBuild
+./mvnw clean compile jib:dockerBuild
 
 
 echo "deploy success"
