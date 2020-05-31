@@ -124,8 +124,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -146,7 +144,7 @@
                     </from>
                     <to>
                         <!--镜像名称和tag，使用了mvn内置变量${project.version}，表示当前工程的version-->
-                        <image>hellojib:${project.version}</image>
+                        <image>${project.name}:${project.version}</image>
                     </to>
                     <!--容器相关的属性-->
                     <container>
