@@ -44,6 +44,25 @@ public class AdministratorController {
         this.administratorService = administratorService;
     }
 
+    private static Administrator update(Administrator administrator, AdministratorVO adminVO) {
+        if (adminVO != null && adminVO.getUsername() != null) {
+            administrator.setUsername(adminVO.getUsername());
+        }
+        if (adminVO != null && adminVO.getEmail() != null) {
+            administrator.setEmail(adminVO.getEmail());
+        }
+        if (adminVO != null && adminVO.getEnabled() != null) {
+            administrator.setEnabled(adminVO.getEnabled());
+        }
+        if (adminVO != null && adminVO.getCollege() != null) {
+            administrator.setCollege(adminVO.getCollege());
+        }
+        if (adminVO != null && adminVO.getSex() != null) {
+            administrator.setSex(adminVO.getSex());
+        }
+        return administrator;
+    }
+
     @GetMapping("/me")
     public ResultBean<Map<String, Object>> me(@AuthenticationPrincipal Object object, CsrfToken csrfToken) {
         Map<String, Object> map = new HashMap<>(2);
@@ -74,12 +93,20 @@ public class AdministratorController {
     }
 
     @PostMapping
-    public ResultBean<AdministratorDTO> save(@RequestBody AdministratorVO administratorVO){
-        Set<Role> roles =  roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet());
+    public ResultBean<AdministratorDTO> save(@RequestBody AdministratorVO administratorVO) {
+        Set<Role> roles = roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet());
         administratorVO.setPassword(passwordEncoder.encode(administratorVO.getPassword()));
         Administrator administrator = AdministratorMapper.INSTANCE.toAdmin(administratorVO);
         administrator.setRoles(roles);
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administratorService.save(administrator)));
+    }
+
+    @PutMapping("/{id}")
+    public ResultBean<Administrator> update(
+            @PathVariable Integer id,
+            @RequestBody AdministratorVO administratorVO) {
+        Administrator administrator = administratorService.findById(id).orElseThrow(UserNotFoundException::new);
+        return ResultBean.ok(administratorService.save(update(administrator, administratorVO)));
     }
 
     @DeleteMapping("/{id}")
