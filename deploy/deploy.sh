@@ -4,7 +4,7 @@ git fetch && \
 git reset --hard origin/master
 
 chmod +x ./mvnw && \
-./mvnw clean compile jib:dockerBuild
-#docker images | awk '$1 == "<none>" || $2 == "<none>" {print $3}' | xargs docker rmi
+./mvnw compile jib:dockerBuild
+
 
 echo "deploy success"
