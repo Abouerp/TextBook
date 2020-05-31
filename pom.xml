@@ -147,17 +147,17 @@
                         <image>textbook/abouer:${project.version}</image>
                     </to>
                     <!--容器相关的属性-->
-                    <container>
-                        <!--jvm内存参数-->
-                        <jvmFlags>
-                            <jvmFlag>-Xms4g</jvmFlag>
-                            <jvmFlag>-Xmx4g</jvmFlag>
-                        </jvmFlags>
-                        <!--要暴露的端口-->
-                        <ports>
-                            <port>80</port>
-                        </ports>
-                    </container>
+<!--                    <container>-->
+<!--                        &lt;!&ndash;jvm内存参数&ndash;&gt;-->
+<!--                        <jvmFlags>-->
+<!--                            <jvmFlag>-Xms4g</jvmFlag>-->
+<!--                            <jvmFlag>-Xmx4g</jvmFlag>-->
+<!--                        </jvmFlags>-->
+<!--                        &lt;!&ndash;要暴露的端口&ndash;&gt;-->
+<!--                        <ports>-->
+<!--                            <port>80</port>-->
+<!--                        </ports>-->
+<!--                    </container>-->
                 </configuration>
             </plugin>
 
