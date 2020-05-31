@@ -1,7 +1,12 @@
 package com.abouerp.textbook.service;
 
 import com.abouerp.textbook.dao.RoleRepository;
+import com.abouerp.textbook.domain.QRole;
 import com.abouerp.textbook.domain.Role;
+import com.abouerp.textbook.vo.RoleVO;
+import com.querydsl.core.BooleanBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +28,7 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         roleRepository.deleteById(id);
     }
 
@@ -33,5 +38,17 @@ public class RoleService {
 
     public List<Role> findByIdIn(List<Integer> ids){
         return roleRepository.findByIdIn(ids);
+    }
+
+    public Page<Role> findAll(RoleVO roleVO, Pageable pageable) {
+        if (roleVO == null) {
+            return roleRepository.findAll(pageable);
+        }
+        QRole qRole = QRole.role;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (roleVO.getName() != null && !roleVO.getName().isEmpty()) {
+            booleanBuilder.and(qRole.name.containsIgnoreCase(roleVO.getName()));
+        }
+        return roleRepository.findAll(booleanBuilder, pageable);
     }
 }
