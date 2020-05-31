@@ -1,66 +1,55 @@
-//package com.abouerp.textbook.service;
-//
-//
-//import com.abouerp.textbook.dao.TextBookDao;
-//import com.abouerp.textbook.entity.StatisticsRep;
-//import com.abouerp.textbook.entity.TextBookHistoryRsp;
-//import com.github.pagehelper.PageHelper;
-//import com.github.pagehelper.PageInfo;
-//import com.abouerp.textbook.domain.ClassInformation;
-//import com.abouerp.textbook.domain.TextBook;
-//import com.abouerp.textbook.domain.User;
-//import org.apache.poi.hssf.usermodel.HSSFRow;
-//import org.apache.poi.hssf.usermodel.HSSFSheet;
-//import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-//import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Service;
-//
-//import java.io.*;
-//import java.text.SimpleDateFormat;
-//import java.util.List;
-//import java.util.UUID;
-//
-///**
-// * @author Abouerp
-// */
-//@Service
-//public class TextBookService {
-//
-//    private final TextBookDao textBookDao;
+package com.abouerp.textbook.service;
+
+
+
+import com.abouerp.textbook.dao.TextBookRepository;
+import com.abouerp.textbook.entity.StatisticsRep;
+import com.abouerp.textbook.entity.TextBookHistoryRsp;
+
+import com.abouerp.textbook.domain.ClassInformation;
+import com.abouerp.textbook.domain.TextBook;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * @author Abouerp
+ */
+@Service
+public class TextBookService {
+
+    private final TextBookRepository textBookRepository;
 //    @Value("${file.staticAccessPath}")
 //    private String staticAccessPath;
 //    @Value("${file.uploadFolder}")
 //    private String uploadFolder;
-//
-//    public TextBookService(TextBookDao textBookDao) {
-//        this.textBookDao = textBookDao;
-//    }
-//
-//    public TextBook save(TextBook textBook) {
-//        textBookDao.save(textBook);
-//        return textBook;
-//    }
-//
-//    public PageInfo<TextBook> findByTeacherId(int page, int size, Integer id) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherId(id), size);
-//        return pageInfo;
-//    }
-//
-//    public TextBook findTextBookById(Integer id) {
-//        return textBookDao.findByTextBookById(id);
-//    }
-//
-//    public void deleteByTextBookId(Integer id) {
-//        textBookDao.deleteById(id);
-//    }
-//
-//    public TextBook updateTextBook(TextBook textBook) {
-//        textBookDao.updateTextbook(textBook);
-//        return textBook;
-//    }
-//
+
+    public TextBookService(TextBookRepository textBookRepository) {
+        this.textBookRepository = textBookRepository;
+    }
+
+    public TextBook save(TextBook textBook) {
+        return textBookRepository.save(textBook);
+    }
+
+    public Optional<TextBook> findById(Integer id) {
+        return textBookRepository.findById(id);
+    }
+
+    public void deleteById(Integer id) {
+        textBookRepository.deleteById(id);
+    }
+
+
 //    public PageInfo<TextBook> findByTeacherIdAndStatus(int page, int size, Integer teacherId, Integer status) {
 //        PageHelper.startPage(page, size);
 //        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndStatus(teacherId, status), size);
@@ -72,15 +61,15 @@
 //        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndOkStatus(teacherId, status), size);
 //        return pageInfo;
 //    }
-//
-//
-//
-//    /**
-//     * 获取未审核 和 已审核 的申请表
-//     *
-//     * @param status 得到的值应该为2
-//     * @return
-//     */
+
+
+
+    /**
+     * 获取未审核 和 已审核 的申请表
+     *
+     * @param status 得到的值应该为2
+     * @return
+     */
 //    public PageInfo<TextBookHistoryRsp> findByStatusUnReview(int page, int size, Integer status) {
 //        PageHelper.startPage(page, size);
 //        PageInfo<TextBookHistoryRsp> pageInfo;
@@ -91,16 +80,16 @@
 //        }
 //        return pageInfo;
 //    }
-//
-//
-//    /**
-//     * 导出申请表，多张
-//     *
-//     * @param textbookList
-//     * @param uploadFolder
-//     * @return
-//     * @throws IOException
-//     */
+
+
+    /**
+     * 导出申请表，多张
+     *
+     * @param textbookList
+     * @param uploadFolder
+     * @return
+     * @throws IOException
+     */
 //    public String outExcel(List<TextBook> textbookList, String uploadFolder) throws IOException {
 //        String filename = UUID.randomUUID().toString() + ".xls";
 //        OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
@@ -179,16 +168,16 @@
 //
 //        return filename;
 //    }
-//
-//    /**
-//     * 教师导出单张申请表
-//     *
-//     * @param textBook
-//     * @param classInformations
-//     * @param user
-//     * @return
-//     * @throws Exception
-//     */
+
+    /**
+     * 教师导出单张申请表
+     *
+     * @param textBook
+     * @param classInformations
+     * @param user
+     * @return
+     * @throws Exception
+     */
 //    public String outSimpleExcel(TextBook textBook, List<ClassInformation> classInformations, User user) throws Exception {
 //        FileInputStream fileInputStream = new FileInputStream(uploadFolder + "finallymodel.xls");
 //        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -285,4 +274,4 @@
 //        }
 //        return rep;
 //    }
-//}
+}
