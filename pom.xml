@@ -127,7 +127,6 @@
     </dependencies>
 
     <build>
-<!--        <defaultGoal>compile</defaultGoal>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -145,7 +144,7 @@
                     </from>
                     <to>
                         <!--镜像名称和tag，使用了mvn内置变量${project.version}，表示当前工程的version-->
-                        <image>TextBook:${project.version}</image>
+                        <image>TextBook/abouer:${project.version}</image>
                     </to>
                     <!--容器相关的属性-->
                     <container>
