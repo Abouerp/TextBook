@@ -1,9 +1,9 @@
 version: '3.7'
 services:
   web:
-    image: abouerp.top/TextBook:master
+    image: textbook/abouerp:latest
     networks:
-      - portal
+      - textbook
     ports:
       - 80:8080
     volumes:
@@ -12,6 +12,6 @@ services:
     restart: always
 
 networks:
-  portal:
+  textbook:
     external: true
 
