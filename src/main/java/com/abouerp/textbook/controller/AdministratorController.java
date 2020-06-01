@@ -156,4 +156,9 @@ public class AdministratorController {
                 .orElseThrow(UserNotFoundException::new);
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administrator));
     }
+
+    @GetMapping("/test")
+    public ResultBean<Object> test(){
+        return ResultBean.ok("我可以了！！！！");
+    }
 }
