@@ -5,7 +5,7 @@ git reset --hard origin/master
 
 chmod +x ./mvnw && \
 ./mvnw clean compile jib:dockerBuild
-
+docker-compose up -d
 
 
 echo "deploy success"
