@@ -28,6 +28,6 @@ networks:
     external: true
 
 volumes:
-  mysql_data:
+  textbook_mysql_data:
     external: true
 
