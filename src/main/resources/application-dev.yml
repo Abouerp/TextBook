@@ -14,6 +14,7 @@ spring:
     #compose
     username: root
     url: jdbc:mysql://mysql/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
+    password: root
   jpa:
     generate-ddl: true
     show-sql: true
