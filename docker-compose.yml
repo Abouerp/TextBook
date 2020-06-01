@@ -21,6 +21,8 @@ services:
       - textbook_mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
 #      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     restart: always
 
