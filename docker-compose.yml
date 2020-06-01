@@ -4,6 +4,8 @@ services:
     image: textbook/abouerp:latest
     networks:
       - textbook
+    depends_on:
+      - mysql
     ports:
       - 80:8080
     volumes:
