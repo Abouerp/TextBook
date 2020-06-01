@@ -157,7 +157,7 @@ public class AdministratorController {
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administrator));
     }
 
-    @GetMapping("/test")
+    @GetMapping("/okokok")
     public ResultBean<Object> test(){
         return ResultBean.ok("我可以了！！！！");
     }
