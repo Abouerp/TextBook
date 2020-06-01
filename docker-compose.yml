@@ -20,7 +20,8 @@ services:
       - ./deploy/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:ro
       - textbook_mysql_data:/var/lib/mysql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_PASSWORD: 'root'
+#      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     restart: always
 
 networks:

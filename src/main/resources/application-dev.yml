@@ -13,7 +13,7 @@ spring:
 #    url: jdbc:mysql://172.17.0.2:3306/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
     #compose
     username: root
-    password:
+    password: root
     url: jdbc:mysql://mysql/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
   jpa:
     generate-ddl: true
