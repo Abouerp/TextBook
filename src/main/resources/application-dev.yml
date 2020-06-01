@@ -8,12 +8,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #本地
-#    url: jdbc:mysql://localhost:3306/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
     #mei conpose
 #    url: jdbc:mysql://172.17.0.2:3306/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
     #compose
     username: root
-    url: jdbc:mysql://mysql/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
+    password: chenjinjie
+#    url: jdbc:mysql://mysql/textbook?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
   jpa:
     generate-ddl: true
     show-sql: true
