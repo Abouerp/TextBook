@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Abouerp
@@ -88,7 +89,10 @@ public class TextbookController {
             @RequestBody TextBookVO textBookVO){
         Administrator administrator = administratorService.findById(id).orElseThrow(UserNotFoundException::new);
         textBookVO.setDate(new Date());
-        TextBook textBook = textBookService.save(TextBookMapper.INSTANCE.toTextBook(textBookVO));
+        Set<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassList()).stream().collect(Collectors.toSet());
+        TextBook textBook = TextBookMapper.INSTANCE.toTextBook(textBookVO);
+        textBook.setClassList(classInformationList);
+        textBook = textBookService.save(textBook);
         Set<TextBook> bookSet = administrator.getTextBooks();
         bookSet.add(textBook);
         administrator.setTextBooks(bookSet);
@@ -103,7 +107,7 @@ public class TextbookController {
         TextBook textBook = textBookService.findById(id).orElseThrow(TextBookNotFoundException::new);
         if (textBookVO!=null&&!textBookVO.getClassList().isEmpty()){
             List<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassList());
-            textBook.setClassList(classInformationList);
+            textBook.setClassList(classInformationList.stream().collect(Collectors.toSet()));
         }
         return ResultBean.ok(textBookService.save(update(textBook,textBookVO)));
     }

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 教材表
@@ -80,7 +81,7 @@ public class TextBook implements Serializable {
      * list[包含的班级]
      */
     @OneToMany
-    private List<ClassInformation> classList;
+    private Set<ClassInformation> classList;
     /**
      * 审核意见
      */
