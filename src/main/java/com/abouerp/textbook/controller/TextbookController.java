@@ -37,47 +37,47 @@ public class TextbookController {
         this.classInformationRepository = classInformationRepository;
     }
 
-    private static TextBook update(TextBook textBook, TextBookVO textBookVO){
-        if (textBookVO!=null&&textBookVO.getAuthor()!=null){
+    private static TextBook update(TextBook textBook, TextBookVO textBookVO) {
+        if (textBookVO != null && textBookVO.getAuthor() != null) {
             textBook.setAuthor(textBookVO.getAuthor());
         }
-        if (textBookVO!=null&&textBookVO.getCourseName()!=null){
+        if (textBookVO != null && textBookVO.getCourseName() != null) {
             textBook.setCourseName(textBookVO.getCourseName());
         }
-        if (textBookVO!=null&&textBookVO.getCourseTime()!=null){
+        if (textBookVO != null && textBookVO.getCourseTime() != null) {
             textBook.setCourseTime(textBookVO.getCourseTime());
         }
-        if (textBookVO!=null&&textBookVO.getFlag()!=null){
+        if (textBookVO != null && textBookVO.getFlag() != null) {
             textBook.setFlag(textBookVO.getFlag());
         }
-        if (textBookVO!=null&&textBookVO.getIsbn()!=null){
+        if (textBookVO != null && textBookVO.getIsbn() != null) {
             textBook.setIsbn(textBookVO.getIsbn());
         }
-        if (textBookVO!=null&&textBookVO.getPhone()!=null){
+        if (textBookVO != null && textBookVO.getPhone() != null) {
             textBook.setPhone(textBookVO.getPhone());
         }
-        if (textBookVO!=null&&textBookVO.getPublisher()!=null){
+        if (textBookVO != null && textBookVO.getPublisher() != null) {
             textBook.setPublisher(textBookVO.getPublisher());
         }
-        if (textBookVO!=null&&textBookVO.getVersion()!=null){
+        if (textBookVO != null && textBookVO.getVersion() != null) {
             textBook.setVersion(textBookVO.getVersion());
         }
-        if (textBookVO!=null&&textBookVO.getTitleName()!=null){
+        if (textBookVO != null && textBookVO.getTitleName() != null) {
             textBook.setTitleName(textBookVO.getTitleName());
         }
-        if (textBookVO!=null&&textBookVO.getTitleDate()!=null){
+        if (textBookVO != null && textBookVO.getTitleDate() != null) {
             textBook.setTitleDate(textBookVO.getTitleDate());
         }
-        if (textBookVO!=null&&textBookVO.getTitleType()!=null){
+        if (textBookVO != null && textBookVO.getTitleType() != null) {
             textBook.setTitleType(textBookVO.getTitleType());
         }
-        if (textBookVO!=null&&textBookVO.getStatus()!=null){
+        if (textBookVO != null && textBookVO.getStatus() != null) {
             textBook.setStatus(textBookVO.getStatus());
         }
-        if (textBookVO!=null&&textBookVO.getReviewOpinion()!=null){
+        if (textBookVO != null && textBookVO.getReviewOpinion() != null) {
             textBook.setReviewOpinion(textBookVO.getReviewOpinion());
         }
-        if (textBookVO!=null&&textBookVO.getReviewDate()!=null){
+        if (textBookVO != null && textBookVO.getReviewDate() != null) {
             textBook.setReviewDate(textBookVO.getReviewDate());
         }
         return textBook;
@@ -86,10 +86,10 @@ public class TextbookController {
     @PostMapping("/{id}")
     public ResultBean<TextBook> save(
             @PathVariable Integer id,
-            @RequestBody TextBookVO textBookVO){
+            @RequestBody TextBookVO textBookVO) {
         Administrator administrator = administratorService.findById(id).orElseThrow(UserNotFoundException::new);
         textBookVO.setDate(new Date());
-        Set<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassList()).stream().collect(Collectors.toSet());
+        Set<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassLists()).stream().collect(Collectors.toSet());
         TextBook textBook = TextBookMapper.INSTANCE.toTextBook(textBookVO);
         textBook.setClassList(classInformationList);
         textBook = textBookService.save(textBook);
@@ -103,17 +103,17 @@ public class TextbookController {
     @PutMapping("/{id}")
     public ResultBean<TextBook> update(
             @PathVariable Integer id,
-            @RequestBody TextBookVO textBookVO){
+            @RequestBody TextBookVO textBookVO) {
         TextBook textBook = textBookService.findById(id).orElseThrow(TextBookNotFoundException::new);
-        if (textBookVO!=null&&!textBookVO.getClassList().isEmpty()){
-            List<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassList());
+        if (textBookVO != null && !textBookVO.getClassLists().isEmpty()) {
+            List<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassLists());
             textBook.setClassList(classInformationList.stream().collect(Collectors.toSet()));
         }
-        return ResultBean.ok(textBookService.save(update(textBook,textBookVO)));
+        return ResultBean.ok(textBookService.save(update(textBook, textBookVO)));
     }
 
     @DeleteMapping("/{id}")
-    public ResultBean delete(@PathVariable Integer id){
+    public ResultBean delete(@PathVariable Integer id) {
         textBookService.deleteById(id);
         return ResultBean.ok();
     }

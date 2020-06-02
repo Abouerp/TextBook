@@ -26,7 +26,7 @@ public class TextBookVO {
     private String phone;
     private Date date;
     private Integer status;
-    private List<Integer> classList;
+    private List<Integer> classLists;
     private String reviewOpinion;
     private Date reviewDate;
 
