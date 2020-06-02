@@ -3,16 +3,20 @@ package com.abouerp.textbook.service;
 
 
 import com.abouerp.textbook.dao.TextBookRepository;
+import com.abouerp.textbook.domain.QTextBook;
 import com.abouerp.textbook.entity.StatisticsRep;
 import com.abouerp.textbook.entity.TextBookHistoryRsp;
 
 import com.abouerp.textbook.domain.ClassInformation;
 import com.abouerp.textbook.domain.TextBook;
+import com.querydsl.core.BooleanBuilder;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -47,6 +51,18 @@ public class TextBookService {
 
     public void deleteById(Integer id) {
         textBookRepository.deleteById(id);
+    }
+
+    public Page<TextBook> findAll(TextBook textBook, Pageable pageable){
+        QTextBook qTextBook = QTextBook.textBook;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (textBook==null){
+            return textBookRepository.findAll(pageable);
+        }
+        if (textBook.getPublisher()!=null&&!textBook.getPublisher().isEmpty()){
+            booleanBuilder.and(qTextBook.publisher.containsIgnoreCase(textBook.getPublisher()));
+        }
+        return textBookRepository.findAll(booleanBuilder,pageable);
     }
 
 
