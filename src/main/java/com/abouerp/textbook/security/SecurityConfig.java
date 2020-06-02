@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler,
                           AuthenticationFailureHandler authenticationFailureHandler,
                           LogoutHandler logoutHandler,
-                          @Qualifier("userDetailsServiceImpl")UserDetailsService userDetailsService,
+                          @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
                           PasswordEncoder passwordEncoder) {
         this.authenticationSuccessHandler = authenticationSuccessHandler;
         this.authenticationFailureHandler = authenticationFailureHandler;
