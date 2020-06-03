@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -56,5 +57,9 @@ public class AdministratorService {
             booleanBuilder.and(qAdministrator.enabled.eq(administrator.getEnabled()));
         }
         return administratorRepository.findAll(booleanBuilder, pageable);
+    }
+
+    public List<Administrator> saveAll(List<Administrator> administratorList) {
+        return administratorRepository.saveAll(administratorList);
     }
 }

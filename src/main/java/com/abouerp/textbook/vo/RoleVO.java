@@ -17,6 +17,8 @@ public class RoleVO {
 
     private String description;
 
+    private Boolean isDefault;
+
     private Set<Authority> authorities = new HashSet<>();
 
 }

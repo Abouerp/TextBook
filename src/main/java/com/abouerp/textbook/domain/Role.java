@@ -35,6 +35,8 @@ public class Role implements Serializable {
 
     private String description;
 
+    private Boolean isDefault;
+
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Authority> authorities = new HashSet<>();

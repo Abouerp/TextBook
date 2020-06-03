@@ -111,15 +111,13 @@
 //            return new ResultBean<>("file is null");
 //        }
 //        String path = uploadFolder;
-////        System.out.println(path);
+//
 //        File newFile = new File(path);
 //        if (!newFile.exists()) {
 //            newFile.mkdir();
 //        }
-//        String uuid = UUID.randomUUID().toString().replace("-", "");
-////        String filename = uuid + "_" + file.getOriginalFilename();
+//
 //        try {
-//            /*file.transferTo(new File(path,filename));*/
 //
 //            InputStream inputStream = file.getInputStream();
 //            HSSFWorkbook workbook = new HSSFWorkbook(inputStream);

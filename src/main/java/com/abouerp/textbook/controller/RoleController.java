@@ -44,6 +44,10 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     public ResultBean<Object> delete(@PathVariable Integer id) {
+        Role role = roleService.findById(id).orElseThrow(RoleNotFoundException::new);
+        if (role.getIsDefault() == true) {
+            return ResultBean.of(400, "DEFAULT ROLE CAN'T BE DELETE");
+        }
         roleService.deleteById(id);
         return ResultBean.ok();
     }

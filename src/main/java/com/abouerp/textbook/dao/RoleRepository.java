@@ -17,4 +17,6 @@ public interface RoleRepository extends JpaRepository<Role,Integer> , QuerydslPr
     Optional<Role> findFirstByName(String name);
 
     List<Role> findByIdIn(List<Integer> roles);
+
+    Optional<Role> findFirstByIsDefault(Boolean isDefault);
 }
