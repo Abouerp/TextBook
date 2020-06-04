@@ -149,6 +149,10 @@ public class AdministratorController {
             @PathVariable Integer id,
             @RequestBody AdministratorVO administratorVO) {
         Administrator administrator = administratorService.findById(id).orElseThrow(UserNotFoundException::new);
+        if (administratorVO != null && administratorVO.getCollegeId() != null) {
+            College college = collegeService.findById(administratorVO.getCollegeId()).orElseThrow(CollegeNotFoundException::new);
+            administrator.setCollege(college);
+        }
         if (administratorVO != null && administratorVO.getRole() != null && !administratorVO.getRole().isEmpty()) {
             administrator.setRoles(roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet()));
         }
