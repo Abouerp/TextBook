@@ -54,20 +54,16 @@ public class init implements CommandLineRunner {
             return roleRepository.save(it);
         }).collect(Collectors.toSet());
 
-        List<Administrator> administratorList = administratorRepository.findAll();
-        if (administratorList == null || administratorList.size() == 0) {
-            Administrator administrator = new Administrator().setUsername("admin")
-                    .setAccountNonExpired(true)
-                    .setAccountNonLocked(true)
-                    .setCredentialsNonExpired(true)
-                    .setEnabled(true)
-                    .setCollege("计算机学院")
-                    .setEmail("1057240821@qq.com")
-                    .setJobNumber("001")
-                    .setPassword("{noop}admin")
-                    .setSex("1")
-                    .setRoles(role);
-            administratorRepository.save(administrator);
-        }
+        objectMapper.readValue(read("data/administrator.json"), new TypeReference<List<Administrator>>() {
+        }).forEach(it -> {
+            administratorRepository.findFirstByUsername(it.getUsername()).map(Administrator::getId).ifPresent(it::setId);
+            if (it.getUsername().equals("admin")) {
+                it.setRoles(role.stream().filter(its -> its.getName().equals("超级管理员")).collect(Collectors.toSet()));
+            } else {
+                it.setRoles(role.stream().filter(its -> its.getName().equals("教师")).collect(Collectors.toSet()));
+            }
+            administratorRepository.save(it);
+        });
+
     }
 }

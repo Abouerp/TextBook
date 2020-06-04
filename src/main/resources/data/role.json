@@ -2,12 +2,13 @@
   {
     "name": "超级管理员",
     "description": null,
-    "authorities": null
+    "authorities": null,
+    "isDefault": false
   },
   {
     "name": "教师",
     "description": null,
-    "authorities": null
+    "authorities": ["TEXTBOOK_CREATE"],
+    "isDefault": true
   }
-}
 ]

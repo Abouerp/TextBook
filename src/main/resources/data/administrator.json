@@ -1,0 +1,18 @@
+[
+  {
+    "username": "admin",
+    "password": "{noop}admin",
+    "accountNonExpired": true,
+    "accountNonLocked": true,
+    "credentialsNonExpired": true,
+    "enabled": true
+  },
+  {
+    "username": "teacher",
+    "password": "{noop}teacher",
+    "accountNonExpired": true,
+    "accountNonLocked": true,
+    "credentialsNonExpired": true,
+    "enabled": true
+  }
+]

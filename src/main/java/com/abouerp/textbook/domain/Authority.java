@@ -19,7 +19,12 @@ public enum Authority {
     USER_UPDATE("用户更新"),
     USER_DELETE("用户删除"),
 
-    AUTHORITY_READ("权限查看");
+    AUTHORITY_READ("权限查看"),
+
+    TEXTBOOK_CREATE("教材申请表创建"),
+    TEXTBOOK_READ("教材申请表查看"),
+    TEXTBOOK_UPDATE("教材申请表更新"),
+    TEXTBOOK_DELETE("教材申请表删除");
 
     public static final EnumMap<Authority, String> mappings = new EnumMap<>(Authority.class);
 
