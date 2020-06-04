@@ -168,7 +168,7 @@ public class AdministratorController {
     @GetMapping
     public ResultBean<Page<AdministratorDTO>> findAll(
             @PageableDefault Pageable pageable,
-            Administrator administrator) {
+            AdministratorVO administrator) {
         return ResultBean.ok(administratorService.findAll(administrator, pageable).map(AdministratorMapper.INSTANCE::toDTO));
     }
 

@@ -24,7 +24,7 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    public Role save(Role role){
+    public Role save(Role role) {
         return roleRepository.save(role);
     }
 
@@ -32,11 +32,11 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    public Optional<Role> findById(Integer id){
+    public Optional<Role> findById(Integer id) {
         return roleRepository.findById(id);
     }
 
-    public List<Role> findByIdIn(List<Integer> ids){
+    public List<Role> findByIdIn(List<Integer> ids) {
         return roleRepository.findByIdIn(ids);
     }
 

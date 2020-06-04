@@ -2,8 +2,8 @@ package com.abouerp.textbook.service;
 
 import com.abouerp.textbook.dao.AdministratorRepository;
 import com.abouerp.textbook.domain.Administrator;
-import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.domain.QAdministrator;
+import com.abouerp.textbook.vo.AdministratorVO;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +36,7 @@ public class AdministratorService {
         return administratorRepository.findById(id);
     }
 
-    public Page<Administrator> findAll(Administrator administrator, Pageable pageable) {
+    public Page<Administrator> findAll(AdministratorVO administrator, Pageable pageable) {
         QAdministrator qAdministrator = QAdministrator.administrator;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (administrator != null && administrator.getUsername() != null && !administrator.getUsername().isEmpty()) {
@@ -55,6 +55,9 @@ public class AdministratorService {
         if (administrator != null && administrator.getEnabled() != null) {
             booleanBuilder.and(qAdministrator.enabled.eq(administrator.getEnabled()));
         }
+        if (administrator != null && administrator.getCollegeId() != null) {
+            booleanBuilder.and(qAdministrator.college.id.eq(administrator.getCollegeId()));
+        }
         return administratorRepository.findAll(booleanBuilder, pageable);
     }
 
@@ -62,11 +65,11 @@ public class AdministratorService {
         return administratorRepository.saveAll(administratorList);
     }
 
-    public List<Administrator> findByIdIn(List<Integer> ids){
+    public List<Administrator> findByIdIn(List<Integer> ids) {
         return administratorRepository.findByIdIn(ids);
     }
 
-    public void deleteByCollegeId(Integer collegeId){
+    public void deleteByCollegeId(Integer collegeId) {
         administratorRepository.deleteByCollegeId(collegeId);
     }
 }
