@@ -3,13 +3,16 @@ package com.abouerp.textbook.controller;
 import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.dao.AdministratorRepository;
 import com.abouerp.textbook.domain.Administrator;
+import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.domain.Role;
 import com.abouerp.textbook.dto.AdministratorDTO;
+import com.abouerp.textbook.exception.CollegeNotFoundException;
 import com.abouerp.textbook.exception.PasswordNotMatchException;
 import com.abouerp.textbook.exception.UserNotFoundException;
 import com.abouerp.textbook.mapper.AdministratorMapper;
 import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
+import com.abouerp.textbook.service.CollegeService;
 import com.abouerp.textbook.service.RoleService;
 import com.abouerp.textbook.vo.AdministratorVO;
 import org.springframework.data.domain.Page;
@@ -37,15 +40,18 @@ public class AdministratorController {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final AdministratorService administratorService;
+    private final CollegeService collegeService;
 
     public AdministratorController(AdministratorRepository administratorRepository,
                                    RoleService roleService,
                                    PasswordEncoder passwordEncoder,
-                                   AdministratorService administratorService) {
+                                   AdministratorService administratorService,
+                                   CollegeService collegeService) {
         this.administratorRepository = administratorRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.administratorService = administratorService;
+        this.collegeService = collegeService;
     }
 
     private static Administrator update(Administrator administrator, AdministratorVO adminVO) {
@@ -57,9 +63,6 @@ public class AdministratorController {
         }
         if (adminVO != null && adminVO.getEnabled() != null) {
             administrator.setEnabled(adminVO.getEnabled());
-        }
-        if (adminVO != null && adminVO.getCollege() != null) {
-            administrator.setCollege(adminVO.getCollege());
         }
         if (adminVO != null && adminVO.getSex() != null) {
             administrator.setSex(adminVO.getSex());
@@ -132,9 +135,11 @@ public class AdministratorController {
     @PostMapping
     public ResultBean<AdministratorDTO> save(@RequestBody AdministratorVO administratorVO) {
         Set<Role> roles = roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet());
+        College college = collegeService.findById(administratorVO.getCollegeId()).orElseThrow(CollegeNotFoundException::new);
         administratorVO.setPassword(passwordEncoder.encode(administratorVO.getPassword()));
         Administrator administrator = AdministratorMapper.INSTANCE.toAdmin(administratorVO);
         administrator.setRoles(roles);
+        administrator.setCollege(college);
         administrator.setStartTask(false);
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administratorService.save(administrator)));
     }

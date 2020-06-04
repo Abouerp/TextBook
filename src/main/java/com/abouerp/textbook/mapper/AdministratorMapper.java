@@ -24,6 +24,7 @@ public interface AdministratorMapper {
 
     AdministratorMapper INSTANCE = Mappers.getMapper(AdministratorMapper.class);
 
+
     AdministratorDTO toDTO(Administrator administrator);
 
     Administrator toAdmin(AdministratorVO adminVO);

@@ -1,5 +1,6 @@
 package com.abouerp.textbook.vo;
 
+import com.abouerp.textbook.domain.College;
 import lombok.Data;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class AdministratorVO {
     private String mobile;
     private String email;
     private String sex;
-    private String college;
+    private Integer collegeId;
     private String jobNumber;
     private List<Integer> role;
     private Boolean startTask = false;

@@ -25,6 +25,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Accessors(chain = true)
+@Table
 public class Administrator implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,13 +42,14 @@ public class Administrator implements Serializable {
     private Boolean credentialsNonExpired;
     private Boolean enabled;
     private String sex;
-    private String college;
     private String jobNumber;
     private Boolean startTask;
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
     @OneToMany
     private Set<TextBook> textBooks = new HashSet<>();
+    @OneToOne
+    private College college;
     @CreatedBy
     private Integer createBy;
     @LastModifiedBy

@@ -19,6 +19,7 @@ import java.util.Set;
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table
 public class TextBook implements Serializable {
 
     private static final long serialVersionUID = 1L;

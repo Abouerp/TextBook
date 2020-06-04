@@ -3,10 +3,7 @@ package com.abouerp.textbook.domain;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -15,6 +12,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @Entity
+@Table
 public class MainBook implements Serializable {
 
     private static final long serialVersionUID = 1L;

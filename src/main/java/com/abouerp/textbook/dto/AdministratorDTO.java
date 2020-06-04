@@ -1,5 +1,6 @@
 package com.abouerp.textbook.dto;
 
+import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.domain.Role;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class AdministratorDTO {
     private String mobile;
     private String email;
     private String sex;
-    private String college;
+    private College college;
     private String jobNumber;
     private Boolean startTask;
     private Set<Role> roles;

@@ -5,10 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -21,6 +18,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Accessors(chain = true)
+@Table
 public class ClassInformation implements Serializable {
 
     private static final long serialVersionUID = 1L;
