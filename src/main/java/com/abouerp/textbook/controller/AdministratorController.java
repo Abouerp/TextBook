@@ -64,13 +64,13 @@ public class AdministratorController {
         if (adminVO != null && adminVO.getSex() != null) {
             administrator.setSex(adminVO.getSex());
         }
-        if (adminVO!=null && adminVO.getMobile()!=null){
+        if (adminVO != null && adminVO.getMobile() != null) {
             administrator.setMobile(adminVO.getMobile());
         }
-        if (adminVO!=null && adminVO.getJobNumber()!=null){
+        if (adminVO != null && adminVO.getJobNumber() != null) {
             administrator.setJobNumber(adminVO.getJobNumber());
         }
-        if (adminVO!=null && adminVO.getStartTask()!=null){
+        if (adminVO != null && adminVO.getStartTask() != null) {
             administrator.setStartTask(adminVO.getStartTask());
         }
         return administrator;
@@ -174,7 +174,7 @@ public class AdministratorController {
     public ResultBean startOrDown(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody List<Integer> teacherIds,
-            Boolean startTask){
+            @RequestParam Boolean startTask) {
         Administrator administrator = administratorService.findById(userPrincipal.getId())
                 .orElseThrow(UserNotFoundException::new);
         administratorService.findByIdIn(teacherIds)
