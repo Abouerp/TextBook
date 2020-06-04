@@ -30,3 +30,6 @@ spring:
 logging:
   level:
     com.Abouerp: debug
+
+storage:
+  location: /root/TextBook/upload/Downloads/textbook/
