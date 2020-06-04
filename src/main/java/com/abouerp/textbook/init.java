@@ -45,25 +45,27 @@ public class init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Set<Role> role = objectMapper.readValue(read("data/role.json"), new TypeReference<List<Role>>() {
-        }).stream().map(it -> {
-            roleRepository.findFirstByName(it.getName()).map(Role::getId).ifPresent(it::setId);
-            if (it.getAuthorities() == null) {
-                it.setAuthorities(Arrays.stream(Authority.values()).collect(Collectors.toSet()));
-            }
-            return roleRepository.save(it);
-        }).collect(Collectors.toSet());
+        long count = administratorRepository.count();
+        if (count == 0) {
+            Set<Role> role = objectMapper.readValue(read("data/role.json"), new TypeReference<List<Role>>() {
+            }).stream().map(it -> {
+                roleRepository.findFirstByName(it.getName()).map(Role::getId).ifPresent(it::setId);
+                if (it.getAuthorities() == null) {
+                    it.setAuthorities(Arrays.stream(Authority.values()).collect(Collectors.toSet()));
+                }
+                return roleRepository.save(it);
+            }).collect(Collectors.toSet());
 
-        objectMapper.readValue(read("data/administrator.json"), new TypeReference<List<Administrator>>() {
-        }).forEach(it -> {
-            administratorRepository.findFirstByUsername(it.getUsername()).map(Administrator::getId).ifPresent(it::setId);
-            if (it.getUsername().equals("admin")) {
-                it.setRoles(role.stream().filter(its -> its.getName().equals("超级管理员")).collect(Collectors.toSet()));
-            } else {
-                it.setRoles(role.stream().filter(its -> its.getName().equals("教师")).collect(Collectors.toSet()));
-            }
-            administratorRepository.save(it);
-        });
-
+            objectMapper.readValue(read("data/administrator.json"), new TypeReference<List<Administrator>>() {
+            }).forEach(it -> {
+                administratorRepository.findFirstByUsername(it.getUsername()).map(Administrator::getId).ifPresent(it::setId);
+                if (it.getUsername().equals("admin")) {
+                    it.setRoles(role.stream().filter(its -> its.getName().equals("超级管理员")).collect(Collectors.toSet()));
+                } else {
+                    it.setRoles(role.stream().filter(its -> its.getName().equals("教师")).collect(Collectors.toSet()));
+                }
+                administratorRepository.save(it);
+            });
+        }
     }
 }

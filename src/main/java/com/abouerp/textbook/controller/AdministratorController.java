@@ -21,6 +21,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,6 +63,15 @@ public class AdministratorController {
         }
         if (adminVO != null && adminVO.getSex() != null) {
             administrator.setSex(adminVO.getSex());
+        }
+        if (adminVO!=null && adminVO.getMobile()!=null){
+            administrator.setMobile(adminVO.getMobile());
+        }
+        if (adminVO!=null && adminVO.getJobNumber()!=null){
+            administrator.setJobNumber(adminVO.getJobNumber());
+        }
+        if (adminVO!=null && adminVO.getStartTask()!=null){
+            administrator.setStartTask(adminVO.getStartTask());
         }
         return administrator;
     }
@@ -125,15 +135,19 @@ public class AdministratorController {
         administratorVO.setPassword(passwordEncoder.encode(administratorVO.getPassword()));
         Administrator administrator = AdministratorMapper.INSTANCE.toAdmin(administratorVO);
         administrator.setRoles(roles);
+        administrator.setStartTask(false);
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administratorService.save(administrator)));
     }
 
     @PutMapping("/{id}")
-    public ResultBean<Administrator> update(
+    public ResultBean<AdministratorDTO> update(
             @PathVariable Integer id,
             @RequestBody AdministratorVO administratorVO) {
         Administrator administrator = administratorService.findById(id).orElseThrow(UserNotFoundException::new);
-        return ResultBean.ok(administratorService.save(update(administrator, administratorVO)));
+        if (administratorVO != null && administratorVO.getRole() != null && !administratorVO.getRole().isEmpty()) {
+            administrator.setRoles(roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet()));
+        }
+        return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administratorService.save(update(administrator, administratorVO))));
     }
 
     @DeleteMapping("/{id}")
@@ -156,8 +170,20 @@ public class AdministratorController {
         return ResultBean.ok(AdministratorMapper.INSTANCE.toDTO(administrator));
     }
 
-    @GetMapping("/okokok")
-    public ResultBean<Object> test(){
-        return ResultBean.ok("我可以了！！！！");
+    @PutMapping("/start-task")
+    public ResultBean startOrDown(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestBody List<Integer> teacherIds,
+            Boolean startTask){
+        Administrator administrator = administratorService.findById(userPrincipal.getId())
+                .orElseThrow(UserNotFoundException::new);
+        administratorService.findByIdIn(teacherIds)
+                .stream()
+                .filter(it -> administrator.getCollege().equals(it.getCollege()))
+                .forEach(it -> {
+                    it.setStartTask(startTask);
+                    administratorService.save(it);
+                });
+        return ResultBean.ok();
     }
 }

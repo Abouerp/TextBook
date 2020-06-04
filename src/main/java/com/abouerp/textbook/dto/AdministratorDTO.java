@@ -18,7 +18,7 @@ public class AdministratorDTO {
     private String sex;
     private String college;
     private String jobNumber;
-
+    private Boolean startTask;
     private Set<Role> roles;
 
     private boolean accountNonExpired;
