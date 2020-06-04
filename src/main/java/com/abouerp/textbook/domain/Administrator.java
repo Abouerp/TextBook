@@ -48,7 +48,7 @@ public class Administrator implements Serializable {
     private Set<Role> roles = new HashSet<>();
     @OneToMany
     private Set<TextBook> textBooks = new HashSet<>();
-    @OneToOne
+    @ManyToOne
     private College college;
     @CreatedBy
     private Integer createBy;

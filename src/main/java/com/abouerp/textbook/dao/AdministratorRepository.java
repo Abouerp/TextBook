@@ -4,8 +4,10 @@ import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.College;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,5 +22,7 @@ public interface AdministratorRepository extends JpaRepository<Administrator,Int
 
     List<Administrator> findByIdIn(List<Integer> ids);
 
-    void deleteByCollege(College college);
+    @Transactional
+    void deleteByCollegeId(Integer collegeId);
+
 }

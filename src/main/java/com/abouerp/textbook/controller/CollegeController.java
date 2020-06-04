@@ -54,8 +54,7 @@ public class CollegeController {
 
     @DeleteMapping("/{id}")
     public ResultBean delete(@PathVariable Integer id){
-        College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
-        administratorService.deleteByCollege(college);
+        administratorService.deleteByCollegeId(id);
         collegeService.delete(id);
         return ResultBean.ok();
     }

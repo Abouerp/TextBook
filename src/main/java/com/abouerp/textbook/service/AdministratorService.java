@@ -66,7 +66,7 @@ public class AdministratorService {
         return administratorRepository.findByIdIn(ids);
     }
 
-    public void deleteByCollege(College college){
-        administratorRepository.deleteByCollege(college);
+    public void deleteByCollegeId(Integer collegeId){
+        administratorRepository.deleteByCollegeId(collegeId);
     }
 }
