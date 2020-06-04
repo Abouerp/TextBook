@@ -1,6 +1,7 @@
 package com.abouerp.textbook.dao;
 
 import com.abouerp.textbook.domain.Administrator;
+import com.abouerp.textbook.domain.College;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -18,4 +19,6 @@ public interface AdministratorRepository extends JpaRepository<Administrator,Int
     Optional<Administrator> findFirstByUsername(String username);
 
     List<Administrator> findByIdIn(List<Integer> ids);
+
+    void deleteByCollege(College college);
 }

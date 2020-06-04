@@ -1,9 +1,11 @@
 package com.abouerp.textbook.controller;
 
 import com.abouerp.textbook.bean.ResultBean;
+import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.exception.CollegeNotFoundException;
 import com.abouerp.textbook.mapper.CollegeMapper;
+import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.CollegeService;
 import com.abouerp.textbook.vo.CollegeVO;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,13 @@ import java.util.List;
 public class CollegeController {
 
     private final CollegeService collegeService;
+    private final AdministratorService administratorService;
 
-    public CollegeController(CollegeService collegeService) {
+    public CollegeController(
+            CollegeService collegeService,
+            AdministratorService administratorService) {
         this.collegeService = collegeService;
+        this.administratorService = administratorService;
     }
 
     private static College update(College college, CollegeVO collegeVO){
@@ -44,6 +50,14 @@ public class CollegeController {
             @RequestBody CollegeVO collegeVO) {
         College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
         return ResultBean.ok(collegeService.save(update(college,collegeVO)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResultBean delete(@PathVariable Integer id){
+        College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
+        administratorService.deleteByCollege(college);
+        collegeService.delete(id);
+        return ResultBean.ok();
     }
 
     @GetMapping

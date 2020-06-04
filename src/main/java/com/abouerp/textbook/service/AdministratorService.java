@@ -2,6 +2,7 @@ package com.abouerp.textbook.service;
 
 import com.abouerp.textbook.dao.AdministratorRepository;
 import com.abouerp.textbook.domain.Administrator;
+import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.domain.QAdministrator;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
@@ -63,5 +64,9 @@ public class AdministratorService {
 
     public List<Administrator> findByIdIn(List<Integer> ids){
         return administratorRepository.findByIdIn(ids);
+    }
+
+    public void deleteByCollege(College college){
+        administratorRepository.deleteByCollege(college);
     }
 }
