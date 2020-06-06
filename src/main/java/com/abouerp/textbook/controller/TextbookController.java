@@ -102,7 +102,7 @@ public class TextbookController {
     }
 
     @PutMapping("/{id}")
-    public ResultBean<TextBook> update(
+    public ResultBean<TextBookDTO> update(
             @PathVariable Integer id,
             @RequestBody TextBookVO textBookVO) {
         TextBook textBook = textBookService.findById(id).orElseThrow(TextBookNotFoundException::new);
@@ -110,7 +110,7 @@ public class TextbookController {
             List<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassLists());
             textBook.setClassList(classInformationList.stream().collect(Collectors.toSet()));
         }
-        return ResultBean.ok(textBookService.save(update(textBook, textBookVO)));
+        return ResultBean.ok(TextBookMapper.INSTANCE.toDTO(textBookService.save(update(textBook, textBookVO))));
     }
 
     @DeleteMapping("/{id}")
