@@ -46,8 +46,6 @@ public class Administrator implements Serializable {
     private Boolean startTask;
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
-    @OneToMany
-    private Set<TextBook> textBooks = new HashSet<>();
     @ManyToOne
     private College college;
     @CreatedBy

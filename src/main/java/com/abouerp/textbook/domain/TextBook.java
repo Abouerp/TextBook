@@ -91,4 +91,6 @@ public class TextBook implements Serializable {
      * 审核通过时间
      */
     private Date reviewDate;
+    @ManyToOne
+    private Administrator administrator;
 }

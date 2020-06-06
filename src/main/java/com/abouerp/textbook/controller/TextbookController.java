@@ -92,10 +92,8 @@ public class TextbookController {
         Set<ClassInformation> classInformationList = classInformationRepository.findByIdIn(textBookVO.getClassLists()).stream().collect(Collectors.toSet());
         TextBook textBook = TextBookMapper.INSTANCE.toTextBook(textBookVO);
         textBook.setClassList(classInformationList);
+        textBook.setAdministrator(administrator);
         textBook = textBookService.save(textBook);
-        Set<TextBook> bookSet = administrator.getTextBooks();
-        bookSet.add(textBook);
-        administrator.setTextBooks(bookSet);
         administratorService.save(administrator);
         return ResultBean.ok(textBook);
     }
