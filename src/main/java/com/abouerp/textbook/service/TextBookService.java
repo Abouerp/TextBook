@@ -54,7 +54,7 @@ public class TextBookService {
 
     public Page<TextBookDTO> findAll(Pageable pageable, Integer status) {
         List<TextBook> list = textBookRepository.findAll();
-        if (status != null) {
+        if (status != null && status > 0) {
             list = list.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
         }
         return common(pageable, list);
@@ -62,7 +62,7 @@ public class TextBookService {
 
     public Page<TextBookDTO> findByAdministrator_Id(Integer id, Pageable pageable, Integer status) {
         List<TextBook> list = textBookRepository.findByAdministrator_Id(id, pageable);
-        if (status != null) {
+        if (status != null && status > 0) {
             list = list.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
         }
         return common(pageable, list);
@@ -70,7 +70,7 @@ public class TextBookService {
 
     public Page<TextBookDTO> findByAdministrator_Ids(List<Integer> ids, Pageable pageable, Integer status) {
         List<TextBook> list = textBookRepository.findByAdministratorIdIn(ids, pageable);
-        if (status != null) {
+        if (status != null && status > 0) {
             list = list.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
         }
         return common(pageable, list);
@@ -81,7 +81,6 @@ public class TextBookService {
         for (TextBook textBook : list) {
             dtoList.add((TextBookMapper.INSTANCE.toDTO(textBook)));
         }
-        System.out.println(dtoList);
         int start = (int) pageable.getOffset();
         int end = (start + pageable.getPageSize()) > dtoList.size() ? dtoList.size() : (start + pageable.getPageSize());
         return new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size());
