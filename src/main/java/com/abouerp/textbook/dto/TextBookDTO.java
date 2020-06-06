@@ -1,8 +1,7 @@
-package com.abouerp.textbook.vo;
+package com.abouerp.textbook.dto;
 
-
+import com.abouerp.textbook.domain.ClassInformation;
 import lombok.Data;
-
 
 import java.util.Date;
 import java.util.List;
@@ -11,8 +10,9 @@ import java.util.List;
  * @author Abouerp
  */
 @Data
-public class TextBookVO {
+public class TextBookDTO {
 
+    private Integer id;
     private String courseName;
     private Integer courseTime;
     private String titleName;
@@ -26,8 +26,7 @@ public class TextBookVO {
     private String phone;
     private Date date;
     private Integer status;
-    private List<Integer> classLists;
+    private List<ClassInformation> classList;
     private String reviewOpinion;
     private Date reviewDate;
-
 }

@@ -1,5 +1,6 @@
 package com.abouerp.textbook.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -34,6 +35,7 @@ public class Administrator implements Serializable {
     private Integer id;
 
     private String username;
+    @JsonIgnore
     private String password;
     private String email;
     private String mobile;

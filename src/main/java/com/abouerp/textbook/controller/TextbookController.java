@@ -5,12 +5,15 @@ import com.abouerp.textbook.dao.ClassInformationRepository;
 import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.ClassInformation;
 import com.abouerp.textbook.domain.TextBook;
+import com.abouerp.textbook.dto.TextBookDTO;
 import com.abouerp.textbook.exception.TextBookNotFoundException;
 import com.abouerp.textbook.exception.UserNotFoundException;
 import com.abouerp.textbook.mapper.TextBookMapper;
+import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.TextBookService;
 import com.abouerp.textbook.vo.TextBookVO;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -84,7 +87,7 @@ public class TextbookController {
     }
 
     @PostMapping("/{id}")
-    public ResultBean<TextBook> save(
+    public ResultBean<TextBookDTO> save(
             @PathVariable Integer id,
             @RequestBody TextBookVO textBookVO) {
         Administrator administrator = administratorService.findById(id).orElseThrow(UserNotFoundException::new);
@@ -95,7 +98,7 @@ public class TextbookController {
         textBook.setAdministrator(administrator);
         textBook = textBookService.save(textBook);
         administratorService.save(administrator);
-        return ResultBean.ok(textBook);
+        return ResultBean.ok(TextBookMapper.INSTANCE.toDTO(textBook));
     }
 
     @PutMapping("/{id}")
