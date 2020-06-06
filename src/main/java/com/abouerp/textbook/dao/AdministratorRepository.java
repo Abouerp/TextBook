@@ -23,4 +23,6 @@ public interface AdministratorRepository extends JpaRepository<Administrator,Int
     @Transactional
     void deleteByCollegeId(Integer collegeId);
 
+    List<Administrator> findByCollege_Id(Integer id);
+
 }

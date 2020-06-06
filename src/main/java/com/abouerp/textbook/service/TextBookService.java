@@ -1,6 +1,7 @@
 package com.abouerp.textbook.service;
 
 
+import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.dao.TextBookRepository;
 import com.abouerp.textbook.domain.QTextBook;
 
@@ -11,6 +12,7 @@ import com.abouerp.textbook.vo.TextBookVO;
 import com.querydsl.core.BooleanBuilder;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -49,28 +52,39 @@ public class TextBookService {
         textBookRepository.deleteById(id);
     }
 
-    public Page<TextBook> findAll(TextBookVO textBookVO, Pageable pageable) {
-        QTextBook qTextBook = QTextBook.textBook;
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (textBookVO == null) {
-            return textBookRepository.findAll(pageable);
+    public Page<TextBookDTO> findAll(Pageable pageable, Integer status) {
+        List<TextBook> list = textBookRepository.findAll();
+        if (status != null) {
+            list = list.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
         }
-        if (textBookVO.getPublisher() != null && !textBookVO.getPublisher().isEmpty()) {
-            booleanBuilder.and(qTextBook.publisher.containsIgnoreCase(textBookVO.getPublisher()));
-        }
-        if (textBookVO.getStatus()!=null ){
-            booleanBuilder.and(qTextBook.status.eq(textBookVO.getStatus()));
-        }
-        return textBookRepository.findAll(booleanBuilder, pageable);
+        return common(pageable, list);
     }
 
-    public List<TextBookDTO> findByAdministrator_Id(Integer id, Pageable pageable){
+    public Page<TextBookDTO> findByAdministrator_Id(Integer id, Pageable pageable, Integer status) {
         List<TextBook> list = textBookRepository.findByAdministrator_Id(id, pageable);
+        if (status != null) {
+            list = list.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
+        }
+        return common(pageable, list);
+    }
+
+    public Page<TextBookDTO> findByAdministrator_Ids(List<Integer> ids, Pageable pageable, Integer status) {
+        List<TextBook> list = textBookRepository.findByAdministratorIdIn(ids, pageable);
+        if (status != null) {
+            list = list.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
+        }
+        return common(pageable, list);
+    }
+
+    private static Page<TextBookDTO> common(Pageable pageable, List<TextBook> list) {
         List<TextBookDTO> dtoList = new ArrayList<>();
-        for (TextBook textBook:list) {
+        for (TextBook textBook : list) {
             dtoList.add((TextBookMapper.INSTANCE.toDTO(textBook)));
         }
-        return dtoList;
+        System.out.println(dtoList);
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > dtoList.size() ? dtoList.size() : (start + pageable.getPageSize());
+        return new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size());
     }
 
 

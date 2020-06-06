@@ -72,4 +72,8 @@ public class AdministratorService {
     public void deleteByCollegeId(Integer collegeId) {
         administratorRepository.deleteByCollegeId(collegeId);
     }
+
+    public List<Administrator> findByCollegeId(Integer id){
+        return administratorRepository.findByCollege_Id(id);
+    }
 }

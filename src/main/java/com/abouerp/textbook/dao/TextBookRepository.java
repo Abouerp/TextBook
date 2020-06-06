@@ -15,4 +15,6 @@ import java.util.List;
 public interface TextBookRepository extends JpaRepository<TextBook, Integer>, QuerydslPredicateExecutor<TextBook> {
 
     List<TextBook> findByAdministrator_Id(Integer id, Pageable pageable);
+
+    List<TextBook> findByAdministratorIdIn(List<Integer> ids, Pageable pageable);
 }

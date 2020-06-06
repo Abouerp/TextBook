@@ -35,7 +35,6 @@ public class Administrator implements Serializable {
     private Integer id;
 
     private String username;
-    @JsonIgnore
     private String password;
     private String email;
     private String mobile;

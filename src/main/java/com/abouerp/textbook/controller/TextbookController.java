@@ -2,13 +2,12 @@ package com.abouerp.textbook.controller;
 
 import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.dao.ClassInformationRepository;
-import com.abouerp.textbook.domain.Administrator;
-import com.abouerp.textbook.domain.ClassInformation;
-import com.abouerp.textbook.domain.TextBook;
+import com.abouerp.textbook.domain.*;
 import com.abouerp.textbook.dto.TextBookDTO;
 import com.abouerp.textbook.exception.TextBookNotFoundException;
 import com.abouerp.textbook.exception.UserNotFoundException;
 import com.abouerp.textbook.mapper.TextBookMapper;
+import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.TextBookService;
 import com.abouerp.textbook.vo.TextBookVO;
@@ -17,9 +16,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -122,18 +123,35 @@ public class TextbookController {
         return ResultBean.ok();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
     public ResultBean<Page<TextBookDTO>> findAll(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable Integer id,
-            Integer status) {
-        List<TextBookDTO> dtoList = textBookService.findByAdministrator_Id(id, pageable);
-        if (status != null) {
-            dtoList = dtoList.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
+            Integer status,
+            Integer collegeId) {
+        Administrator administrator = administratorService.findById(userPrincipal.getId()).orElseThrow(UserNotFoundException::new);
+        Set<Authority> authorities = new HashSet<>();
+        administrator.getRoles().stream().forEach(it ->
+                authorities.addAll(it.getAuthorities())
+        );
+        if (authorities.contains(Authority.ALL_TEXTBOOK_READ)) {
+            if (collegeId != null) {
+                List<Integer> ids = administratorService.findByCollegeId(collegeId)
+                        .stream()
+                        .map(Administrator::getId)
+                        .collect(Collectors.toList());
+                return ResultBean.ok(textBookService.findByAdministrator_Ids(ids, pageable, status));
+            }
+            return ResultBean.ok(textBookService.findAll(pageable, status));
+        } else if (authorities.contains(Authority.COLLEGE_TEXTBOOK_READ)) {
+            List<Integer> ids = administratorService.findByCollegeId(administrator.getCollege().getId())
+                    .stream()
+                    .map(Administrator::getId)
+                    .collect(Collectors.toList());
+            return ResultBean.ok(textBookService.findByAdministrator_Ids(ids, pageable, status));
+        } else {
+            return ResultBean.ok(textBookService.findByAdministrator_Id(userPrincipal.getId(), pageable, status));
         }
-        int start = (int) pageable.getOffset();
-        int end = (start + pageable.getPageSize()) > dtoList.size() ? dtoList.size() : (start + pageable.getPageSize());
-        return ResultBean.ok(new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size()));
     }
 
 
