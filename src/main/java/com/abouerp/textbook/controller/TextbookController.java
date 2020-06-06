@@ -9,11 +9,14 @@ import com.abouerp.textbook.dto.TextBookDTO;
 import com.abouerp.textbook.exception.TextBookNotFoundException;
 import com.abouerp.textbook.exception.UserNotFoundException;
 import com.abouerp.textbook.mapper.TextBookMapper;
-import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.TextBookService;
 import com.abouerp.textbook.vo.TextBookVO;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -117,6 +120,20 @@ public class TextbookController {
     public ResultBean delete(@PathVariable Integer id) {
         textBookService.deleteById(id);
         return ResultBean.ok();
+    }
+
+    @GetMapping("/{id}")
+    public ResultBean<Page<TextBookDTO>> findAll(
+            @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable,
+            @PathVariable Integer id,
+            Integer status) {
+        List<TextBookDTO> dtoList = textBookService.findByAdministrator_Id(id, pageable);
+        if (status != null) {
+            dtoList = dtoList.stream().filter(it -> it.getStatus().equals(status)).collect(Collectors.toList());
+        }
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > dtoList.size() ? dtoList.size() : (start + pageable.getPageSize());
+        return ResultBean.ok(new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size()));
     }
 
 

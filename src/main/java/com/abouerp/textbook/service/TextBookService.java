@@ -1,11 +1,13 @@
 package com.abouerp.textbook.service;
 
 
-
 import com.abouerp.textbook.dao.TextBookRepository;
 import com.abouerp.textbook.domain.QTextBook;
 
 import com.abouerp.textbook.domain.TextBook;
+import com.abouerp.textbook.dto.TextBookDTO;
+import com.abouerp.textbook.mapper.TextBookMapper;
+import com.abouerp.textbook.vo.TextBookVO;
 import com.querydsl.core.BooleanBuilder;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -45,16 +49,28 @@ public class TextBookService {
         textBookRepository.deleteById(id);
     }
 
-    public Page<TextBook> findAll(TextBook textBook, Pageable pageable){
+    public Page<TextBook> findAll(TextBookVO textBookVO, Pageable pageable) {
         QTextBook qTextBook = QTextBook.textBook;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (textBook==null){
+        if (textBookVO == null) {
             return textBookRepository.findAll(pageable);
         }
-        if (textBook.getPublisher()!=null&&!textBook.getPublisher().isEmpty()){
-            booleanBuilder.and(qTextBook.publisher.containsIgnoreCase(textBook.getPublisher()));
+        if (textBookVO.getPublisher() != null && !textBookVO.getPublisher().isEmpty()) {
+            booleanBuilder.and(qTextBook.publisher.containsIgnoreCase(textBookVO.getPublisher()));
         }
-        return textBookRepository.findAll(booleanBuilder,pageable);
+        if (textBookVO.getStatus()!=null ){
+            booleanBuilder.and(qTextBook.status.eq(textBookVO.getStatus()));
+        }
+        return textBookRepository.findAll(booleanBuilder, pageable);
+    }
+
+    public List<TextBookDTO> findByAdministrator_Id(Integer id, Pageable pageable){
+        List<TextBook> list = textBookRepository.findByAdministrator_Id(id, pageable);
+        List<TextBookDTO> dtoList = new ArrayList<>();
+        for (TextBook textBook:list) {
+            dtoList.add((TextBookMapper.INSTANCE.toDTO(textBook)));
+        }
+        return dtoList;
     }
 
 
@@ -69,7 +85,6 @@ public class TextBookService {
 //        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndOkStatus(teacherId, status), size);
 //        return pageInfo;
 //    }
-
 
 
     /**
