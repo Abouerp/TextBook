@@ -32,4 +32,4 @@ logging:
     com.Abouerp: debug
 
 storage:
-  location: /root/TextBook/upload/Downloads/textbook/
+  location: /TextBook/storage
