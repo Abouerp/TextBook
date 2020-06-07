@@ -22,10 +22,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -184,6 +181,6 @@ public class TextbookController {
     @GetMapping("/excel")
     public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids){
         List<TextBook> textBooks = textBookService.findByIdIn(ids);
-        return null;
+        return ResultBean.ok(Arrays.asList(textBookService.outPutExcel(textBooks.get(0))));
     }
 }

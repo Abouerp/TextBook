@@ -2,22 +2,39 @@ package com.abouerp.textbook.service;
 
 
 import com.abouerp.textbook.bean.ResultBean;
+import com.abouerp.textbook.config.StorageProperties;
+import com.abouerp.textbook.dao.StorageRepository;
 import com.abouerp.textbook.dao.TextBookRepository;
+import com.abouerp.textbook.domain.ClassInformation;
 import com.abouerp.textbook.domain.QTextBook;
 
+import com.abouerp.textbook.domain.Storage;
 import com.abouerp.textbook.domain.TextBook;
 import com.abouerp.textbook.dto.TextBookDTO;
+import com.abouerp.textbook.exception.ExcelErrorException;
 import com.abouerp.textbook.mapper.TextBookMapper;
 import com.abouerp.textbook.vo.TextBookVO;
 import com.querydsl.core.BooleanBuilder;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +48,17 @@ import java.util.stream.Collectors;
 public class TextBookService {
 
     private final TextBookRepository textBookRepository;
-//    @Value("${file.staticAccessPath}")
-//    private String staticAccessPath;
-//    @Value("${file.uploadFolder}")
-//    private String uploadFolder;
+    private final Path rootLocation;
+    private final StorageRepository storageRepository;
 
-    public TextBookService(TextBookRepository textBookRepository) {
+
+    public TextBookService(
+            TextBookRepository textBookRepository,
+            StorageProperties storageProperties,
+            StorageRepository storageRepository) {
         this.textBookRepository = textBookRepository;
+        this.rootLocation = Paths.get(storageProperties.getLocation());
+        this.storageRepository = storageRepository;
     }
 
     public TextBook save(TextBook textBook) {
@@ -86,12 +107,112 @@ public class TextBookService {
         return new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size());
     }
 
-    public List<TextBook> findByIdIn(List<Integer> ids){
+    public List<TextBook> findByIdIn(List<Integer> ids) {
         return textBookRepository.findByIdIn(ids);
     }
 
+    public String outPutExcel(TextBook textBook) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(rootLocation + "/FD3452D292C57AF06D357438F0CD6B24110A53FC");
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+            POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
+            HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
+            HSSFSheet sheet = workbook.getSheet("Sheet1");
+
+            HSSFRow row = sheet.getRow(2);
+            row.getCell(1).setCellValue(textBook.getCourseName());
+            row.getCell(6).setCellValue(textBook.getCourseTime());
+
+            row = sheet.getRow(3);
+            row.getCell(1).setCellValue(textBook.getTitleName());
+            row.getCell(6).setCellValue(textBook.getPublisher());
+
+            row = sheet.getRow(4);
+            row.getCell(1).setCellValue(textBook.getAuthor());
+            row.getCell(3).setCellValue(textBook.getTitleDate());
+            row.getCell(5).setCellValue(textBook.getVersion());
+            row.getCell(7).setCellValue(textBook.getFlag());
+
+            row = sheet.getRow(6);
+            row.getCell(4).setCellValue(textBook.getTitleType());
+
+            row = sheet.getRow(7);
+            row.getCell(6).setCellValue(textBook.getIsbn());
+
+            List<ClassInformation> classInformations = textBook.getClassList().stream().collect(Collectors.toList());
+            int i = 9;
+            for (ClassInformation classInformation : classInformations) {
+                row = sheet.getRow(i);
+                row.getCell(0).setCellValue(classInformation.getGrade());
+                row.getCell(1).setCellValue(classInformation.getSubject());
+                row.getCell(3).setCellValue(classInformation.getNumber());
+                row.getCell(4).setCellValue(classInformation.getDate());
+                row.getCell(5).setCellValue(classInformation.getClassType());
+                row.getCell(6).setCellValue(classInformation.getSemester());
+                i++;
+            }
+
+            row = sheet.getRow(14);
+
+
+            row.getCell(2).setCellValue(textBook.getAdministrator().getUsername());
+            row.getCell(6).setCellValue(textBook.getPhone());
+
+            row = sheet.getRow(16);
+            row.getCell(0).setCellValue("审核意见： " + textBook.getReviewOpinion());
+
+            row = sheet.getRow(17);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            row.getCell(5).setCellValue("审核时间：" + (textBook.getReviewDate() == null ? "" : format.format(textBook.getReviewDate())));
+
+            row = sheet.getRow(18);
+            row.getCell(5).setCellValue("系主任签名：");
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            workbook.write(baos);
+            ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
+            String sha1 = common(rootLocation, swapStream);
+            Storage storage = new Storage().setSha1(sha1)
+                    .setContentType("application/vnd.ms-excel")
+                    .setOriginalFilename(textBook.getCourseName()+".xls");
+            storageRepository.save(storage);
+            return sha1;
+        } catch (Exception e) {
+            throw new ExcelErrorException();
+        }
+    }
+
+    private String common(Path rootLocation,ByteArrayInputStream in ){
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            Path temp = Files.createTempFile("temp-", null);
+            try (
+                    OutputStream out = Files.newOutputStream(temp)
+            ) {
+                byte[] buf = new byte[8192];
+                int n;
+                while (-1 != (n = in.read(buf, 0, buf.length))) {
+                    digest.update(buf, 0, n);
+                    out.write(buf, 0, n);
+                }
+                String sha1 = String.format("%032X", new BigInteger(1, digest.digest()));
+                Path dest = rootLocation.resolve(sha1);
+                if (dest.toFile().exists()) {
+                    return sha1;
+                }
+                Files.move(temp, dest);
+                return sha1;
+            } catch (IOException e) {
+//                throw new StorageException("Failed to store file " + originalFilename, e);
+            }
+        } catch (IOException | NoSuchAlgorithmException e) {
+//            throw new StorageException("Failed to create temp file ", e);
+        }
+        return null;
+    }
+
     /**
-     * 导出申请表，多张
+     * 导出申请表，多张 无格式的
      *
      * @param textbookList
      * @param uploadFolder
@@ -188,60 +309,7 @@ public class TextBookService {
      */
 //    public String outSimpleExcel(TextBook textBook, List<ClassInformation> classInformations, User user) throws Exception {
 //        FileInputStream fileInputStream = new FileInputStream(uploadFolder + "finallymodel.xls");
-//        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-//        POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
-//        HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
-//        HSSFSheet sheet = workbook.getSheet("Sheet1");
-//
-//        HSSFRow row = sheet.getRow(2);
-//        row.getCell(1).setCellValue(textBook.getCourseName());
-//        row.getCell(6).setCellValue(textBook.getCourseTime());
-//
-//        row = sheet.getRow(3);
-//        row.getCell(1).setCellValue(textBook.getTitleName());
-//        row.getCell(6).setCellValue(textBook.getPublisher());
-//
-//        row = sheet.getRow(4);
-//        row.getCell(1).setCellValue(textBook.getAuthor());
-//        row.getCell(3).setCellValue(textBook.getTitleDate());
-//        row.getCell(5).setCellValue(textBook.getVersion());
-//        row.getCell(7).setCellValue(textBook.getFlag());
-//
-//        row = sheet.getRow(6);
-//        row.getCell(4).setCellValue(textBook.getTitleType());
-//
-//        row = sheet.getRow(7);
-//        row.getCell(6).setCellValue(textBook.getIsbn());
-//
-//
-//        int i = 9;
-//        for (ClassInformation classInformation : classInformations) {
-//            row = sheet.getRow(i);
-//            row.getCell(0).setCellValue(classInformation.getGrade());
-//            row.getCell(1).setCellValue(classInformation.getSubject());
-//            row.getCell(3).setCellValue(classInformation.getNumber());
-//            row.getCell(4).setCellValue(classInformation.getDate());
-//            row.getCell(5).setCellValue(classInformation.getClassType());
-//            row.getCell(6).setCellValue(classInformation.getSemester());
-//            i++;
-//        }
-//
-//        row = sheet.getRow(14);
-//
-//
-//        System.out.println(user.getRealName());
-//        row.getCell(2).setCellValue(user.getRealName());
-//        row.getCell(6).setCellValue(textBook.getPhone());
-//
-//        row = sheet.getRow(16);
-//        row.getCell(0).setCellValue("审核意见： " + textBook.getReviewOpinion());
-//
-//        row = sheet.getRow(17);
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//        row.getCell(5).setCellValue("审核时间：" + (textBook.getReviewDate() == null ? "" : format.format(textBook.getReviewDate()) ));
-//
-//        row = sheet.getRow(18);
-//        row.getCell(5).setCellValue("系主任签名：");
+
 //        String filename = UUID.randomUUID().toString() + ".xls";
 //        OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
 //        workbook.write(outputStream);
