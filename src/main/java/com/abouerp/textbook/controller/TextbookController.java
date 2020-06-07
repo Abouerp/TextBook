@@ -135,7 +135,7 @@ public class TextbookController {
                 authorities.addAll(it.getAuthorities())
         );
         if (authorities.contains(Authority.ALL_TEXTBOOK_READ)) {
-            if (collegeId != null || collegeId <= 0) {
+            if (collegeId != null && collegeId >0) {
                 List<Integer> ids = administratorService.findByCollegeId(collegeId)
                         .stream()
                         .map(Administrator::getId)
