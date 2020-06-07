@@ -4,6 +4,7 @@ import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.dao.ClassInformationRepository;
 import com.abouerp.textbook.domain.*;
 import com.abouerp.textbook.dto.TextBookDTO;
+import com.abouerp.textbook.exception.BadRequestException;
 import com.abouerp.textbook.exception.TextBookNotFoundException;
 import com.abouerp.textbook.exception.UserNotFoundException;
 import com.abouerp.textbook.mapper.TextBookMapper;
@@ -134,7 +135,7 @@ public class TextbookController {
                 authorities.addAll(it.getAuthorities())
         );
         if (authorities.contains(Authority.ALL_TEXTBOOK_READ)) {
-            if (collegeId != null && collegeId >0) {
+            if (collegeId != null && collegeId > 0) {
                 List<Integer> ids = administratorService.findByCollegeId(collegeId)
                         .stream()
                         .map(Administrator::getId)
@@ -153,5 +154,21 @@ public class TextbookController {
         }
     }
 
-
+    @PatchMapping("/{id}")
+    public ResultBean<TextBookDTO> reviewTextBook(
+            @PathVariable Integer id,
+            @RequestBody TextBookVO textBookVO) {
+        TextBook textBook = textBookService.findById(id).orElseThrow(TextBookNotFoundException::new);
+        if (textBookVO == null) {
+            throw new BadRequestException();
+        }
+        if (textBookVO.getStatus() != null) {
+            textBook.setStatus(textBookVO.getStatus());
+        }
+        if (textBookVO.getReviewOpinion() != null) {
+            textBook.setReviewOpinion(textBookVO.getReviewOpinion());
+        }
+        textBook.setReviewDate(new Date());
+        return ResultBean.ok(TextBookMapper.INSTANCE.toDTO(textBookService.save(textBook)));
+    }
 }
