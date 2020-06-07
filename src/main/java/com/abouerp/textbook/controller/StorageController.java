@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 文件处理
  *
- * @author
+ * @author Abouerp
  */
 @RestController
 @RequestMapping("/api/storage")
@@ -67,7 +67,7 @@ public class StorageController {
 
 
     /**
-     * 拼接地址发往人脸服务器用这个接口，preview接口会爆数据错误
+     * 触发浏览器下载
      *
      * @param id   图片/视频的名称id
      */

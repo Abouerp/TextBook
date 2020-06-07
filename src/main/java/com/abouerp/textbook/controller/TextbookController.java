@@ -12,13 +12,16 @@ import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.TextBookService;
 import com.abouerp.textbook.vo.TextBookVO;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -88,6 +91,12 @@ public class TextbookController {
             textBook.setReviewDate(textBookVO.getReviewDate());
         }
         return textBook;
+    }
+
+
+    private static byte[] read(String path) throws IOException {
+        ClassPathResource resource = new ClassPathResource(path);
+        return FileCopyUtils.copyToByteArray(resource.getInputStream());
     }
 
     @PostMapping("/{id}")
@@ -170,5 +179,11 @@ public class TextbookController {
         }
         textBook.setReviewDate(new Date());
         return ResultBean.ok(TextBookMapper.INSTANCE.toDTO(textBookService.save(textBook)));
+    }
+
+    @GetMapping("/excel")
+    public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids){
+        List<TextBook> textBooks = textBookService.findByIdIn(ids);
+        return null;
     }
 }

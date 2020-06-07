@@ -86,37 +86,9 @@ public class TextBookService {
         return new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size());
     }
 
-
-//    public PageInfo<TextBook> findByTeacherIdAndStatus(int page, int size, Integer teacherId, Integer status) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndStatus(teacherId, status), size);
-//        return pageInfo;
-//    }
-//
-//    public PageInfo<TextBook> findByTeacherIdAndOkStatus(int page, int size, Integer teacherId, Integer status) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByTeacherIdAndOkStatus(teacherId, status), size);
-//        return pageInfo;
-//    }
-
-
-    /**
-     * 获取未审核 和 已审核 的申请表
-     *
-     * @param status 得到的值应该为2
-     * @return
-     */
-//    public PageInfo<TextBookHistoryRsp> findByStatusUnReview(int page, int size, Integer status) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<TextBookHistoryRsp> pageInfo;
-//        if (status == 2) {
-//            pageInfo = new PageInfo<>(textBookDao.findByStatusUnReview(status), size);
-//        } else {
-//            return null;
-//        }
-//        return pageInfo;
-//    }
-
+    public List<TextBook> findByIdIn(List<Integer> ids){
+        return textBookRepository.findByIdIn(ids);
+    }
 
     /**
      * 导出申请表，多张
@@ -279,17 +251,7 @@ public class TextBookService {
 //        return filename;
 //    }
 //
-//    public PageInfo<TextBook> findByCollege(int page, int size, String college) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findByCollege(college), size);
-//        return pageInfo;
-//    }
-//
-//    public PageInfo<TextBook> findAllTextBook(int page, int size) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<TextBook> pageInfo = new PageInfo<>(textBookDao.findAll(), size);
-//        return pageInfo;
-//    }
+
 //
 //    /**
 //     * 返回统计个数

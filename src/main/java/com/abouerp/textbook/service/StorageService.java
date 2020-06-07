@@ -34,7 +34,7 @@ public class StorageService {
     }
 
     public Storage findBySHA1(String id) {
-        Storage storage = storageRepository.findBySha1(id).orElseThrow(null);
+        Storage storage = storageRepository.findBySha1(id).orElse(null);
         if (storage == null) {
             return null;
         } else {

@@ -3,6 +3,7 @@ package com.abouerp.textbook.security;
 import com.abouerp.textbook.security.handler.LogoutHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/api/user/me").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/storage/download/**").permitAll()
                 .antMatchers("/api/**").authenticated()
 
                 .and()

@@ -17,4 +17,6 @@ public interface TextBookRepository extends JpaRepository<TextBook, Integer>, Qu
     List<TextBook> findByAdministrator_Id(Integer id, Pageable pageable);
 
     List<TextBook> findByAdministratorIdIn(List<Integer> ids, Pageable pageable);
+
+    List<TextBook> findByIdIn(List<Integer> ids);
 }
