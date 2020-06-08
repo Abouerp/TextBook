@@ -90,12 +90,6 @@ public class TextbookController {
         return textBook;
     }
 
-
-    private static byte[] read(String path) throws IOException {
-        ClassPathResource resource = new ClassPathResource(path);
-        return FileCopyUtils.copyToByteArray(resource.getInputStream());
-    }
-
     @PostMapping("/{id}")
     public ResultBean<TextBookDTO> save(
             @PathVariable Integer id,
@@ -179,8 +173,16 @@ public class TextbookController {
     }
 
     @GetMapping("/excel")
-    public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids){
+    public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids) throws Exception{
         List<TextBook> textBooks = textBookService.findByIdIn(ids);
-        return ResultBean.ok(Arrays.asList(textBookService.outPutExcel(textBooks.get(0))));
+        List<String> sha1s = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        for (TextBook textBook:textBooks){
+            String sha1 = textBookService.outPutExcel(textBook);
+            sha1s.add(sha1);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("time:----------------------------------"+(end-start));
+        return ResultBean.ok(sha1s);
     }
 }

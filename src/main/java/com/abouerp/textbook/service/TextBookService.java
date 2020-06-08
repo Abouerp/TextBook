@@ -1,30 +1,30 @@
 package com.abouerp.textbook.service;
 
 
-import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.config.StorageProperties;
 import com.abouerp.textbook.dao.StorageRepository;
 import com.abouerp.textbook.dao.TextBookRepository;
 import com.abouerp.textbook.domain.ClassInformation;
-import com.abouerp.textbook.domain.QTextBook;
+
 
 import com.abouerp.textbook.domain.Storage;
 import com.abouerp.textbook.domain.TextBook;
 import com.abouerp.textbook.dto.TextBookDTO;
 import com.abouerp.textbook.exception.ExcelErrorException;
 import com.abouerp.textbook.mapper.TextBookMapper;
-import com.abouerp.textbook.vo.TextBookVO;
-import com.querydsl.core.BooleanBuilder;
+
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.FileCopyUtils;
+
 
 import java.io.*;
 
@@ -50,6 +50,7 @@ public class TextBookService {
     private final TextBookRepository textBookRepository;
     private final Path rootLocation;
     private final StorageRepository storageRepository;
+    private final String CONTENT_TYPE = "application/vnd.ms-excel";
 
 
     public TextBookService(
@@ -111,11 +112,20 @@ public class TextBookService {
         return textBookRepository.findByIdIn(ids);
     }
 
-    public String outPutExcel(TextBook textBook) {
+    private static byte[] read(String path) throws IOException {
+        ClassPathResource resource = new ClassPathResource(path);
+        return FileCopyUtils.copyToByteArray(resource.getInputStream());
+    }
+
+
+    public String outPutExcel(TextBook textBook) throws IOException {
+        byte[] data = read("excel/template_textbook.xls");
+//        BufferedInputStream bufferedInputStream = new BufferedInputStream(data);
         try {
-            FileInputStream fileInputStream = new FileInputStream(rootLocation + "/FD3452D292C57AF06D357438F0CD6B24110A53FC");
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-            POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);
+//            FileInputStream fileInputStream = new FileInputStream(rootLocation + "/FD3452D292C57AF06D357438F0CD6B24110A53FC");
+            InputStream in = new ByteArrayInputStream(data);
+//            BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
+            POIFSFileSystem fileSystem = new POIFSFileSystem(in);
             HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
             HSSFSheet sheet = workbook.getSheet("Sheet1");
 
@@ -172,17 +182,21 @@ public class TextBookService {
             workbook.write(baos);
             ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
             String sha1 = common(rootLocation, swapStream);
-            Storage storage = new Storage().setSha1(sha1)
-                    .setContentType("application/vnd.ms-excel")
-                    .setOriginalFilename(textBook.getCourseName()+".xls");
-            storageRepository.save(storage);
-            return sha1;
+            Storage storage = storageRepository.findBySha1(sha1).orElse(null);
+            if (storage == null) {
+                storage = new Storage().setSha1(sha1)
+                        .setContentType(CONTENT_TYPE)
+                        .setOriginalFilename(textBook.getCourseName() + ".xls");
+                storageRepository.save(storage);
+                return sha1;
+            }
+            return storage.getSha1();
         } catch (Exception e) {
             throw new ExcelErrorException();
         }
     }
 
-    private String common(Path rootLocation,ByteArrayInputStream in ){
+    private String common(Path rootLocation, ByteArrayInputStream in) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             Path temp = Files.createTempFile("temp-", null);
