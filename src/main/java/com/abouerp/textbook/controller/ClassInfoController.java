@@ -26,7 +26,7 @@ public class ClassInfoController {
 
     @PostMapping
     public ResultBean<List<Integer>> save(
-            @RequestBody List<ClassInformation> classInformationList){
+            @RequestBody List<ClassInformation> classInformationList) {
         return ResultBean.ok(classInformationRepository.saveAll(classInformationList)
                 .stream()
                 .map(ClassInformation::getId)

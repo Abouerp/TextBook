@@ -37,7 +37,7 @@ public class ExcelOperatorController {
 
     @PostMapping
     public ResultBean importAdmin(@RequestBody MultipartFile file) {
-        if (file ==null){
+        if (file == null) {
             throw new BadRequestException();
         }
         try {
@@ -59,7 +59,7 @@ public class ExcelOperatorController {
             }
             administratorService.saveAll(administrators);
             return ResultBean.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ExcelErrorException();
         }
     }

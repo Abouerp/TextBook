@@ -19,7 +19,7 @@ public class CollegeService {
         this.collegeRepository = collegeRepository;
     }
 
-    public Optional<College> findById(Integer id){
+    public Optional<College> findById(Integer id) {
         return collegeRepository.findById(id);
     }
 
@@ -27,11 +27,11 @@ public class CollegeService {
         return collegeRepository.save(college);
     }
 
-    public void delete(Integer id){
+    public void delete(Integer id) {
         collegeRepository.deleteById(id);
     }
 
-    public List<College> findAll(){
+    public List<College> findAll() {
         return collegeRepository.findAll();
     }
 }

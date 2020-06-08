@@ -29,11 +29,11 @@ public class CollegeController {
         this.administratorService = administratorService;
     }
 
-    private static College update(College college, CollegeVO collegeVO){
-        if (collegeVO!=null && collegeVO.getName()!=null){
+    private static College update(College college, CollegeVO collegeVO) {
+        if (collegeVO != null && collegeVO.getName() != null) {
             college.setName(collegeVO.getName());
         }
-        if (collegeVO!=null && collegeVO.getDescription()!=null){
+        if (collegeVO != null && collegeVO.getDescription() != null) {
             college.setDescription(collegeVO.getDescription());
         }
         return college;
@@ -49,18 +49,18 @@ public class CollegeController {
             @PathVariable Integer id,
             @RequestBody CollegeVO collegeVO) {
         College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
-        return ResultBean.ok(collegeService.save(update(college,collegeVO)));
+        return ResultBean.ok(collegeService.save(update(college, collegeVO)));
     }
 
     @DeleteMapping("/{id}")
-    public ResultBean delete(@PathVariable Integer id){
+    public ResultBean delete(@PathVariable Integer id) {
         administratorService.deleteByCollegeId(id);
         collegeService.delete(id);
         return ResultBean.ok();
     }
 
     @GetMapping
-    public ResultBean<List<College>> findAll(){
+    public ResultBean<List<College>> findAll() {
         return ResultBean.ok(collegeService.findAll());
     }
 }

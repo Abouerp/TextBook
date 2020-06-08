@@ -173,10 +173,10 @@ public class TextbookController {
     }
 
     @PostMapping("/excel")
-    public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids) throws Exception{
+    public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids) throws Exception {
         List<TextBook> textBooks = textBookService.findByIdIn(ids);
         List<String> sha1s = new ArrayList<>();
-        for (TextBook textBook:textBooks){
+        for (TextBook textBook : textBooks) {
             String sha1 = textBookService.outPutExcel(textBook);
             sha1s.add(sha1);
         }

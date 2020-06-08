@@ -36,7 +36,7 @@ public class StorageController {
      * 保存图片或者视频
      *
      * @param files
-     * @return  一个list存储图片的名称（id）
+     * @return 一个list存储图片的名称（id）
      */
     @PostMapping
     public ResultBean<List<String>> save(@RequestParam("files") MultipartFile[] files) {
@@ -69,7 +69,7 @@ public class StorageController {
     /**
      * 触发浏览器下载
      *
-     * @param id   图片/视频的名称id
+     * @param id 图片/视频的名称id
      */
     @GetMapping(value = "/download/{id}")
     public ResponseEntity<Resource> download(@PathVariable String id) {

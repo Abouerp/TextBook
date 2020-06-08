@@ -67,13 +67,17 @@ public class FileStorageService {
                     InputStream in = file.getInputStream();
                     OutputStream out = Files.newOutputStream(temp)
             ) {
-                byte[] buf = new byte[8192];
                 int n;
+                byte[] buf = new byte[8192];
+
                 while (-1 != (n = in.read(buf, 0, buf.length))) {
                     digest.update(buf, 0, n);
                     out.write(buf, 0, n);
                 }
+
                 String sha1 = String.format("%032X", new BigInteger(1, digest.digest()));
+                log.info("sh1 = {}" + sha1);
+
                 Path dest = rootLocation.resolve(sha1);
                 if (dest.toFile().exists()) {
                     return sha1;
