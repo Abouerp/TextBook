@@ -5,14 +5,11 @@ import com.abouerp.textbook.config.StorageProperties;
 import com.abouerp.textbook.dao.StorageRepository;
 import com.abouerp.textbook.dao.TextBookRepository;
 import com.abouerp.textbook.domain.ClassInformation;
-
-
 import com.abouerp.textbook.domain.Storage;
 import com.abouerp.textbook.domain.TextBook;
 import com.abouerp.textbook.dto.TextBookDTO;
 import com.abouerp.textbook.exception.ExcelErrorException;
 import com.abouerp.textbook.mapper.TextBookMapper;
-
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -24,7 +21,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
-
 
 import java.io.*;
 
@@ -120,11 +116,8 @@ public class TextBookService {
 
     public String outPutExcel(TextBook textBook) throws IOException {
         byte[] data = read("excel/template_textbook.xls");
-//        BufferedInputStream bufferedInputStream = new BufferedInputStream(data);
         try {
-//            FileInputStream fileInputStream = new FileInputStream(rootLocation + "/FD3452D292C57AF06D357438F0CD6B24110A53FC");
             InputStream in = new ByteArrayInputStream(data);
-//            BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
             POIFSFileSystem fileSystem = new POIFSFileSystem(in);
             HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
             HSSFSheet sheet = workbook.getSheet("Sheet1");
@@ -182,6 +175,10 @@ public class TextBookService {
             workbook.write(baos);
             ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
             String sha1 = common(rootLocation, swapStream);
+
+            workbook.close();
+            swapStream.close();
+            in.close();
             Storage storage = storageRepository.findBySha1(sha1).orElse(null);
             if (storage == null) {
                 storage = new Storage().setSha1(sha1)
@@ -190,6 +187,8 @@ public class TextBookService {
                 storageRepository.save(storage);
                 return sha1;
             }
+
+
             return storage.getSha1();
         } catch (Exception e) {
             throw new ExcelErrorException();
@@ -311,28 +310,7 @@ public class TextBookService {
 //
 //        return filename;
 //    }
-
-    /**
-     * 教师导出单张申请表
-     *
-     * @param textBook
-     * @param classInformations
-     * @param user
-     * @return
-     * @throws Exception
-     */
-//    public String outSimpleExcel(TextBook textBook, List<ClassInformation> classInformations, User user) throws Exception {
-//        FileInputStream fileInputStream = new FileInputStream(uploadFolder + "finallymodel.xls");
-
-//        String filename = UUID.randomUUID().toString() + ".xls";
-//        OutputStream outputStream = new FileOutputStream(uploadFolder + filename);
-//        workbook.write(outputStream);
-//        outputStream.close();
-//        workbook.close();
-//
-//        return filename;
-//    }
-//
+    
 
 //
 //    /**

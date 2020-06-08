@@ -172,17 +172,14 @@ public class TextbookController {
         return ResultBean.ok(TextBookMapper.INSTANCE.toDTO(textBookService.save(textBook)));
     }
 
-    @GetMapping("/excel")
+    @PostMapping("/excel")
     public ResultBean<List<String>> outPutExcel(@RequestBody List<Integer> ids) throws Exception{
         List<TextBook> textBooks = textBookService.findByIdIn(ids);
         List<String> sha1s = new ArrayList<>();
-        long start = System.currentTimeMillis();
         for (TextBook textBook:textBooks){
             String sha1 = textBookService.outPutExcel(textBook);
             sha1s.add(sha1);
         }
-        long end = System.currentTimeMillis();
-        System.out.println("time:----------------------------------"+(end-start));
         return ResultBean.ok(sha1s);
     }
 }
