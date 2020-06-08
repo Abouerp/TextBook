@@ -15,6 +15,9 @@ import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.CollegeService;
 import com.abouerp.textbook.service.RoleService;
 import com.abouerp.textbook.vo.AdministratorVO;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,11 +25,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -194,5 +198,39 @@ public class AdministratorController {
                     administratorService.save(it);
                 });
         return ResultBean.ok();
+    }
+
+    // todo - fix role
+    @PostMapping("/excel")
+    public ResultBean<String> importProcess(@RequestBody MultipartFile file) {
+        if (file == null) {
+            return new ResultBean<>("file is null");
+        }
+        try {
+            InputStream inputStream = file.getInputStream();
+            HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+            HSSFSheet sheet = workbook.getSheetAt(0);
+            int lastRowNum = sheet.getLastRowNum();
+            List<Administrator> administratorList = new ArrayList<>();
+            for (int i = 1; i <= lastRowNum; i++) {
+                HSSFRow row = sheet.getRow(i);
+                String username = row.getCell(0).getStringCellValue();
+                String password = row.getCell(1).getStringCellValue();
+                String jobNumber = row.getCell(2).getStringCellValue();
+
+                Administrator administrator = new Administrator().setUsername(username)
+                        .setPassword("{noop}"+password)
+                        .setJobNumber(jobNumber)
+                        .setAccountNonExpired(true)
+                        .setAccountNonLocked(true)
+                        .setCredentialsNonExpired(true)
+                        .setEnabled(true);
+                administratorList.add(administrator);
+            }
+            administratorService.saveAll(administratorList);
+            return new ResultBean<>("insert teacher success");
+        } catch (IOException e) {
+            return new ResultBean<>("file upload fail");
+        }
     }
 }
