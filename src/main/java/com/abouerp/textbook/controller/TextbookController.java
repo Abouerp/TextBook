@@ -4,6 +4,7 @@ import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.dao.ClassInformationRepository;
 import com.abouerp.textbook.domain.*;
 import com.abouerp.textbook.dto.TextBookDTO;
+import com.abouerp.textbook.dto.TextBookStatusDTO;
 import com.abouerp.textbook.exception.BadRequestException;
 import com.abouerp.textbook.exception.TextBookNotFoundException;
 import com.abouerp.textbook.exception.UserNotFoundException;
@@ -186,5 +187,10 @@ public class TextbookController {
             sha1s.add(sha1);
         }
         return ResultBean.ok(sha1s);
+    }
+
+    @GetMapping("/status/{id}")
+    public ResultBean<TextBookStatusDTO> count(@PathVariable Integer id){
+        return ResultBean.ok(textBookService.countStatusAndAdminId(id));
     }
 }

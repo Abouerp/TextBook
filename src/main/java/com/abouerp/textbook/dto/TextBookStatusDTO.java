@@ -1,22 +1,14 @@
-package com.abouerp.textbook.entity;
+package com.abouerp.textbook.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-
 /**
- * 统计代提交，代审核，已审核 全部记录 实体类
- *
  * @author Abouerp
  */
 @Data
 @Accessors(chain = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class StatisticsRep implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class TextBookStatusDTO {
 
     /**
      * 待提交

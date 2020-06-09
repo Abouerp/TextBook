@@ -8,6 +8,7 @@ import com.abouerp.textbook.domain.ClassInformation;
 import com.abouerp.textbook.domain.Storage;
 import com.abouerp.textbook.domain.TextBook;
 import com.abouerp.textbook.dto.TextBookDTO;
+import com.abouerp.textbook.dto.TextBookStatusDTO;
 import com.abouerp.textbook.exception.ExcelErrorException;
 import com.abouerp.textbook.mapper.TextBookMapper;
 
@@ -225,24 +226,11 @@ public class TextBookService {
     }
 
 
-//
-//    /**
-//     * 返回统计个数
-//     *
-//     * @param teacherId
-//     * @return
-//     */
-//    public StatisticsRep findStatisticsByTeacherId(Integer teacherId) {
-//        StatisticsRep rep = textBookDao.findStatisticsByTeacherId(teacherId);
-//        if (rep.getUnSubmit() == null){
-//            rep.setUnSubmit(0);
-//        }
-//        if (rep.getReview() == null) {
-//            rep.setReview(0);
-//        }
-//        if (rep.getUnReview() == null) {
-//            rep.setUnReview(0);
-//        }
-//        return rep;
-//    }
+    public TextBookStatusDTO countStatusAndAdminId(Integer id){
+        return new TextBookStatusDTO()
+                .setUnSubmit(textBookRepository.countByStatusAndAdministrator_Id(1,id))
+                .setUnReview(textBookRepository.countByStatusAndAdministrator_Id(2,id))
+                .setReview(textBookRepository.countByStatusAndAdministrator_Id(3,id))
+                .setCount(textBookRepository.countByAdministrator_Id(id));
+    }
 }
