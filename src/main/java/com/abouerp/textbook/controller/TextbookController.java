@@ -21,7 +21,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -152,6 +151,12 @@ public class TextbookController {
         } else {
             return ResultBean.ok(textBookService.findByAdministrator_Id(userPrincipal.getId(), pageable, status));
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResultBean<TextBookDTO> findById(@PathVariable Integer id) {
+        TextBook textBook = textBookService.findById(id).orElseThrow(TextBookNotFoundException::new);
+        return ResultBean.ok(TextBookMapper.INSTANCE.toDTO(textBook));
     }
 
     @PatchMapping("/{id}")
