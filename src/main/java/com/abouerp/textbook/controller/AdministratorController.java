@@ -27,7 +27,6 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -80,7 +79,7 @@ public class AdministratorController {
         if (adminVO != null && adminVO.getStartTask() != null) {
             administrator.setStartTask(adminVO.getStartTask());
         }
-        if (adminVO!=null && adminVO.getRealName()!=null){
+        if (adminVO != null && adminVO.getRealName() != null) {
             administrator.setRealName(adminVO.getRealName());
         }
         return administrator;
@@ -222,7 +221,7 @@ public class AdministratorController {
                 String jobNumber = row.getCell(2).getStringCellValue();
 
                 Administrator administrator = new Administrator().setUsername(username)
-                        .setPassword("{noop}"+password)
+                        .setPassword("{noop}" + password)
                         .setJobNumber(jobNumber)
                         .setAccountNonExpired(true)
                         .setAccountNonLocked(true)
