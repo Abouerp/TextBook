@@ -158,7 +158,7 @@ public class TextBookService {
             row = sheet.getRow(14);
 
 
-            row.getCell(2).setCellValue(textBook.getAdministrator().getUsername());
+            row.getCell(2).setCellValue(textBook.getAdministrator().getRealName());
             row.getCell(6).setCellValue(textBook.getPhone());
 
             row = sheet.getRow(16);
