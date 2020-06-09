@@ -79,9 +79,6 @@ public class AdministratorController {
         if (adminVO != null && adminVO.getEnabled() != null) {
             administrator.setEnabled(adminVO.getEnabled());
         }
-        if (adminVO != null && adminVO.getStartTask() != null) {
-            administrator.setStartTask(adminVO.getStartTask());
-        }
         return administrator;
     }
 
