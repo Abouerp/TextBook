@@ -20,6 +20,7 @@ public class AdministratorDTO {
     private College college;
     private String jobNumber;
     private Boolean startTask;
+    private String realName;
     private Set<Role> roles;
 
     private boolean accountNonExpired;

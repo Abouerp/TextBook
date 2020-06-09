@@ -15,6 +15,7 @@ public class AdministratorVO {
     private String mobile;
     private String email;
     private String sex;
+    private String realName;
     private Integer collegeId;
     private String jobNumber;
     private List<Integer> role;

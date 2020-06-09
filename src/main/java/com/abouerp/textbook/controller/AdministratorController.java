@@ -80,6 +80,9 @@ public class AdministratorController {
         if (adminVO != null && adminVO.getStartTask() != null) {
             administrator.setStartTask(adminVO.getStartTask());
         }
+        if (adminVO!=null && adminVO.getRealName()!=null){
+            administrator.setRealName(adminVO.getRealName());
+        }
         return administrator;
     }
 

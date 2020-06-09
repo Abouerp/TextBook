@@ -45,6 +45,7 @@ public class Administrator implements Serializable {
     private String sex;
     private String jobNumber;
     private Boolean startTask;
+    private String realName;
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
     @ManyToOne
