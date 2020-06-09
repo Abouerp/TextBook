@@ -58,14 +58,11 @@ public class AdministratorController {
     }
 
     private static Administrator update(Administrator administrator, AdministratorVO adminVO) {
-        if (adminVO != null && adminVO.getUsername() != null) {
-            administrator.setUsername(adminVO.getUsername());
+        if (adminVO != null && adminVO.getRealName() != null) {
+            administrator.setRealName(adminVO.getRealName());
         }
         if (adminVO != null && adminVO.getEmail() != null) {
             administrator.setEmail(adminVO.getEmail());
-        }
-        if (adminVO != null && adminVO.getEnabled() != null) {
-            administrator.setEnabled(adminVO.getEnabled());
         }
         if (adminVO != null && adminVO.getSex() != null) {
             administrator.setSex(adminVO.getSex());
@@ -76,11 +73,14 @@ public class AdministratorController {
         if (adminVO != null && adminVO.getJobNumber() != null) {
             administrator.setJobNumber(adminVO.getJobNumber());
         }
-        if (adminVO != null && adminVO.getStartTask() != null) {
-            administrator.setStartTask(adminVO.getStartTask());
-        }
         if (adminVO != null && adminVO.getRealName() != null) {
             administrator.setRealName(adminVO.getRealName());
+        }
+        if (adminVO != null && adminVO.getEnabled() != null) {
+            administrator.setEnabled(adminVO.getEnabled());
+        }
+        if (adminVO != null && adminVO.getStartTask() != null) {
+            administrator.setStartTask(adminVO.getStartTask());
         }
         return administrator;
     }
