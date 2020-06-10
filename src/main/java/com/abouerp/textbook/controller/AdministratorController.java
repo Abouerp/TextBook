@@ -9,6 +9,7 @@ import com.abouerp.textbook.dto.AdministratorDTO;
 import com.abouerp.textbook.exception.CollegeNotFoundException;
 import com.abouerp.textbook.exception.PasswordNotMatchException;
 import com.abouerp.textbook.exception.UserNotFoundException;
+import com.abouerp.textbook.exception.UserRepeatException;
 import com.abouerp.textbook.mapper.AdministratorMapper;
 import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
@@ -137,10 +138,14 @@ public class AdministratorController {
 
     @PostMapping
     public ResultBean<AdministratorDTO> save(@RequestBody AdministratorVO administratorVO) {
+        Administrator administrator = administratorService.findFirstByUsername(administratorVO.getUsername()).orElse(null);
+        if (administrator != null) {
+            throw new UserRepeatException();
+        }
         Set<Role> roles = roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet());
         College college = collegeService.findById(administratorVO.getCollegeId()).orElseThrow(CollegeNotFoundException::new);
         administratorVO.setPassword(passwordEncoder.encode(administratorVO.getPassword()));
-        Administrator administrator = AdministratorMapper.INSTANCE.toAdmin(administratorVO);
+        administrator = AdministratorMapper.INSTANCE.toAdmin(administratorVO);
         administrator.setRoles(roles);
         administrator.setCollege(college);
         administrator.setStartTask(false);

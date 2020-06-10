@@ -36,6 +36,10 @@ public class AdministratorService {
         return administratorRepository.findById(id);
     }
 
+    public Optional<Administrator> findFirstByUsername(String username) {
+        return administratorRepository.findFirstByUsername(username);
+    }
+
     public Page<Administrator> findAll(AdministratorVO administrator, Pageable pageable) {
         QAdministrator qAdministrator = QAdministrator.administrator;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
