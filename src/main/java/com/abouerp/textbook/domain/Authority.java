@@ -29,7 +29,12 @@ public enum Authority {
 
     PERSONAL_TEXTBOOK_READ("个人教材申请表查看"),
     COLLEGE_TEXTBOOK_READ("学院教材申请表查看"),
-    ALL_TEXTBOOK_READ("所有教材申请表查看");
+    ALL_TEXTBOOK_READ("所有教材申请表查看"),
+
+    COLLEGE_CREATE("学院创建"),
+    COLLEGE_READ("学院查看"),
+    COLLEGE_UPDATE("学院更新"),
+    COLLEGE_DELETE("学院删除");
 
     public static final EnumMap<Authority, String> mappings = new EnumMap<>(Authority.class);
 

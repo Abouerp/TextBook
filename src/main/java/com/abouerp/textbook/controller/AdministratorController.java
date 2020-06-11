@@ -142,7 +142,9 @@ public class AdministratorController {
         if (administrator != null) {
             throw new UserRepeatException();
         }
-        Set<Role> roles = roleService.findByIdIn(administratorVO.getRole()).stream().collect(Collectors.toSet());
+        Set<Role> roles = roleService.findByIdIn(administratorVO.getRole())
+                .stream()
+                .collect(Collectors.toSet());
         College college = collegeService.findById(administratorVO.getCollegeId()).orElseThrow(CollegeNotFoundException::new);
         administratorVO.setPassword(passwordEncoder.encode(administratorVO.getPassword()));
         administrator = AdministratorMapper.INSTANCE.toAdmin(administratorVO);
