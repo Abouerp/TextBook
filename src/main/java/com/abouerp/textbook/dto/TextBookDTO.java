@@ -26,6 +26,7 @@ public class TextBookDTO {
     private String phone;
     private Date date;
     private Integer status;
+    private String realName;
     private List<ClassInformation> classList;
     private String reviewOpinion;
     private Date reviewDate;
