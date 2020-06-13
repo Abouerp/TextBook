@@ -34,6 +34,9 @@ public class RoleController {
         if (roleVO != null && roleVO.getAuthorities() != null && !roleVO.getAuthorities().isEmpty()) {
             role.setAuthorities(roleVO.getAuthorities());
         }
+        if (roleVO!=null && roleVO.getIsDefault()!=null){
+            role.setIsDefault(roleVO.getIsDefault());
+        }
         return role;
     }
 
