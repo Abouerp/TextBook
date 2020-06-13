@@ -13,13 +13,11 @@ import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.TextBookService;
 import com.abouerp.textbook.vo.TextBookVO;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -190,7 +188,7 @@ public class TextbookController {
     }
 
     @GetMapping("/status/{id}")
-    public ResultBean<TextBookStatusDTO> count(@PathVariable Integer id){
+    public ResultBean<TextBookStatusDTO> count(@PathVariable Integer id) {
         return ResultBean.ok(textBookService.countStatusAndAdminId(id));
     }
 }

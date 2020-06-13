@@ -82,7 +82,7 @@ public class StorageController {
     }
 
     @GetMapping("/download/user-model")
-    public ResponseEntity<Resource> getModel(){
+    public ResponseEntity<Resource> getModel() {
         return ResponseEntity.ok().header(
                 HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=\"%s\"", "model.xls")

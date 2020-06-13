@@ -1,7 +1,6 @@
 package com.abouerp.textbook.controller;
 
 import com.abouerp.textbook.bean.ResultBean;
-import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.exception.CollegeNotFoundException;
 import com.abouerp.textbook.mapper.CollegeMapper;
