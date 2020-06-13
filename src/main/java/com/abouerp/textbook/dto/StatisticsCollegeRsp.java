@@ -1,4 +1,4 @@
-package com.abouerp.textbook.entity;
+package com.abouerp.textbook.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -7,20 +7,22 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
+ * 统计各个学院教师的人数
+ *
  * @author Abouerp
  */
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StatisticsPublisherRsp implements Serializable {
+public class StatisticsCollegeRsp implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
-     * 出版社名字
+     * 学院名称
      */
-    private String publisher;
+    private String collegeName;
     /**
-     * 对应的数量
+     * 学院教师人数
      */
-    private Integer number;
+    private Integer totalNumber;
 }

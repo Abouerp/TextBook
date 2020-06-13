@@ -1,13 +1,4 @@
-package com.abouerp.textbook.service;//package com.abouerp.textbook.service;
-//
-//import com.abouerp.textbook.dao.MainPageDao;
-//import com.abouerp.textbook.dao.TextBookDao;
-//import com.abouerp.textbook.entity.StatisticsPublisherRsp;
-//import com.github.pagehelper.PageHelper;
-//import com.github.pagehelper.PageInfo;
-//import com.abouerp.textbook.domain.MainBook;
-//import org.springframework.stereotype.Service;
-//
+package com.abouerp.textbook.service;
 
 import com.abouerp.textbook.dao.MainBookRepository;
 import com.abouerp.textbook.domain.MainBook;
@@ -45,10 +36,5 @@ public class MainBookService {
     public MainBook findByBookId(Integer id) {
         return mainBookRepository.findById(id).orElseThrow(MainBookNotFoundException::new);
     }
-//
-//    public PageInfo<StatisticsPublisherRsp> findStatisticsPublisherRsp(int page, int size) {
-//        PageHelper.startPage(page,size);
-//        PageInfo<StatisticsPublisherRsp> pageInfo = new PageInfo<>(textBookDao.findStatisticsPublisherRsp(),size);
-//        return pageInfo;
-//    }
+
 }

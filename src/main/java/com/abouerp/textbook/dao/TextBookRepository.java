@@ -1,7 +1,6 @@
 package com.abouerp.textbook.dao;
 
 import com.abouerp.textbook.domain.TextBook;
-import com.abouerp.textbook.entity.StatisticsPublisherRsp;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +25,7 @@ public interface TextBookRepository extends JpaRepository<TextBook, Integer>, Qu
 
     Integer countByAdministrator_Id(Integer id);
 
-
+    @Query(value = "select publisher ,count(publisher) as number from textbook  group by publisher order by number"
+            ,nativeQuery = true)
+    List<Object[]> counts();
 }
