@@ -1,5 +1,19 @@
-//package com.abouerp.textbook.controller;
-//
+package com.abouerp.textbook.controller;
+
+import com.abouerp.textbook.bean.ResultBean;
+import com.abouerp.textbook.domain.College;
+import com.abouerp.textbook.domain.MainBook;
+import com.abouerp.textbook.exception.CollegeNotFoundException;
+import com.abouerp.textbook.service.CollegeService;
+import com.abouerp.textbook.service.MainBookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 //import com.github.pagehelper.PageInfo;
 //import com.abouerp.textbook.bean.ResultBean;
 //import com.abouerp.textbook.bean.ResultCode;
@@ -12,19 +26,31 @@
 //import java.util.List;
 //import java.util.Map;
 //
-///**
-// * @author Abouerp
-// */
-//@RestController
-//@RequestMapping("/api/main")
-//public class MainController {
+/**
+ * @author Abouerp
+ */
+@RestController
+@RequestMapping("/api/main")
+public class MainController {
 //
-//    private final MainBookService mainBookService;
-//
-//    public MainController(MainBookService mainBookService) {
-//        this.mainBookService = mainBookService;
-//    }
-//
+    private final MainBookService mainBookService;
+    private final CollegeService collegeService;
+
+    public MainController(MainBookService mainBookService, CollegeService collegeService) {
+        this.mainBookService = mainBookService;
+        this.collegeService = collegeService;
+    }
+
+    @GetMapping("/{id}")
+    public ResultBean<Page<MainBook>> findAll(
+            @PathVariable Integer id,
+            @PageableDefault Pageable pageable){
+        College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
+        MainBook mainBook = new MainBook();
+        mainBook.setCollege(college.getName());
+        return ResultBean.ok(mainBookService.findAll(pageable,mainBook));
+    }
+
 //    /**
 //     * 主页  根据学院获取书    分页
 //     *
@@ -109,4 +135,4 @@
 //        map.put("total",statisticsPublisherRsp.getTotal());
 //        return new ResultBean(ResultCode.SUCCESS, map);
 //    }
-//}
+}
