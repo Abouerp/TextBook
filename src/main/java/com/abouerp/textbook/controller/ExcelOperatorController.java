@@ -35,7 +35,7 @@ public class ExcelOperatorController {
     }
 
     @ResponseBody
-    @PostMapping
+    @PostMapping("/user")
     public ResultBean importAdmin(@RequestParam MultipartFile file) {
         if (file == null) {
             throw new BadRequestException();
