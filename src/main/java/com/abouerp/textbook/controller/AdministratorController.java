@@ -203,6 +203,20 @@ public class AdministratorController {
         return ResultBean.ok();
     }
 
+    @PutMapping("/start-task/{id}")
+    public ResultBean startOrDownByCollege(
+            @PathVariable Integer id,
+            @RequestParam Boolean startTask){
+        College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
+        administratorService.findByCollegeId(college.getId())
+                .stream()
+                .forEach(it -> {
+                    it.setStartTask(startTask);
+                        administratorService.save(it);
+                });
+        return ResultBean.ok();
+    }
+
     // todo - fix role
 //    @PostMapping("/excel")
 //    public ResultBean<String> importProcess(@RequestBody MultipartFile file) {
