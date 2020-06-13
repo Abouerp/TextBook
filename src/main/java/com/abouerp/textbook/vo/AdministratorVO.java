@@ -18,7 +18,7 @@ public class AdministratorVO {
     private Integer collegeId;
     private String jobNumber;
     private List<Integer> role;
-    private Boolean startTask = false;
+    private Boolean startTask;
     private Boolean accountNonExpired = true;
     private Boolean accountNonLocked = true;
     private Boolean credentialsNonExpired = true;

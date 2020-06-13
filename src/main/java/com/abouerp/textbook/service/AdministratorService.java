@@ -55,9 +55,6 @@ public class AdministratorService {
         if (administrator != null && administrator.getSex() != null && !administrator.getSex().isEmpty()) {
             booleanBuilder.and(qAdministrator.sex.containsIgnoreCase(administrator.getSex()));
         }
-        if (administrator != null && administrator.getEnabled() != null) {
-            booleanBuilder.and(qAdministrator.enabled.eq(administrator.getEnabled()));
-        }
         if (administrator != null && administrator.getCollegeId() != null) {
             booleanBuilder.and(qAdministrator.college.id.eq(administrator.getCollegeId()));
         }
