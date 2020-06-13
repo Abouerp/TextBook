@@ -6,10 +6,7 @@ import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.College;
 import com.abouerp.textbook.domain.Role;
 import com.abouerp.textbook.dto.AdministratorDTO;
-import com.abouerp.textbook.exception.CollegeNotFoundException;
-import com.abouerp.textbook.exception.PasswordNotMatchException;
-import com.abouerp.textbook.exception.UserNotFoundException;
-import com.abouerp.textbook.exception.UserRepeatException;
+import com.abouerp.textbook.exception.*;
 import com.abouerp.textbook.mapper.AdministratorMapper;
 import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
@@ -207,36 +204,36 @@ public class AdministratorController {
     }
 
     // todo - fix role
-    @PostMapping("/excel")
-    public ResultBean<String> importProcess(@RequestBody MultipartFile file) {
-        if (file == null) {
-            return new ResultBean<>("file is null");
-        }
-        try {
-            InputStream inputStream = file.getInputStream();
-            HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
-            HSSFSheet sheet = workbook.getSheetAt(0);
-            int lastRowNum = sheet.getLastRowNum();
-            List<Administrator> administratorList = new ArrayList<>();
-            for (int i = 1; i <= lastRowNum; i++) {
-                HSSFRow row = sheet.getRow(i);
-                String username = row.getCell(0).getStringCellValue();
-                String password = row.getCell(1).getStringCellValue();
-                String jobNumber = row.getCell(2).getStringCellValue();
-
-                Administrator administrator = new Administrator().setUsername(username)
-                        .setPassword("{noop}" + password)
-                        .setJobNumber(jobNumber)
-                        .setAccountNonExpired(true)
-                        .setAccountNonLocked(true)
-                        .setCredentialsNonExpired(true)
-                        .setEnabled(true);
-                administratorList.add(administrator);
-            }
-            administratorService.saveAll(administratorList);
-            return new ResultBean<>("insert teacher success");
-        } catch (IOException e) {
-            return new ResultBean<>("file upload fail");
-        }
-    }
+//    @PostMapping("/excel")
+//    public ResultBean<String> importProcess(@RequestBody MultipartFile file) {
+//        if (file == null) {
+//            return ResultBean.ok("file is null");
+//        }
+//        try {
+//            InputStream inputStream = file.getInputStream();
+//            HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+//            HSSFSheet sheet = workbook.getSheetAt(0);
+//            int lastRowNum = sheet.getLastRowNum();
+//            List<Administrator> administratorList = new ArrayList<>();
+//            for (int i = 1; i <= lastRowNum; i++) {
+//                HSSFRow row = sheet.getRow(i);
+//                String username = row.getCell(0).getStringCellValue();
+//                String password = row.getCell(1).getStringCellValue();
+//                String jobNumber = row.getCell(2).getStringCellValue();
+//
+//                Administrator administrator = new Administrator().setUsername(username)
+//                        .setPassword("{noop}" + password)
+//                        .setJobNumber(jobNumber)
+//                        .setAccountNonExpired(true)
+//                        .setAccountNonLocked(true)
+//                        .setCredentialsNonExpired(true)
+//                        .setEnabled(true);
+//                administratorList.add(administrator);
+//            }
+//            administratorService.saveAll(administratorList);
+//            return new ResultBean<>("insert teacher success");
+//        } catch (IOException e) {
+//            throw new ExcelErrorException();
+//        }
+//    }
 }

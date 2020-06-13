@@ -1,6 +1,5 @@
 package com.abouerp.textbook.vo;
 
-import com.abouerp.textbook.domain.College;
 import lombok.Data;
 
 import java.util.List;

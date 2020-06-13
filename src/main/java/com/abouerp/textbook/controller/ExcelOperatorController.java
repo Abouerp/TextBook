@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -36,7 +37,7 @@ public class ExcelOperatorController {
     }
 
     @PostMapping
-    public ResultBean importAdmin(@RequestBody MultipartFile file) {
+    public ResultBean importAdmin(@RequestParam MultipartFile file) {
         if (file == null) {
             throw new BadRequestException();
         }
@@ -51,10 +52,20 @@ public class ExcelOperatorController {
             List<Administrator> administrators = new ArrayList<>();
             for (int i = 1; i <= lastRowNum; i++) {
                 HSSFRow row = sheet.getRow(i);
-                Administrator administrator = new Administrator().setUsername(row.getCell(0).getStringCellValue())
-                        .setPassword(row.getCell(1).getStringCellValue())
-                        .setJobNumber(row.getCell(2).getStringCellValue())
+                System.out.println(row.getLastCellNum());
+                String username = row.getCell(0).getStringCellValue();
+                String password = row.getCell(1).getStringCellValue();
+                String jobNumber = row.getCell(2).getStringCellValue();
+
+                Administrator administrator = new Administrator().setUsername(username)
+                        .setPassword("{noop}" + password)
+                        .setJobNumber(jobNumber)
+                        .setAccountNonExpired(true)
+                        .setAccountNonLocked(true)
+                        .setCredentialsNonExpired(true)
+                        .setEnabled(true)
                         .setRoles(roleSet);
+
                 administrators.add(administrator);
             }
             administratorService.saveAll(administrators);

@@ -52,7 +52,6 @@ public class AdministratorService {
         if (administrator != null && administrator.getMobile() != null && !administrator.getMobile().isEmpty()) {
             booleanBuilder.and(qAdministrator.mobile.containsIgnoreCase(administrator.getMobile()));
         }
-
         if (administrator != null && administrator.getSex() != null && !administrator.getSex().isEmpty()) {
             booleanBuilder.and(qAdministrator.sex.containsIgnoreCase(administrator.getSex()));
         }
@@ -61,6 +60,9 @@ public class AdministratorService {
         }
         if (administrator != null && administrator.getCollegeId() != null) {
             booleanBuilder.and(qAdministrator.college.id.eq(administrator.getCollegeId()));
+        }
+        if (administrator != null && administrator.getStartTask() != null) {
+            booleanBuilder.and(qAdministrator.startTask.eq(administrator.getStartTask()));
         }
         return administratorRepository.findAll(booleanBuilder, pageable);
     }
