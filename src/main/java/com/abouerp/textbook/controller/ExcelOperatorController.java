@@ -11,10 +11,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -36,6 +34,7 @@ public class ExcelOperatorController {
         this.roleRepository = roleRepository;
     }
 
+    @ResponseBody
     @PostMapping
     public ResultBean importAdmin(@RequestParam MultipartFile file) {
         if (file == null) {
@@ -52,10 +51,12 @@ public class ExcelOperatorController {
             List<Administrator> administrators = new ArrayList<>();
             for (int i = 1; i <= lastRowNum; i++) {
                 HSSFRow row = sheet.getRow(i);
-                System.out.println(row.getLastCellNum());
-                String username = row.getCell(0).getStringCellValue();
-                String password = row.getCell(1).getStringCellValue();
-                String jobNumber = row.getCell(2).getStringCellValue();
+                if (null == row) {
+                    continue;
+                }
+                String username = row.getCell(0).getStringCellValue().intern() == null ? null : row.getCell(0).getStringCellValue();
+                String password = row.getCell(1).getStringCellValue().intern() == null ? null : row.getCell(1).getStringCellValue();
+                String jobNumber = row.getCell(2).getStringCellValue().intern() == null ? null : row.getCell(2).getStringCellValue();
 
                 Administrator administrator = new Administrator().setUsername(username)
                         .setPassword("{noop}" + password)

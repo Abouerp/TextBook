@@ -5,6 +5,7 @@ import com.abouerp.textbook.domain.Storage;
 import com.abouerp.textbook.service.FileStorageService;
 import com.abouerp.textbook.service.StorageService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -78,5 +79,13 @@ public class StorageController {
                 HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=\"%s\"", storage.getOriginalFilename())
         ).body(fileStorageService.findByHash(id));
+    }
+
+    @GetMapping("/download/user-model")
+    public ResponseEntity<Resource> getModel(){
+        return ResponseEntity.ok().header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                String.format("attachment; filename=\"%s\"", "model.xls")
+        ).body(new ClassPathResource("excel/admin_model.xls"));
     }
 }
