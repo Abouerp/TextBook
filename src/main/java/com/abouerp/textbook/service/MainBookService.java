@@ -12,6 +12,7 @@ package com.abouerp.textbook.service;//package com.abouerp.textbook.service;
 import com.abouerp.textbook.dao.MainBookRepository;
 import com.abouerp.textbook.domain.MainBook;
 import com.abouerp.textbook.domain.QMainBook;
+import com.abouerp.textbook.exception.MainBookNotFoundException;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,24 +42,9 @@ public class MainBookService {
         return mainBookRepository.findAll(booleanBuilder,pageable);
     }
 
-    //
-//    private final MainPageDao mainPageDao;
-//    private final TextBookDao textBookDao;
-//
-//    public MainBookService(MainPageDao mainPageDao, TextBookDao textBookDao) {
-//        this.mainPageDao = mainPageDao;
-//        this.textBookDao = textBookDao;
-//    }
-//
-//    public PageInfo<MainBook> findByCollege(int page, int size, String college) {
-//        PageHelper.startPage(page, size);
-//        PageInfo<MainBook> pageInfo = new PageInfo<>(mainPageDao.findByCollege(college), size);
-//        return pageInfo;
-//    }
-//
-//    public MainBook findByBookId(Integer id) {
-//        return mainPageDao.findByBookId(id);
-//    }
+    public MainBook findByBookId(Integer id) {
+        return mainBookRepository.findById(id).orElseThrow(MainBookNotFoundException::new);
+    }
 //
 //    public PageInfo<StatisticsPublisherRsp> findStatisticsPublisherRsp(int page, int size) {
 //        PageHelper.startPage(page,size);

@@ -1,8 +1,10 @@
 package com.abouerp.textbook.dao;
 
 import com.abouerp.textbook.domain.TextBook;
+import com.abouerp.textbook.entity.StatisticsPublisherRsp;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +25,6 @@ public interface TextBookRepository extends JpaRepository<TextBook, Integer>, Qu
     Integer countByStatusAndAdministrator_Id(Integer status, Integer id);
 
     Integer countByAdministrator_Id(Integer id);
+
+
 }
