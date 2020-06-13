@@ -182,14 +182,10 @@ public class AdministratorController {
 
     @PutMapping("/start-task")
     public ResultBean startOrDown(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody List<Integer> teacherIds,
             @RequestParam Boolean startTask) {
-        Administrator administrator = administratorService.findById(userPrincipal.getId())
-                .orElseThrow(UserNotFoundException::new);
         administratorService.findByIdIn(teacherIds)
                 .stream()
-                .filter(it -> administrator.getCollege().equals(it.getCollege()))
                 .forEach(it -> {
                     it.setStartTask(startTask);
                     administratorService.save(it);
