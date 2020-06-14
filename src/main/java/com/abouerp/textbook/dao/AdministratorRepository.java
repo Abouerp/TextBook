@@ -25,4 +25,6 @@ public interface AdministratorRepository extends JpaRepository<Administrator,Int
 
     List<Administrator> findByCollege_Id(Integer id);
 
+    Integer countByCollege_Id(Integer collegeId);
+
 }

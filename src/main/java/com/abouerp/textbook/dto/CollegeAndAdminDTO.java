@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StatisticsCollegeRsp implements Serializable {
+public class CollegeAndAdminDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**

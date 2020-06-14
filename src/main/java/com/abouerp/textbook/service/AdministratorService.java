@@ -3,6 +3,7 @@ package com.abouerp.textbook.service;
 import com.abouerp.textbook.dao.AdministratorRepository;
 import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.QAdministrator;
+import com.abouerp.textbook.dto.CollegeAndAdminDTO;
 import com.abouerp.textbook.vo.AdministratorVO;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
@@ -78,5 +79,9 @@ public class AdministratorService {
 
     public List<Administrator> findByCollegeId(Integer id) {
         return administratorRepository.findByCollege_Id(id);
+    }
+
+    public Integer countByCollege_Id(Integer id){
+        return administratorRepository.countByCollege_Id(id);
     }
 }

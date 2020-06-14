@@ -2,6 +2,7 @@ package com.abouerp.textbook.controller;
 
 import com.abouerp.textbook.bean.ResultBean;
 import com.abouerp.textbook.domain.College;
+import com.abouerp.textbook.dto.CollegeAndAdminDTO;
 import com.abouerp.textbook.exception.CollegeNotFoundException;
 import com.abouerp.textbook.mapper.CollegeMapper;
 import com.abouerp.textbook.service.AdministratorService;
@@ -9,6 +10,7 @@ import com.abouerp.textbook.service.CollegeService;
 import com.abouerp.textbook.vo.CollegeVO;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,5 +63,18 @@ public class CollegeController {
     @GetMapping
     public ResultBean<List<College>> findAll() {
         return ResultBean.ok(collegeService.findAll());
+    }
+
+    @GetMapping("/user-number")
+    public ResultBean<List<CollegeAndAdminDTO>> countNumber(){
+        List<College> colleges = collegeService.findAll();
+        List<CollegeAndAdminDTO> collegeAndAdminDTOList = new ArrayList<>();
+        for (College college:colleges){
+            CollegeAndAdminDTO collegeAndAdminDTO = new CollegeAndAdminDTO()
+                    .setCollegeName(college.getName())
+                    .setTotalNumber(administratorService.countByCollege_Id(college.getId()));
+            collegeAndAdminDTOList.add(collegeAndAdminDTO);
+        }
+        return ResultBean.ok(collegeAndAdminDTOList);
     }
 }
