@@ -12,6 +12,7 @@ import com.abouerp.textbook.security.UserPrincipal;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.CollegeService;
 import com.abouerp.textbook.service.RoleService;
+import com.abouerp.textbook.service.TextBookService;
 import com.abouerp.textbook.vo.AdministratorVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,17 +37,20 @@ public class AdministratorController {
     private final PasswordEncoder passwordEncoder;
     private final AdministratorService administratorService;
     private final CollegeService collegeService;
+    private final TextBookService textBookService;
 
     public AdministratorController(AdministratorRepository administratorRepository,
                                    RoleService roleService,
                                    PasswordEncoder passwordEncoder,
                                    AdministratorService administratorService,
-                                   CollegeService collegeService) {
+                                   CollegeService collegeService,
+                                   TextBookService textBookService) {
         this.administratorRepository = administratorRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.administratorService = administratorService;
         this.collegeService = collegeService;
+        this.textBookService = textBookService;
     }
 
     private static Administrator update(Administrator administrator, AdministratorVO adminVO) {
@@ -162,6 +166,7 @@ public class AdministratorController {
 
     @DeleteMapping("/{id}")
     public ResultBean delete(@PathVariable Integer id) {
+        textBookService.deleteByAdministrator_Id(id);
         administratorService.delete(id);
         return ResultBean.ok();
     }

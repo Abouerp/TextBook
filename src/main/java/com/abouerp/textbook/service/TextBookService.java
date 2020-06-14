@@ -233,4 +233,8 @@ public class TextBookService {
                 .setReview(textBookRepository.countByStatusAndAdministrator_Id(3,id))
                 .setCount(textBookRepository.countByAdministrator_Id(id));
     }
+
+    public void deleteByAdministrator_Id(Integer id){
+        textBookRepository.deleteByAdministrator_Id(id);
+    }
 }
