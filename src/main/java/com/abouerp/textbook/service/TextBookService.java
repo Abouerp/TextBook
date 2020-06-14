@@ -100,6 +100,7 @@ public class TextBookService {
         for (TextBook textBook : list) {
             dtoList.add((TextBookMapper.INSTANCE.toDTO(textBook)));
         }
+        dtoList = dtoList.stream().filter(it -> !it.getStatus().equals(1)).collect(Collectors.toList());
         int start = (int) pageable.getOffset();
         int end = (start + pageable.getPageSize()) > dtoList.size() ? dtoList.size() : (start + pageable.getPageSize());
         return new PageImpl<>(dtoList.subList(start, end), pageable, dtoList.size());
