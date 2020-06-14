@@ -14,9 +14,9 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CollegeAndAdminDTO implements Serializable {
+public class CollegeAndAdminDTO {
 
-    private static final long serialVersionUID = 1L;
+    private Integer collegeId;
     /**
      * 学院名称
      */

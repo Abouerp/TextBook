@@ -71,6 +71,7 @@ public class CollegeController {
         List<CollegeAndAdminDTO> collegeAndAdminDTOList = new ArrayList<>();
         for (College college:colleges){
             CollegeAndAdminDTO collegeAndAdminDTO = new CollegeAndAdminDTO()
+                    .setCollegeId(college.getId())
                     .setCollegeName(college.getName())
                     .setTotalNumber(administratorService.countByCollege_Id(college.getId()));
             collegeAndAdminDTOList.add(collegeAndAdminDTO);
