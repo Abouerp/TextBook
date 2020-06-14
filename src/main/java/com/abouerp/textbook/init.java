@@ -6,6 +6,7 @@ import com.abouerp.textbook.domain.Administrator;
 import com.abouerp.textbook.domain.Authority;
 import com.abouerp.textbook.domain.Role;
 
+import com.abouerp.textbook.exception.RoleNotFoundException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,9 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +44,9 @@ public class init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Role superRole = roleRepository.findFirstByName("超级管理员").orElseThrow(RoleNotFoundException::new);
+        superRole.setAuthorities(Arrays.stream(Authority.values()).collect(Collectors.toSet()));
+        roleRepository.save(superRole);
         long count = administratorRepository.count();
         if (count == 0) {
             Set<Role> role = objectMapper.readValue(read("data/role.json"), new TypeReference<List<Role>>() {
