@@ -3,9 +3,11 @@ package com.abouerp.textbook.dao;
 import com.abouerp.textbook.domain.TextBook;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,5 +31,7 @@ public interface TextBookRepository extends JpaRepository<TextBook, Integer>, Qu
             ,nativeQuery = true)
     List<Object[]> counts();
 
+    @Modifying
+    @Transactional
     void deleteByAdministrator_Id(Integer id);
 }
