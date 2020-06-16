@@ -35,6 +35,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -232,7 +233,7 @@ public class TextBookService {
 
 
     public TextBookStatusDTO countStatusAndAdminId(Integer id){
-        List<TextBook> list = textBookRepository.findByAdministrator_Id(id,null);
+        List<TextBook> list = textBookRepository.findByIdIn(Arrays.asList(id));
         return new TextBookStatusDTO()
                 .setUnSubmit((int)list.stream().filter(it -> it.getStatus().equals(1)).count())
                 .setUnReview((int)list.stream().filter(it -> it.getStatus().equals(2)).count())
