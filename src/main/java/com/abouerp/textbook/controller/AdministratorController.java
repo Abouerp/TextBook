@@ -17,6 +17,7 @@ import com.abouerp.textbook.vo.AdministratorVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -108,6 +109,7 @@ public class AdministratorController {
     }
 
     @PatchMapping("/{id}/password")
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ResultBean<AdministratorDTO> updateOtherPassword(
             @PathVariable Integer id,
             String srcPassword,
@@ -132,6 +134,7 @@ public class AdministratorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('USER_CREATE')")
     public ResultBean<AdministratorDTO> save(@RequestBody AdministratorVO administratorVO) {
         Administrator administrator = administratorService.findFirstByUsername(administratorVO.getUsername()).orElse(null);
         if (administrator != null) {
@@ -150,6 +153,7 @@ public class AdministratorController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ResultBean<AdministratorDTO> update(
             @PathVariable Integer id,
             @RequestBody AdministratorVO administratorVO) {
@@ -165,6 +169,7 @@ public class AdministratorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_DELETE')")
     public ResultBean delete(@PathVariable Integer id) {
         textBookService.deleteByAdministrator_Id(id);
         administratorService.delete(id);
@@ -172,6 +177,7 @@ public class AdministratorController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('USER_READ')")
     public ResultBean<Page<AdministratorDTO>> findAll(
             @PageableDefault Pageable pageable,
             AdministratorVO administrator) {
@@ -186,6 +192,7 @@ public class AdministratorController {
     }
 
     @PutMapping("/start-task")
+    @PreAuthorize("hasAuthority('TEXTBOOK_TASK_UPDATE')")
     public ResultBean startOrDown(
             @RequestBody List<Integer> teacherIds,
             @RequestParam Boolean startTask) {
@@ -199,15 +206,16 @@ public class AdministratorController {
     }
 
     @PutMapping("/start-task/{id}")
+    @PreAuthorize("hasAuthority('TEXTBOOK_TASK_UPDATE')")
     public ResultBean startOrDownByCollege(
             @PathVariable Integer id,
-            @RequestParam Boolean startTask){
+            @RequestParam Boolean startTask) {
         College college = collegeService.findById(id).orElseThrow(CollegeNotFoundException::new);
         administratorService.findByCollegeId(college.getId())
                 .stream()
                 .forEach(it -> {
                     it.setStartTask(startTask);
-                        administratorService.save(it);
+                    administratorService.save(it);
                 });
         return ResultBean.ok();
     }

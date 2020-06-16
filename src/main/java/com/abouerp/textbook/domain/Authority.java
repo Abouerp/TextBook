@@ -33,7 +33,9 @@ public enum Authority {
     COLLEGE_CREATE("学院创建"),
     COLLEGE_READ("学院查看"),
     COLLEGE_UPDATE("学院更新"),
-    COLLEGE_DELETE("学院删除");
+    COLLEGE_DELETE("学院删除"),
+
+    TEXTBOOK_TASK_UPDATE("申请表填写任务");
 
     public static final EnumMap<Authority, String> mappings = new EnumMap<>(Authority.class);
 

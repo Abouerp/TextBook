@@ -9,6 +9,7 @@ import com.abouerp.textbook.vo.RoleVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,11 +42,13 @@ public class RoleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CREATE')")
     public ResultBean<Role> save(@RequestBody RoleVO roleVO) {
         return ResultBean.ok(roleService.save(RoleMapper.INSTANCE.toRole(roleVO)));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public ResultBean<Object> delete(@PathVariable Integer id) {
         Role role = roleService.findById(id).orElseThrow(RoleNotFoundException::new);
         if (role.getIsDefault() == true) {
@@ -56,12 +59,14 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ResultBean<Role> update(@PathVariable Integer id, @RequestBody RoleVO roleVO) {
         Role role = roleService.findById(id).orElseThrow(RoleNotFoundException::new);
         return ResultBean.ok(roleService.save(updateInfo(role, roleVO)));
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_READ')")
     public ResultBean<Page<Role>> findAll(
             @PageableDefault Pageable pageable,
             RoleVO roleVO

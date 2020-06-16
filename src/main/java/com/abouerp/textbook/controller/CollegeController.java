@@ -8,6 +8,7 @@ import com.abouerp.textbook.mapper.CollegeMapper;
 import com.abouerp.textbook.service.AdministratorService;
 import com.abouerp.textbook.service.CollegeService;
 import com.abouerp.textbook.vo.CollegeVO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -41,11 +42,13 @@ public class CollegeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('COLLEGE_CREATE')")
     public ResultBean<College> save(@RequestBody CollegeVO collegeVO) {
         return ResultBean.ok(collegeService.save(CollegeMapper.INSTANCE.toCollege(collegeVO)));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('COLLEGE_UPDATE')")
     public ResultBean<College> update(
             @PathVariable Integer id,
             @RequestBody CollegeVO collegeVO) {
@@ -54,6 +57,7 @@ public class CollegeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('COLLEGE_DELETE')")
     public ResultBean delete(@PathVariable Integer id) {
         administratorService.deleteByCollegeId(id);
         collegeService.delete(id);
@@ -61,6 +65,7 @@ public class CollegeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('COLLEGE_READ')")
     public ResultBean<List<College>> findAll() {
         return ResultBean.ok(collegeService.findAll());
     }
