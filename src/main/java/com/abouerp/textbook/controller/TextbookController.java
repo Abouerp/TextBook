@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,6 +90,7 @@ public class TextbookController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAuthority('TEXTBOOK_CREATE')")
     public ResultBean<TextBookDTO> save(
             @PathVariable Integer id,
             @RequestBody TextBookVO textBookVO) {
@@ -104,6 +106,7 @@ public class TextbookController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('TEXTBOOK_UPDATE')")
     public ResultBean<TextBookDTO> update(
             @PathVariable Integer id,
             @RequestBody TextBookVO textBookVO) {
@@ -116,12 +119,14 @@ public class TextbookController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('TEXTBOOK_DELETE')")
     public ResultBean delete(@PathVariable Integer id) {
         textBookService.deleteById(id);
         return ResultBean.ok();
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('TEXTBOOK_READ')")
     public ResultBean<Page<TextBookDTO>> findAll(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -159,6 +164,7 @@ public class TextbookController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('TEXTBOOK_REVIEW')")
     public ResultBean<TextBookDTO> reviewTextBook(
             @PathVariable Integer id,
             @RequestBody TextBookVO textBookVO) {

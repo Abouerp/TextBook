@@ -10,6 +10,7 @@ import com.abouerp.textbook.service.AdministratorService;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class ExcelOperatorController {
 
     @ResponseBody
     @PostMapping("/user")
+    @PreAuthorize("hasAuthority('USER_CREATE')")
     public ResultBean importAdmin(@RequestParam MultipartFile file) {
         if (file == null) {
             throw new BadRequestException();

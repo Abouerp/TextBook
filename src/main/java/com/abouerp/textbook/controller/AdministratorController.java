@@ -94,6 +94,7 @@ public class AdministratorController {
     }
 
     @PatchMapping("/me/password")
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ResultBean<AdministratorDTO> updatePassword(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
 //            String srcPassword,
@@ -185,6 +186,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_READ')")
     public ResultBean<AdministratorDTO> findById(@PathVariable Integer id) {
         Administrator administrator = administratorService.findById(id)
                 .orElseThrow(UserNotFoundException::new);
