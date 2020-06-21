@@ -21,8 +21,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -136,7 +138,10 @@ public class AdministratorController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('USER_CREATE')")
-    public ResultBean<AdministratorDTO> save(@RequestBody AdministratorVO administratorVO) {
+    public ResultBean<AdministratorDTO> save(@RequestBody @Valid AdministratorVO administratorVO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+           throw new ParamErrorException();
+        }
         Administrator administrator = administratorService.findFirstByUsername(administratorVO.getUsername()).orElse(null);
         if (administrator != null) {
             throw new UserRepeatException();
