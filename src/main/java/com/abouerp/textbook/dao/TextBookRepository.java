@@ -23,10 +23,6 @@ public interface TextBookRepository extends JpaRepository<TextBook, Integer>, Qu
 
     List<TextBook> findByIdIn(List<Integer> ids);
 
-    Integer countByStatusAndAdministrator_Id(Integer status, Integer id);
-
-    Integer countByAdministrator_Id(Integer id);
-
     @Query(value = "select publisher ,count(publisher) as number from textbook  group by publisher order by number"
             ,nativeQuery = true)
     List<Object[]> counts();
