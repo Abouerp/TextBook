@@ -5,7 +5,6 @@ import com.abouerp.textbook.config.StorageProperties;
 import com.abouerp.textbook.dao.StorageRepository;
 import com.abouerp.textbook.dao.TextBookRepository;
 import com.abouerp.textbook.domain.ClassInformation;
-import com.abouerp.textbook.domain.QTextBook;
 import com.abouerp.textbook.domain.Storage;
 import com.abouerp.textbook.domain.TextBook;
 import com.abouerp.textbook.dto.TextBookDTO;
@@ -13,7 +12,6 @@ import com.abouerp.textbook.dto.TextBookStatusDTO;
 import com.abouerp.textbook.exception.ExcelErrorException;
 import com.abouerp.textbook.mapper.TextBookMapper;
 
-import com.querydsl.core.BooleanBuilder;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -232,16 +230,16 @@ public class TextBookService {
     }
 
 
-    public TextBookStatusDTO countStatusAndAdminId(Integer id){
+    public TextBookStatusDTO countStatusAndAdminId(Integer id) {
         List<TextBook> list = textBookRepository.findByAdministrator_Id(id, null);
         return new TextBookStatusDTO()
-                .setUnSubmit((int)list.stream().filter(it -> it.getStatus().equals(1)).count())
-                .setUnReview((int)list.stream().filter(it -> it.getStatus().equals(2)).count())
-                .setReview((int)list.stream().filter(it -> it.getStatus().equals(3)).count())
+                .setUnSubmit((int) list.stream().filter(it -> it.getStatus().equals(1)).count())
+                .setUnReview((int) list.stream().filter(it -> it.getStatus().equals(2)).count())
+                .setReview((int) list.stream().filter(it -> it.getStatus().equals(3)).count())
                 .setCount(list.size());
     }
 
-    public void deleteByAdministrator_Id(Integer id){
+    public void deleteByAdministrator_Id(Integer id) {
         textBookRepository.deleteByAdministrator_Id(id);
     }
 }

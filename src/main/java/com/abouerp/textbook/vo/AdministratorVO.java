@@ -15,9 +15,7 @@ public class AdministratorVO {
     @NotNull
     private String username;
     private String password;
-    @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
     private String mobile;
-    @Email(message = "邮箱格式错误")
     private String email;
     private String sex;
     @NotNull

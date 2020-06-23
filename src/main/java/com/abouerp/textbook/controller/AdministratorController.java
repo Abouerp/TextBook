@@ -140,7 +140,7 @@ public class AdministratorController {
     @PreAuthorize("hasAuthority('USER_CREATE')")
     public ResultBean<AdministratorDTO> save(@RequestBody @Valid AdministratorVO administratorVO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-           throw new ParamErrorException();
+            throw new ParamErrorException();
         }
         Administrator administrator = administratorService.findFirstByUsername(administratorVO.getUsername()).orElse(null);
         if (administrator != null) {

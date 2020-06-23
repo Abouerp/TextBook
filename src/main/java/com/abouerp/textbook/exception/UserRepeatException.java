@@ -1,7 +1,7 @@
 package com.abouerp.textbook.exception;
 
 /**
- * @author techial
+ * @author Abouerp
  */
 public class UserRepeatException extends ClientErrorException {
     private static final Integer DEFAULT_CODE = 400;
