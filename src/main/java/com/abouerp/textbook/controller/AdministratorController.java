@@ -227,4 +227,13 @@ public class AdministratorController {
         return ResultBean.ok();
     }
 
+    @GetMapping("/judge")
+    public ResultBean judgeUserName(String username){
+        Administrator administrator = administratorService.findFirstByUsername(username).orElse(null);
+        if (administrator != null) {
+            return ResultBean.ok("User is Existing");
+        }else {
+            return ResultBean.ok("User isn't Existing");
+        }
+    }
 }
