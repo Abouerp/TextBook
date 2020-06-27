@@ -243,4 +243,9 @@ public class AdministratorController {
     public ResultBean test(){
         return ResultBean.ok();
     }
+
+    @GetMapping("/test1")
+    public ResultBean tes1t(){
+        return ResultBean.ok();
+    }
 }
