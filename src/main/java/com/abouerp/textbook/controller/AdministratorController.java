@@ -99,7 +99,6 @@ public class AdministratorController {
     }
 
     @PatchMapping("/me/password")
-    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ResultBean<AdministratorDTO> updatePassword(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
 //            String srcPassword,
@@ -240,5 +239,8 @@ public class AdministratorController {
         }
     }
 
-
+    @GetMapping("/test")
+    public ResultBean test(){
+        return ResultBean.ok();
+    }
 }
