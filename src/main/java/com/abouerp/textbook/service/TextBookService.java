@@ -232,6 +232,8 @@ public class TextBookService {
 
     public TextBookStatusDTO countStatusAndAdminId(Integer id) {
         List<TextBook> list = textBookRepository.findByAdministrator_Id(id, null);
+        System.out.println("-------------------------------------------------");
+        System.out.println(list);
         return new TextBookStatusDTO()
                 .setUnSubmit((int) list.stream().filter(it -> it.getStatus().equals(1)).count())
                 .setUnReview((int) list.stream().filter(it -> it.getStatus().equals(2)).count())

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,14 +75,17 @@ public class StorageController {
      * @param id 图片/视频的名称id
      */
     @GetMapping(value = "/download/{id}")
-    public ResponseEntity<Resource> download(@PathVariable String id) {
+    public ResponseEntity<Resource> download(@PathVariable String id) throws UnsupportedEncodingException {
         Storage storage = storageService.findBySHA1(id);
         return ResponseEntity.ok().header(
                 HttpHeaders.CONTENT_DISPOSITION,
-                String.format("attachment; filename=\"%s\"", storage.getOriginalFilename())
+//                String.format("attachment; filename=\"%s\"", storage.getOriginalFilename())
 //                String.format("attachment; filename=\"%s\"", new String(storage.getOriginalFilename().getBytes("utf-8"),"ISO8859-1"))
+                String.format("attachment; filename=\"%s\"", URLEncoder.encode(storage.getOriginalFilename(), "UTF-8"))
+
         ).body(fileStorageService.findByHash(id));
         /**
+         * https://www.yisu.com/zixun/130323.html   参考链接
          * 如果上面方法下载文件之后出现中文变成下划线，就用注释的代码
          * String的getBytes()方法是得到一个操作系统默认的编码格式的字节数组
          * String.getBytes(String decode1)方法会根据指定的decode编码返回某字符串在该编码下的byte数组
