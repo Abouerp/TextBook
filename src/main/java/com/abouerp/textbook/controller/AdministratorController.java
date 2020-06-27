@@ -81,6 +81,9 @@ public class AdministratorController {
         return administrator;
     }
 
+    /**
+     * 防止跨站请求伪造
+     */
     @GetMapping("/me")
     public ResultBean<Map<String, Object>> me(@AuthenticationPrincipal Object object, CsrfToken csrfToken) {
         Map<String, Object> map = new HashMap<>(2);
