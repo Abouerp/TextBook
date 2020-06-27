@@ -239,4 +239,8 @@ public class AdministratorController {
         }
     }
 
+    @GetMapping("/test")
+    public ResultBean tst(){
+        return ResultBean.ok();
+    }
 }
